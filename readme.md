@@ -12,17 +12,10 @@ A professional, high-performance Streamlit dashboard to visualize and analyze yo
 
 ## 🚀 Quick Start
 1.  **Install dependencies:**
-    ```bash
-    pip install streamlit pandas folium plotly geopy
-    ```
+    Double-click setup.bat (only once).
 2.  **Run the app:**
-    ```bash
-    python -m streamlit run app.py
-    ```
-    *Or simply double-click the `start_history_location_visualizer.bat` (Windows).*
-
+    *Double-click the `start_history_location_visualizer.bat` (Windows).*
 3.  **Upload your data:** Use the exported JSON File with Location data
 
 ## 🛠️ Requirements
 * Python 3.8+
-* Streamlit, Folium, Plotly, Pandas, Geopy
