@@ -7,8 +7,6 @@ A professional, high-performance Streamlit dashboard to visualize and analyze yo
 * **Heatmap & Point Mode:** Toggle between density visualization and individual data points.
 * **S-Tier Filtering:** Deep-dive filters for specific hours of the day and weekdays.
 * **Analytics Dashboard:** Interactive Plotly charts showing activity distribution.
-* **Distance Tracker:** Automatically estimates the total distance traveled (km).
-* **Data Export:** Export your filtered results directly as a CSV file.
 
 ## 🚀 Quick Start
 1.  **Install dependencies:**
