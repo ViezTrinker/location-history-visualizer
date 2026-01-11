@@ -10,9 +10,9 @@ A professional, high-performance Streamlit dashboard to visualize and analyze yo
 
 ## 🚀 Quick Start
 1.  **Install dependencies:**
-    Double-click setup.bat (only once).
+    Double-click `setup.bat` (only once).
 2.  **Run the app:**
-    *Double-click the `start_history_location_visualizer.bat` (Windows).*
+    *Double-click the `start_history_location_visualizer.bat`*
 3.  **Upload your data:** Use the exported JSON File with Location data
 
 ## 🛠️ Requirements
