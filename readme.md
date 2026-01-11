@@ -17,3 +17,6 @@ A professional, high-performance Streamlit dashboard to visualize and analyze yo
 
 ## 🛠️ Requirements
 * Python 3.8+
+
+* <img width="1807" height="815" alt="hist_loc_vis1" src="https://github.com/user-attachments/assets/a212ca70-6a04-4ad0-befe-b8b3a3b6d173" />
+* <img width="1827" height="738" alt="hist_loc_vis2" src="https://github.com/user-attachments/assets/5c3be738-da81-4480-b78a-14f83f1d9a43" />
