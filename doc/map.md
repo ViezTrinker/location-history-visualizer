@@ -10,7 +10,9 @@ Die Karte ist kein Google-Maps-Widget. `MapWidget` rechnet selbst Web Mercator, 
 - Zoom 2..19
 - Latitude auf ±85.05112878° begrenzt (Mercator-Pol)
 
-`MapWidget` speichert die Ansicht als `_centerWorldX` / `_centerWorldY` plus `_zoom`. Mausrad zoomt um den Cursor (Weltkoordinaten skalieren mit `2^(newZoom-oldZoom)`). Ziehen verschiebt das Zentrum in Pixeln.
+`MapWidget` speichert die Ansicht als `_centerWorldX` / `_centerWorldY` plus `_zoom`. Mausrad und Doppelklick zoomen um den Cursor (Weltkoordinaten skalieren mit `2^(newZoom-oldZoom)`). Die Zoom-Leiste in `MainWindow` (`+` / Slider / `-`) zoomt um die Kartenmitte und bleibt über `ZoomChanged` synchron. Ziehen verschiebt das Zentrum in Pixeln.
+
+Nach dem Laden zentriert `CenterOnPoints` auf die dichteste Zelle, nicht auf die Bounding-Box. Die Berechnung liegt in [`src/map_focus.h`](../src/map_focus.h) (`ComputeDensestFocus`, Raster ~0.02°).
 
 ## Kachel-Pipeline
 
@@ -38,10 +40,10 @@ Fehlende Kacheln erscheinen grau, bis der Download kommt. Unten links: `© OpenS
 | --- | --- |
 | `AllPoints` | Kreise, Viewport-Culling, bei mehr als `MaxDrawnPoints` (20000) Downsampling |
 | `Clustered` | `BuildClusters` am aktuellen Zoom, Kreisgröße ~ log(count) |
-| `Heatmap` | Gauß-Spots in ein Intensitätsbuffer, Color-Ramp |
-| `Blur` | kleine Spots, danach `GaussianBlur` |
+| `Heatmap` | Punkte ins Raster (`AddHeatSample`), Downsample 4×, ein `GaussianBlur`, Color-Ramp |
+| `Blur` | wie Heatmap, anderer Blur-Radius |
 
-Heatmap/Blur normalisieren über `ScaledHeatCeiling(MaxHeat, _heatScale)`. Der Skalierungsregler in der UI hebt schwache Intensitäten an; häufige Orte sättigen früher.
+Heatmap/Blur cachen den Intensitätsbuffer (`_cachedHeatIntensity`) und bauen ihn nur neu bei Zoom, Pan, Punkten oder Größe. Normalisierung über `ScaledHeatCeiling(MaxHeat, _heatScale)`. Der Skalierungsregler in der UI hebt schwache Intensitäten an; häufige Orte sättigen früher.
 
 ## Trefferprüfung
 

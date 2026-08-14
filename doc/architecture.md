@@ -26,6 +26,7 @@ flowchart TB
     tileMath[tile_math]
     clusterer[clusterer]
     heatmap[heatmap_renderer]
+    mapFocus[map_focus]
     dataModel[location_point / location_data]
   end
 
@@ -43,6 +44,7 @@ flowchart TB
   mapWidget --> tileMath
   mapWidget --> clusterer
   mapWidget --> heatmap
+  mapWidget --> mapFocus
   jsonLoader --> dataModel
   jsonLoader --> civilTime
   filter --> dataModel
@@ -74,6 +76,7 @@ sequenceDiagram
   MainWindow->>Filter: ApplyFilter
   Filter-->>MainWindow: gefilterte Punkte
   MainWindow->>MapWidget: SetPoints
+  MainWindow->>MapWidget: CenterOnPoints
   MapWidget->>MapWidget: paintEvent Tiles plus Overlay
   MapWidget->>TileDownloader: fehlende Kacheln
   TileDownloader-->>MapWidget: TileDownloaded
@@ -83,7 +86,7 @@ sequenceDiagram
 
 1. Datei laden → flache Punktliste (`LocationPoint`).
 2. Filter (Datum, Wochentag, Uhrzeit) erzeugen `_filteredPoints`.
-3. `MapWidget` zeichnet OSM-Kacheln und je nach `DisplayMode` Punkte, Cluster, Heatmap oder Blur.
+3. `MapWidget` zentriert auf die dichteste Zelle (`ComputeDensestFocus`) und zeichnet OSM-Kacheln plus Overlay je `DisplayMode`.
 4. Klick trifft den nächsten Punkt im Pixelradius und füllt die Punktinfo.
 
 Details: [core.md](core.md), [map.md](map.md), [ui.md](ui.md).

@@ -49,13 +49,18 @@ Ignoriert in v1: `activity`, `timelineMemory`, `userLocationProfile`.
 
 [`src/heatmap_renderer.h`](../src/heatmap_renderer.h) bleibt pixelbasiert und Qt-frei:
 
-- `AddGaussianSpot` akkumuliert Intensität
+- `AddHeatSample` setzt Intensität auf das nächste Pixel
+- `AddGaussianSpot` akkumuliert einen Gauß-Kern (Tests / älterer Pfad)
 - `ColorFromHeat` mappt 0..1 auf eine transparent→blau→gelb→rot-Rampe
 - `GaussianBlur` ist separabel (horizontal, dann vertikal)
 - `ScaledHeatCeiling(maxHeat, heatScale)` senkt die Normierungsdecke, damit seltene Orte sichtbar bleiben (`heatScale` 1..100, logarithmisch vom UI-Slider)
 
-Die eigentliche `QImage`-Ausgabe macht `MapWidget`. Siehe [map.md](map.md).
+Die eigentliche `QImage`-Ausgabe macht `MapWidget` (Raster 4× verkleinert, ein Blur, Cache). Siehe [map.md](map.md).
+
+## Kartenfokus
+
+[`src/map_focus.h`](../src/map_focus.h) wählt nach dem Laden die Zelle mit den meisten Punkten (`DensityCellDegrees` 0.02, grob 2 km). `ComputeDensestFocus` liefert Mittelpunkt und Zoom, der die Zelle plus Padding ins Viewport legt. `FocusResult`: `NoPoints` oder `Ok`.
 
 ## Version
 
-[`src/version.h`](../src/version.h) hält About-Strings (`AppVersion` `00.01.00.A`, `ReleaseDate`, Author- und Repo-URL). Keine Qt-Abhängigkeit.
+[`src/version.h`](../src/version.h) hält About-Strings (`AppVersion` `1.0.0.R`, `ReleaseDate` `2026-08-14`, Author- und Repo-URL `https://github.com/ViezTrinker/location-history-visualizer`). Keine Qt-Abhängigkeit.
