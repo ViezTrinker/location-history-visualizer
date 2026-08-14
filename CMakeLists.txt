@@ -22,10 +22,10 @@ if(WIN32)
    endforeach()
 endif()
 
-find_package(Qt6 QUIET COMPONENTS Widgets Network)
+find_package(Qt6 QUIET COMPONENTS Widgets Network LinguistTools)
 if(NOT Qt6_FOUND)
    message(FATAL_ERROR
-      "Qt 6 (Widgets + Network) was not found.\n"
+      "Qt 6 (Widgets + Network + LinguistTools) was not found.\n"
       "Qt is not shipped with this repository; install it locally, then point CMake at the kit.\n"
       "\n"
       "Windows installer: https://www.qt.io/download-qt-installer\n"
@@ -85,6 +85,8 @@ target_link_libraries(location_history_core PUBLIC
 set(LOCATION_HISTORY_APP_SOURCES
    src/about_dialog.cpp
    src/about_dialog.h
+   src/app_language.cpp
+   src/app_language.h
    src/main.cpp
    src/main_window.cpp
    src/main_window.h
@@ -108,6 +110,16 @@ target_link_libraries(location_history_visualizer PRIVATE
    Qt6::Network
 )
 
+qt_add_translations(location_history_visualizer
+   SOURCE_TARGETS location_history_visualizer
+   TS_FILES
+      translations/location_history_visualizer_de.ts
+      translations/location_history_visualizer_es.ts
+      translations/location_history_visualizer_fr.ts
+   NO_GENERATE_PLURALS_TS_FILE
+   RESOURCE_PREFIX "/i18n"
+)
+
 if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/googletest/CMakeLists.txt")
    message(FATAL_ERROR
       "The googletest submodule is missing.\n"
@@ -123,6 +135,7 @@ add_subdirectory(third_party/googletest)
 enable_testing()
 
 set(LOCATION_HISTORY_TEST_SOURCES
+   tests/app_language_test.cpp
    tests/clusterer_test.cpp
    tests/heatmap_renderer_test.cpp
    tests/json_loader_test.cpp
@@ -154,7 +167,7 @@ if(WIN32)
    find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT6_BIN_DIR}")
    if(WINDEPLOYQT_EXECUTABLE)
       add_custom_command(TARGET location_history_visualizer POST_BUILD
-         COMMAND "${WINDEPLOYQT_EXECUTABLE}" --no-translations "$<TARGET_FILE:location_history_visualizer>"
+         COMMAND "${WINDEPLOYQT_EXECUTABLE}" --translations de,es,fr "$<TARGET_FILE:location_history_visualizer>"
          COMMENT "Deploying Qt runtime next to the executable"
       )
    endif()

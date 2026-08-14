@@ -13,18 +13,21 @@ Layout: linke Leiste (~280 px) + `MapWidget` + Zoom-Leiste rechts neben der Kart
 
 | Bereich | Steuerung |
 | --- | --- |
-| Datei | Button / Menü Datei → Öffnen, `QFileDialog` für `*.json`. Letzter Pfad in `QSettings` (`lastJsonPath`) |
-| Datum | `QDateEdit` von/bis, nach dem Laden auf Min/Max der Daten gesetzt |
-| Wochentag | sieben Checkboxen, Bits in `weekdayMask` |
-| Uhrzeit | `QTimeEdit` 00:00–23:59 |
-| Darstellung | ComboBox `DisplayMode` |
-| Skalierung | `QSlider`, nur bei Heatmap und Blur aktiv, Faktor ×1..×100 logarithmisch |
-| Zoom | `+`, vertikaler `QSlider` (Zoom 2..19), `-` — außerhalb der Karte |
-| Punktinfo | Wann, Latitude, Longitude |
+| File | Button / File → Open, `QFileDialog` for `*.json`. Last path in `QSettings` (`lastJsonPath`) |
+| Date | `QDateEdit` from/to, set to min/max of the data after load |
+| Weekday | seven checkboxes, bits in `weekdayMask` |
+| Time of day | `QTimeEdit` 00:00–23:59 |
+| Display | ComboBox `DisplayMode` |
+| Scaling | `QSlider`, enabled only for Heatmap and Blur, factor ×1..×100 logarithmic |
+| Zoom | `+`, vertical `QSlider` (zoom 2..19), `-` — beside the map |
+| Point info | When, Latitude, Longitude |
+| Language | ComboBox: English (default), Deutsch, Español, Français. Stored in `QSettings` (`language`) |
 
-`OnOpenClicked` setzt Wait-Cursor, lädt synchron, zeigt `LoadResult` als MessageBox bei Fehler, zentriert die Karte auf die dichteste Zelle (`CenterOnPoints`).
+Source UI strings are English. Translations live in [`translations/`](../translations/) (`.ts` → `.qm` via Qt LinguistTools). Changing the language updates the window immediately.
 
-Menü **Hilfe → About** öffnet [`src/about_dialog.h`](../src/about_dialog.h): Version `1.0.0.R`, Datum, Link ViezTrinker, Repo [location-history-visualizer](https://github.com/ViezTrinker/location-history-visualizer). Texte und URLs stehen in [`src/version.h`](../src/version.h). Links sind `QLabel` mit `setOpenExternalLinks`.
+`OnOpenClicked` sets a wait cursor, loads synchronously, shows `LoadResult` as a message box on error, and centers the map on the densest cell (`CenterOnPoints`).
+
+Menu **Help → About** opens [`src/about_dialog.h`](../src/about_dialog.h): version `1.0.0.R`, date, ViezTrinker link, repo [location-history-visualizer](https://github.com/ViezTrinker/location-history-visualizer). Strings and URLs come from [`src/version.h`](../src/version.h). Links are `QLabel` with `setOpenExternalLinks`.
 
 ## Einstieg
 

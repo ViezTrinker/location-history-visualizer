@@ -5,6 +5,7 @@
 
 #include <QApplication>
 
+#include "app_language.h"
 #include "main_window.h"
 #include "version.h"
 
@@ -17,6 +18,8 @@ int main(int argc, char* argv[])
    application.setOrganizationName(QString::fromUtf8(
       LocationHistory::AuthorName.data(),
       static_cast<int>(LocationHistory::AuthorName.size())));
+
+   LocationHistory::ApplySavedAppLanguage();
 
    LocationHistory::MainWindow window;
    window.show();

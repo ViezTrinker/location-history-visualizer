@@ -15,6 +15,7 @@ flowchart TB
     mainWindow[MainWindow]
     mapWidget[MapWidget]
     aboutDialog[AboutDialog]
+    appLanguage[app_language]
     tileCache[TileCache]
     tileDownloader[TileDownloader]
   end
@@ -35,8 +36,10 @@ flowchart TB
   end
 
   mainCpp --> mainWindow
+  mainCpp --> appLanguage
   mainWindow --> mapWidget
   mainWindow --> aboutDialog
+  mainWindow --> appLanguage
   mainWindow --> jsonLoader
   mainWindow --> filter
   mapWidget --> tileCache

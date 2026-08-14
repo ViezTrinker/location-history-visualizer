@@ -46,9 +46,9 @@ namespace LocationHistory
 
       QLabel* pTitleLabel = new QLabel(QStringLiteral("<h2>%1</h2>").arg(title), this);
       QLabel* pVersionLabel = MakeInfoLabel(this, tr("<b>Version:</b> %1").arg(version));
-      QLabel* pDateLabel = MakeInfoLabel(this, tr("<b>Datum:</b> %1").arg(date));
+      QLabel* pDateLabel = MakeInfoLabel(this, tr("<b>Date:</b> %1").arg(date));
       QLabel* pAuthorLabel = MakeInfoLabel(this, tr("<b>%1:</b> %2").arg(authorName, MakeLink(AuthorUrl)));
-      QLabel* pRepoLabel = MakeInfoLabel(this, tr("<b>Github Repository:</b> %1").arg(MakeLink(RepositoryUrl)));
+      QLabel* pRepoLabel = MakeInfoLabel(this, tr("<b>GitHub repository:</b> %1").arg(MakeLink(RepositoryUrl)));
 
       QDialogButtonBox* pButtons = new QDialogButtonBox(QDialogButtonBox::Ok, this);
       connect(pButtons, &QDialogButtonBox::accepted, this, &AboutDialog::accept);

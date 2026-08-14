@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="de_DE">
+<context>
+    <name>LocationHistory::MainWindow</name>
+    <message>
+        <source>&amp;File</source>
+        <translation>&amp;Datei</translation>
+    </message>
+    <message>
+        <source>Open...</source>
+        <translation>Öffnen...</translation>
+    </message>
+    <message>
+        <source>E&amp;xit</source>
+        <translation>B&amp;eenden</translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation>&amp;Hilfe</translation>
+    </message>
+    <message>
+        <source>About</source>
+        <translation>Info</translation>
+    </message>
+    <message>
+        <source>Open JSON...</source>
+        <translation>JSON öffnen...</translation>
+    </message>
+    <message>
+        <source>No file loaded</source>
+        <translation>Keine Datei geladen</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>Datum</translation>
+    </message>
+    <message>
+        <source>From</source>
+        <translation>Von</translation>
+    </message>
+    <message>
+        <source>To</source>
+        <translation>Bis</translation>
+    </message>
+    <message>
+        <source>Weekday</source>
+        <translation>Wochentag</translation>
+    </message>
+    <message>
+        <source>Mon</source>
+        <translation>Mo</translation>
+    </message>
+    <message>
+        <source>Tue</source>
+        <translation>Di</translation>
+    </message>
+    <message>
+        <source>Wed</source>
+        <translation>Mi</translation>
+    </message>
+    <message>
+        <source>Thu</source>
+        <translation>Do</translation>
+    </message>
+    <message>
+        <source>Fri</source>
+        <translation>Fr</translation>
+    </message>
+    <message>
+        <source>Sat</source>
+        <translation>Sa</translation>
+    </message>
+    <message>
+        <source>Sun</source>
+        <translation>So</translation>
+    </message>
+    <message>
+        <source>Time of day</source>
+        <translation>Uhrzeit</translation>
+    </message>
+    <message>
+        <source>Display</source>
+        <translation>Darstellung</translation>
+    </message>
+    <message>
+        <source>All points</source>
+        <translation>Alle Punkte</translation>
+    </message>
+    <message>
+        <source>Cluster</source>
+        <translation>Cluster</translation>
+    </message>
+    <message>
+        <source>Heatmap</source>
+        <translation>Heatmap</translation>
+    </message>
+    <message>
+        <source>Blur</source>
+        <translation>Unschärfe</translation>
+    </message>
+    <message>
+        <source>Scaling</source>
+        <translation>Skalierung</translation>
+    </message>
+    <message>
+        <source>Raises rarer places in Heatmap and Blur. High values saturate frequent places.</source>
+        <translation>Hebt seltenere Orte in Heatmap und Unschärfe an. Hohe Werte sättigen häufige Orte.</translation>
+    </message>
+    <message>
+        <source>Point info</source>
+        <translation>Punktinfo</translation>
+    </message>
+    <message>
+        <source>When</source>
+        <translation>Wann</translation>
+    </message>
+    <message>
+        <source>Latitude</source>
+        <translation>Latitude</translation>
+    </message>
+    <message>
+        <source>Longitude</source>
+        <translation>Longitude</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Sprache</translation>
+    </message>
+    <message>
+        <source>Zoom in</source>
+        <translation>Hineinzoomen</translation>
+    </message>
+    <message>
+        <source>Zoom out</source>
+        <translation>Herauszoomen</translation>
+    </message>
+    <message>
+        <source>Zoom</source>
+        <translation>Zoom</translation>
+    </message>
+    <message>
+        <source>Ready</source>
+        <translation>Bereit</translation>
+    </message>
+    <message>
+        <source>%1 points shown</source>
+        <translation>%1 Punkte angezeigt</translation>
+    </message>
+    <message>
+        <source>Open Timeline JSON</source>
+        <translation>Timeline JSON öffnen</translation>
+    </message>
+    <message>
+        <source>JSON files (*.json);;All files (*.*)</source>
+        <translation>JSON-Dateien (*.json);;Alle Dateien (*.*)</translation>
+    </message>
+    <message>
+        <source>Load failed</source>
+        <translation>Laden fehlgeschlagen</translation>
+    </message>
+    <message>
+        <source>File not found.</source>
+        <translation>Datei wurde nicht gefunden.</translation>
+    </message>
+    <message>
+        <source>The JSON file is invalid.</source>
+        <translation>Die JSON-Datei ist ungültig.</translation>
+    </message>
+    <message>
+        <source>The file contains no location data.</source>
+        <translation>Die Datei enthält keine Standortdaten.</translation>
+    </message>
+    <message>
+        <source>The file could not be loaded.</source>
+        <translation>Die Datei konnte nicht geladen werden.</translation>
+    </message>
+    <message>
+        <source>×%1</source>
+        <translation>×%1</translation>
+    </message>
+</context>
+<context>
+    <name>LocationHistory::AboutDialog</name>
+    <message>
+        <source>About</source>
+        <translation>Info</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Version:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;Version:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Date:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;Datum:&lt;/b&gt; %1</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;GitHub repository:&lt;/b&gt; %1</source>
+        <translation>&lt;b&gt;GitHub-Repository:&lt;/b&gt; %1</translation>
+    </message>
+</context>
+</TS>
