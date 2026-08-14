@@ -1,0 +1,12 @@
+build/
+out/
+.vs/
+.idea/
+cmake-build-*/
+CMakeUserPresets.json
+CMakeCache.txt
+*.user
+*.suo
+*.sdf
+.cache/
+*.autosave

@@ -1,0 +1,27 @@
+{
+  "version": 6,
+  "configurePresets": [
+    {
+      "name": "vs-x64-local-qt",
+      "displayName": "Visual Studio x64 (local Qt path)",
+      "inherits": "vs-x64",
+      "cacheVariables": {
+        "CMAKE_PREFIX_PATH": "C:/Qt/6.8.3/msvc2022_64"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "vs-x64-local-qt-debug",
+      "displayName": "Debug (local Qt)",
+      "configurePreset": "vs-x64-local-qt",
+      "configuration": "Debug"
+    },
+    {
+      "name": "vs-x64-local-qt-release",
+      "displayName": "Release (local Qt)",
+      "configurePreset": "vs-x64-local-qt",
+      "configuration": "Release"
+    }
+  ]
+}

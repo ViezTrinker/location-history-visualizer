@@ -1,0 +1,42 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "vs-x64",
+      "displayName": "Visual Studio x64",
+      "generator": "Visual Studio 18 2026",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/build",
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "hostOS": [ "Windows" ]
+        }
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "vs-x64-debug",
+      "displayName": "Debug",
+      "configurePreset": "vs-x64",
+      "configuration": "Debug"
+    },
+    {
+      "name": "vs-x64-release",
+      "displayName": "Release",
+      "configurePreset": "vs-x64",
+      "configuration": "Release"
+    },
+    {
+      "name": "vs-x64-relwithdebinfo",
+      "displayName": "RelWithDebInfo",
+      "configurePreset": "vs-x64",
+      "configuration": "RelWithDebInfo"
+    }
+  ]
+}
