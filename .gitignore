@@ -10,3 +10,4 @@ CMakeCache.txt
 *.sdf
 .cache/
 *.autosave
+aqtinstall.log
