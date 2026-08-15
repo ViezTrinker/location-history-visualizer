@@ -13,16 +13,17 @@ Menüleiste: **File | Settings | Help**. Layout darunter: linke Leiste (~280 px)
 
 | Bereich | Steuerung |
 | --- | --- |
-| File | Menu and sidebar button → Open, `QFileDialog` for `*.json`. Last path in `QSettings` (`lastJsonPath`). Exit closes the window. |
-| Settings | **Language** submenu: exclusive checkable actions with native names (English, Deutsch, Español, Français, Русский, العربية, Italiano, Türkçe, Nederlands, Português, Polski, 日本語, 한국어, Bahasa Indonesia, Tiếng Việt, हिन्दी). Stored in `QSettings` (`language`). Arabic sets `Qt::RightToLeft`. **Theme** submenu: Dark (default) or Light. Stored in `QSettings` (`theme`). Fusion palettes, independent of the Windows color mode. **Map display...** opens [`src/map_display_dialog.h`](../src/map_display_dialog.h): point radius 1–16 px (default 4) and maximum drawn points 1000–1 000 000 (default 20 000). Stored in `QSettings` (`pointRadiusPx`, `drawnPointLimit`). |
+| File | Menu → Open, `QFileDialog` for `*.json`. Last path in `QSettings` (`lastJsonPath`). Exit closes the window. |
+| Settings | **Language** submenu: exclusive checkable actions with native names (English, Deutsch, Español, Français, Русский, العربية, Italiano, Türkçe, Nederlands, Português, Polski, 日本語, 한국어, Bahasa Indonesia, Tiếng Việt, हिन्दी). Stored in `QSettings` (`language`). Arabic sets `Qt::RightToLeft`. **Theme** submenu: Dark (default) or Light. Stored in `QSettings` (`theme`). Fusion palettes, independent of the Windows color mode. |
 | Help | About |
 | Date | `QDateEdit` from/to, set to min/max of the data after load |
-| Weekday | seven checkboxes, bits in `weekdayMask` |
+| Weekday | seven columns: checkbox without text, weekday abbreviation as a label underneath. Bits in `weekdayMask` |
 | Time of day | `QTimeEdit` 00:00–23:59 |
 | Display | ComboBox `DisplayMode`: Points, Cluster, or Story |
 | Zoom | `+`, vertical `QSlider` (zoom 2..19), `-` — beside the map |
 | Story | Visible only in Story mode: start-day picker, Play/Pause, scrubber — Play continues through later days as red points |
 | Point info | When, Until, Duration, Latitude, Longitude |
+| Map display | Between Point info and Counts. Point radius 1–16 px (default 4) and maximum drawn points 1000–1 000 000 (default 20 000). Applied immediately. Stored in `QSettings` (`pointRadiusPx`, `drawnPointLimit`). |
 | Counts | At the bottom of the sidebar. **In file**: `_allPoints.size()`. **Visible**: points that current filters (and Story cutoff) allow, capped by the drawn-point limit except in Cluster mode |
 
 Source UI strings are English. Translations live in [`translations/`](../translations/) (`.ts` → `.qm` via Qt LinguistTools). Changing the language updates the window immediately.

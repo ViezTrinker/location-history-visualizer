@@ -10,14 +10,14 @@ Version **1.0.0.R**. Author [ViezTrinker](https://github.com/ViezTrinker). Relea
 
 - **Google Timeline JSON** — current export (`semanticSegments` path/visits and `rawSignals.position`), not the old `locations[]` E7 format
 - **OpenStreetMap map** — pan, mouse-wheel and double-click zoom, zoom slider beside the map, OSM attribution
-- **Filters** — date range, weekdays, time of day
+- **Filters** — date range, weekdays (checkbox with the abbreviation underneath), time of day
 - **Display modes** — Points (simple red dots of the filtered data), Cluster, and Story
 - **Story view** — starts on a chosen day as red points; Play continues through all following days
 - **Point info** — click a point for local time, stay duration (visits), latitude, and longitude
 - **Smart start view** — after load, the map focuses on the densest area, not the bounding-box center
 - **Languages** — Settings → Language: English (default), German, Spanish, French, Russian, Arabic, Italian, Turkish, Dutch, Portuguese, Polish, Japanese, Korean, Indonesian, Vietnamese, Hindi. Arabic uses a right-to-left layout
 - **Theme** — Settings → Theme: dark (default) or light; the choice is remembered
-- **Map display** — Settings → Map display: point size and a drawn-point cap (default 20 000); both are remembered
+- **Map display** — sidebar: point size and a drawn-point cap (default 20 000); both are remembered
 - **Point counts** — the sidebar shows how many samples the JSON contains and how many are currently visible
 - **Local-first** — your JSON stays on disk; OSM tile requests reveal only the current map viewport
 

@@ -15,7 +15,6 @@ flowchart TB
     mainWindow[MainWindow]
     mapWidget[MapWidget]
     aboutDialog[AboutDialog]
-    mapDisplayDialog[MapDisplayDialog]
     appLanguage[app_language]
     appTheme[app_theme]
     mapDisplaySettings[map_display_settings]
@@ -43,7 +42,6 @@ flowchart TB
   mainCpp --> appTheme
   mainWindow --> mapWidget
   mainWindow --> aboutDialog
-  mainWindow --> mapDisplayDialog
   mainWindow --> appLanguage
   mainWindow --> appTheme
   mainWindow --> mapDisplaySettings

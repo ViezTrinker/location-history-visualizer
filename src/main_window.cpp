@@ -13,7 +13,6 @@
 #include <QActionGroup>
 #include <QApplication>
 #include <QDate>
-#include <QDialog>
 #include <QDir>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -24,6 +23,7 @@
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QSettings>
+#include <QSpinBox>
 #include <QStatusBar>
 #include <QTime>
 #include <QVBoxLayout>
@@ -37,7 +37,6 @@
 #include "load_result.h"
 #include "location_filter.h"
 #include "location_point.h"
-#include "map_display_dialog.h"
 #include "map_display_settings.h"
 #include "map_widget.h"
 #include "story_time.h"
@@ -103,11 +102,8 @@ namespace LocationHistory
       , _pThemeActions(nullptr)
       , _pDarkThemeAction(nullptr)
       , _pLightThemeAction(nullptr)
-      , _pMapDisplayAction(nullptr)
       , _pHelpMenu(nullptr)
       , _pAboutAction(nullptr)
-      , _pOpenButton(nullptr)
-      , _pFileLabel(nullptr)
       , _pCountGroup(nullptr)
       , _pInFileCaption(nullptr)
       , _pVisibleCaption(nullptr)
@@ -120,6 +116,7 @@ namespace LocationHistory
       , _pToDate(nullptr)
       , _pWeekdayGroup(nullptr)
       , _pWeekdayBoxes{}
+      , _pWeekdayLabels{}
       , _pTimeGroup(nullptr)
       , _pFromTimeLabel(nullptr)
       , _pToTimeLabel(nullptr)
@@ -133,6 +130,11 @@ namespace LocationHistory
       , _pDurationCaption(nullptr)
       , _pLatitudeCaption(nullptr)
       , _pLongitudeCaption(nullptr)
+      , _pMapDisplayGroup(nullptr)
+      , _pPointSizeCaption(nullptr)
+      , _pDrawnLimitCaption(nullptr)
+      , _pPointRadiusSpin(nullptr)
+      , _pDrawnPointLimitSpin(nullptr)
       , _pZoomInButton(nullptr)
       , _pZoomOutButton(nullptr)
       , _pZoomSlider(nullptr)
@@ -170,9 +172,6 @@ namespace LocationHistory
       _pSettingsMenu = menuBar()->addMenu(QString());
       FillLanguageMenu();
       FillThemeMenu();
-      _pSettingsMenu->addSeparator();
-      _pMapDisplayAction = _pSettingsMenu->addAction(QString());
-      connect(_pMapDisplayAction, &QAction::triggered, this, &MainWindow::OnMapDisplayClicked);
 
       _pHelpMenu = menuBar()->addMenu(QString());
       _pAboutAction = _pHelpMenu->addAction(QString());
@@ -187,13 +186,6 @@ namespace LocationHistory
       QWidget* pSidePanel = new QWidget(pCentral);
       pSidePanel->setFixedWidth(280);
       QVBoxLayout* pSideLayout = new QVBoxLayout(pSidePanel);
-
-      _pOpenButton = new QPushButton(pSidePanel);
-      connect(_pOpenButton, &QPushButton::clicked, this, &MainWindow::OnOpenClicked);
-      _pFileLabel = new QLabel(pSidePanel);
-      _pFileLabel->setWordWrap(true);
-      pSideLayout->addWidget(_pOpenButton);
-      pSideLayout->addWidget(_pFileLabel);
 
       _pDateGroup = new QGroupBox(pSidePanel);
       QFormLayout* pDateLayout = new QFormLayout(_pDateGroup);
@@ -213,13 +205,28 @@ namespace LocationHistory
 
       _pWeekdayGroup = new QGroupBox(pSidePanel);
       QHBoxLayout* pWeekdayLayout = new QHBoxLayout(_pWeekdayGroup);
+      pWeekdayLayout->setSpacing(0);
       for (size_t weekdayIndex = 0; weekdayIndex < WeekdayCount; ++weekdayIndex)
       {
-         QCheckBox* pBox = new QCheckBox(_pWeekdayGroup);
+         QWidget* pColumn = new QWidget(_pWeekdayGroup);
+         QVBoxLayout* pColumnLayout = new QVBoxLayout(pColumn);
+         pColumnLayout->setContentsMargins(0, 0, 0, 0);
+         pColumnLayout->setSpacing(2);
+
+         QCheckBox* pBox = new QCheckBox(pColumn);
          pBox->setChecked(true);
+         pBox->setText(QString());
          connect(pBox, &QCheckBox::stateChanged, this, &MainWindow::OnFiltersChanged);
+
+         QLabel* pLabel = new QLabel(pColumn);
+         pLabel->setAlignment(Qt::AlignHCenter);
+         pLabel->setWordWrap(true);
+
+         pColumnLayout->addWidget(pBox, 0, Qt::AlignHCenter);
+         pColumnLayout->addWidget(pLabel);
          _pWeekdayBoxes[weekdayIndex] = pBox;
-         pWeekdayLayout->addWidget(pBox);
+         _pWeekdayLabels[weekdayIndex] = pLabel;
+         pWeekdayLayout->addWidget(pColumn, 1);
       }
       pSideLayout->addWidget(_pWeekdayGroup);
 
@@ -270,6 +277,26 @@ namespace LocationHistory
       pInfoLayout->addRow(_pLatitudeCaption, _pLatitudeLabel);
       pInfoLayout->addRow(_pLongitudeCaption, _pLongitudeLabel);
       pSideLayout->addWidget(_pInfoGroup);
+
+      _pMapDisplayGroup = new QGroupBox(pSidePanel);
+      QFormLayout* pMapDisplayLayout = new QFormLayout(_pMapDisplayGroup);
+      _pPointSizeCaption = new QLabel(_pMapDisplayGroup);
+      _pDrawnLimitCaption = new QLabel(_pMapDisplayGroup);
+      _pPointRadiusSpin = new QSpinBox(_pMapDisplayGroup);
+      _pPointRadiusSpin->setRange(MinPointRadiusPx, MaxPointRadiusPx);
+      _pPointRadiusSpin->setSingleStep(1);
+      _pPointRadiusSpin->setValue(LoadPointRadiusPx());
+      _pDrawnPointLimitSpin = new QSpinBox(_pMapDisplayGroup);
+      _pDrawnPointLimitSpin->setRange(MinDrawnPointLimit, MaxDrawnPointLimit);
+      _pDrawnPointLimitSpin->setSingleStep(DrawnPointLimitSpinStep);
+      _pDrawnPointLimitSpin->setAccelerated(true);
+      _pDrawnPointLimitSpin->setGroupSeparatorShown(true);
+      _pDrawnPointLimitSpin->setValue(LoadDrawnPointLimit());
+      connect(_pPointRadiusSpin, &QSpinBox::valueChanged, this, &MainWindow::OnPointRadiusChanged);
+      connect(_pDrawnPointLimitSpin, &QSpinBox::valueChanged, this, &MainWindow::OnDrawnPointLimitChanged);
+      pMapDisplayLayout->addRow(_pPointSizeCaption, _pPointRadiusSpin);
+      pMapDisplayLayout->addRow(_pDrawnLimitCaption, _pDrawnPointLimitSpin);
+      pSideLayout->addWidget(_pMapDisplayGroup);
       pSideLayout->addStretch();
 
       _pCountGroup = new QGroupBox(pSidePanel);
@@ -285,6 +312,10 @@ namespace LocationHistory
       pSideLayout->addWidget(_pCountGroup);
 
       _pMapWidget = new MapWidget(pCentral);
+      const auto pointRadiusPx = static_cast<int32_t>(_pPointRadiusSpin->value());
+      const auto drawnPointLimit = static_cast<int32_t>(_pDrawnPointLimitSpin->value());
+      _pMapWidget->SetPointRadiusPx(pointRadiusPx);
+      _pMapWidget->SetDrawnPointLimit(drawnPointLimit);
       connect(_pMapWidget, &MapWidget::PointClicked, this, &MainWindow::OnPointClicked);
       connect(_pMapWidget, &MapWidget::PointCleared, this, &MainWindow::OnPointCleared);
       connect(_pMapWidget, &MapWidget::ZoomChanged, this, &MainWindow::OnMapZoomChanged);
@@ -423,10 +454,8 @@ namespace LocationHistory
       _pThemeMenu->setTitle(tr("Theme"));
       _pDarkThemeAction->setText(tr("Dark"));
       _pLightThemeAction->setText(tr("Light"));
-      _pMapDisplayAction->setText(tr("Map display..."));
       _pHelpMenu->setTitle(tr("&Help"));
       _pAboutAction->setText(tr("About"));
-      _pOpenButton->setText(tr("Open JSON..."));
       _pCountGroup->setTitle(tr("Counts"));
       _pInFileCaption->setText(tr("In file"));
       _pVisibleCaption->setText(tr("Visible"));
@@ -436,7 +465,7 @@ namespace LocationHistory
       _pWeekdayGroup->setTitle(tr("Weekday"));
       for (size_t weekdayIndex = 0; weekdayIndex < WeekdayCount; ++weekdayIndex)
       {
-         _pWeekdayBoxes[weekdayIndex]->setText(WeekdayText(weekdayIndex));
+         _pWeekdayLabels[weekdayIndex]->setText(WeekdayText(weekdayIndex));
       }
       _pTimeGroup->setTitle(tr("Time of day"));
       _pFromTimeLabel->setText(tr("From"));
@@ -451,6 +480,10 @@ namespace LocationHistory
       _pDurationCaption->setText(tr("Duration"));
       _pLatitudeCaption->setText(tr("Latitude"));
       _pLongitudeCaption->setText(tr("Longitude"));
+      _pMapDisplayGroup->setTitle(tr("Map display"));
+      _pPointSizeCaption->setText(tr("Point size"));
+      _pDrawnLimitCaption->setText(tr("Maximum drawn points"));
+      _pPointRadiusSpin->setSuffix(tr(" px"));
       if (_storyPlayback == StoryPlayback::Playing)
       {
          _pStoryPlayButton->setText(tr("Pause"));
@@ -464,20 +497,8 @@ namespace LocationHistory
       _pZoomInButton->setToolTip(tr("Zoom in"));
       _pZoomOutButton->setToolTip(tr("Zoom out"));
       _pZoomSlider->setToolTip(tr("Zoom"));
-      UpdateFileLabel();
       ApplyStoryCutoff();
       UpdateStatusMessage();
-   }
-
-   void MainWindow::UpdateFileLabel(void)
-   {
-      if (_loadedFilePath.isEmpty())
-      {
-         _pFileLabel->setText(tr("No file loaded"));
-         return;
-      }
-
-      _pFileLabel->setText(_loadedFilePath);
    }
 
    void MainWindow::UpdatePointCounts(void)
@@ -685,7 +706,6 @@ namespace LocationHistory
       QSettings settings;
       settings.setValue(LastJsonSettingsKey(), path);
       _loadedFilePath = path;
-      UpdateFileLabel();
       UpdateDateRangeFromPoints();
       ApplyCurrentFilter();
       _pMapWidget->CenterOnPoints();
@@ -698,28 +718,28 @@ namespace LocationHistory
       dialog.exec();
    }
 
-   void MainWindow::OnMapDisplayClicked(void)
+   void MainWindow::OnPointRadiusChanged(const int pointRadiusPx)
    {
       if (_pMapWidget == nullptr)
       {
          return;
       }
 
-      MapDisplayDialog dialog(
-         _pMapWidget->PointRadiusPx(),
-         _pMapWidget->DrawnPointLimit(),
-         this);
-      if (dialog.exec() != QDialog::Accepted)
+      const auto radius = static_cast<int32_t>(pointRadiusPx);
+      SavePointRadiusPx(radius);
+      _pMapWidget->SetPointRadiusPx(radius);
+   }
+
+   void MainWindow::OnDrawnPointLimitChanged(const int drawnPointLimit)
+   {
+      if (_pMapWidget == nullptr)
       {
          return;
       }
 
-      const int32_t pointRadiusPx = dialog.PointRadiusPx();
-      const int32_t drawnPointLimit = dialog.DrawnPointLimit();
-      SavePointRadiusPx(pointRadiusPx);
-      SaveDrawnPointLimit(drawnPointLimit);
-      _pMapWidget->SetPointRadiusPx(pointRadiusPx);
-      _pMapWidget->SetDrawnPointLimit(drawnPointLimit);
+      const auto limit = static_cast<int32_t>(drawnPointLimit);
+      SaveDrawnPointLimit(limit);
+      _pMapWidget->SetDrawnPointLimit(limit);
       UpdateStatusMessage();
    }
 

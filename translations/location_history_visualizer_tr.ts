@@ -20,24 +20,12 @@
         <translation>&amp;Ayarlar</translation>
     </message>
     <message>
-        <source>Map display...</source>
-        <translation>Harita görünümü...</translation>
-    </message>
-    <message>
         <source>&amp;Help</source>
         <translation>&amp;Yardım</translation>
     </message>
     <message>
         <source>About</source>
         <translation>Hakkında</translation>
-    </message>
-    <message>
-        <source>Open JSON...</source>
-        <translation>JSON aç...</translation>
-    </message>
-    <message>
-        <source>No file loaded</source>
-        <translation>Dosya yüklenmedi</translation>
     </message>
     <message>
         <source>Counts</source>
@@ -262,9 +250,6 @@
         <source>&lt;b&gt;GitHub repository:&lt;/b&gt; %1</source>
         <translation>&lt;b&gt;GitHub deposu:&lt;/b&gt; %1</translation>
     </message>
-</context>
-<context>
-    <name>LocationHistory::MapDisplayDialog</name>
     <message>
         <source>Map display</source>
         <translation>Harita görünümü</translation>

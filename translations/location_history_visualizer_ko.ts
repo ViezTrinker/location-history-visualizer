@@ -20,24 +20,12 @@
         <translation>설정(&amp;S)</translation>
     </message>
     <message>
-        <source>Map display...</source>
-        <translation>지도 표시...</translation>
-    </message>
-    <message>
         <source>&amp;Help</source>
         <translation>도움말(&amp;H)</translation>
     </message>
     <message>
         <source>About</source>
         <translation>정보</translation>
-    </message>
-    <message>
-        <source>Open JSON...</source>
-        <translation>JSON 열기...</translation>
-    </message>
-    <message>
-        <source>No file loaded</source>
-        <translation>파일이 없음</translation>
     </message>
     <message>
         <source>Counts</source>
@@ -262,9 +250,6 @@
         <source>&lt;b&gt;GitHub repository:&lt;/b&gt; %1</source>
         <translation>&lt;b&gt;GitHub 저장소:&lt;/b&gt; %1</translation>
     </message>
-</context>
-<context>
-    <name>LocationHistory::MapDisplayDialog</name>
     <message>
         <source>Map display</source>
         <translation>지도 표시</translation>

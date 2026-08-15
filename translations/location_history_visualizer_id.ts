@@ -20,24 +20,12 @@
         <translation>&amp;Pengaturan</translation>
     </message>
     <message>
-        <source>Map display...</source>
-        <translation>Tampilan peta...</translation>
-    </message>
-    <message>
         <source>&amp;Help</source>
         <translation>&amp;Bantuan</translation>
     </message>
     <message>
         <source>About</source>
         <translation>Tentang</translation>
-    </message>
-    <message>
-        <source>Open JSON...</source>
-        <translation>Buka JSON...</translation>
-    </message>
-    <message>
-        <source>No file loaded</source>
-        <translation>Tidak ada berkas</translation>
     </message>
     <message>
         <source>Counts</source>
@@ -262,9 +250,6 @@
         <source>&lt;b&gt;GitHub repository:&lt;/b&gt; %1</source>
         <translation>&lt;b&gt;Repositori GitHub:&lt;/b&gt; %1</translation>
     </message>
-</context>
-<context>
-    <name>LocationHistory::MapDisplayDialog</name>
     <message>
         <source>Map display</source>
         <translation>Tampilan peta</translation>

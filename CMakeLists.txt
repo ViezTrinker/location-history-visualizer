@@ -92,8 +92,6 @@ set(LOCATION_HISTORY_APP_SOURCES
    src/main.cpp
    src/main_window.cpp
    src/main_window.h
-   src/map_display_dialog.cpp
-   src/map_display_dialog.h
    src/map_display_settings.cpp
    src/map_display_settings.h
    src/map_widget.cpp

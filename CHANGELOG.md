@@ -8,8 +8,10 @@ All notable releases of Location History Visualizer are listed here.
 - Story starts on a chosen day. Play reveals later days as raw red points. Heatmap and Blur are removed.
 - Russian, Arabic, Italian, Turkish, Dutch, Portuguese, Polish, Japanese, Korean, Indonesian, Vietnamese, and Hindi UI translations. Arabic mirrors the layout right-to-left.
 - Dark UI is the default. A Light theme is available and remembered. Language and Theme live under Settings in the menu bar.
-- Point size and the drawn-point cap (default 20 000) are adjustable under Settings → Map display.
+- Point size and the drawn-point cap (default 20 000) are adjustable in the sidebar under Map display.
+- Weekday filters show the abbreviation under each checkbox so two-letter labels are not clipped.
 - The sidebar shows how many points the JSON contains and how many are currently visible.
+- Opening a JSON file is only in File → Open. The sidebar no longer has an Open button or the loaded file path.
 
 ## 1.0.0.R — 2026-08-14
 

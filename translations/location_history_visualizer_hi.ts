@@ -20,24 +20,12 @@
         <translation>&amp;सेटिंग्स</translation>
     </message>
     <message>
-        <source>Map display...</source>
-        <translation>मानचित्र प्रदर्शन...</translation>
-    </message>
-    <message>
         <source>&amp;Help</source>
         <translation>&amp;सहायता</translation>
     </message>
     <message>
         <source>About</source>
         <translation>परिचय</translation>
-    </message>
-    <message>
-        <source>Open JSON...</source>
-        <translation>JSON खोलें...</translation>
-    </message>
-    <message>
-        <source>No file loaded</source>
-        <translation>कोई फ़ाइल नहीं</translation>
     </message>
     <message>
         <source>Counts</source>
@@ -262,9 +250,6 @@
         <source>&lt;b&gt;GitHub repository:&lt;/b&gt; %1</source>
         <translation>&lt;b&gt;GitHub रिपॉज़िटरी:&lt;/b&gt; %1</translation>
     </message>
-</context>
-<context>
-    <name>LocationHistory::MapDisplayDialog</name>
     <message>
         <source>Map display</source>
         <translation>मानचित्र प्रदर्शन</translation>

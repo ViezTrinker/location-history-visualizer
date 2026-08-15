@@ -22,6 +22,7 @@
 #include <QMenu>
 #include <QPushButton>
 #include <QSlider>
+#include <QSpinBox>
 #include <QString>
 #include <QTimeEdit>
 #include <QTimer>
@@ -37,6 +38,7 @@ namespace LocationHistory
 {
    constexpr size_t WeekdayCount = 7;
    using WeekdayBoxList = std::array<QCheckBox*, WeekdayCount>;
+   using WeekdayLabelList = std::array<QLabel*, WeekdayCount>;
 
    class MainWindow : public QMainWindow
    {
@@ -56,7 +58,8 @@ namespace LocationHistory
          void OnMapZoomChanged(int32_t zoom);
          void OnLanguageActionTriggered(QAction* pAction);
          void OnThemeActionTriggered(QAction* pAction);
-         void OnMapDisplayClicked(void);
+         void OnPointRadiusChanged(int pointRadiusPx);
+         void OnDrawnPointLimitChanged(int drawnPointLimit);
          void OnStoryDateChanged(const QDate& date);
          void OnStorySliderChanged(int sliderValue);
          void OnStoryPlayClicked(void);
@@ -85,7 +88,6 @@ namespace LocationHistory
          void RetranslateUi(void);
          void FillLanguageMenu(void);
          void FillThemeMenu(void);
-         void UpdateFileLabel(void);
          void UpdatePointCounts(void);
          void UpdateStatusMessage(void);
          void UpdateStoryControls(void);
@@ -123,11 +125,8 @@ namespace LocationHistory
          QActionGroup* _pThemeActions;
          QAction* _pDarkThemeAction;
          QAction* _pLightThemeAction;
-         QAction* _pMapDisplayAction;
          QMenu* _pHelpMenu;
          QAction* _pAboutAction;
-         QPushButton* _pOpenButton;
-         QLabel* _pFileLabel;
          QGroupBox* _pCountGroup;
          QLabel* _pInFileCaption;
          QLabel* _pVisibleCaption;
@@ -140,6 +139,7 @@ namespace LocationHistory
          QDateEdit* _pToDate;
          QGroupBox* _pWeekdayGroup;
          WeekdayBoxList _pWeekdayBoxes;
+         WeekdayLabelList _pWeekdayLabels;
          QGroupBox* _pTimeGroup;
          QLabel* _pFromTimeLabel;
          QLabel* _pToTimeLabel;
@@ -153,6 +153,11 @@ namespace LocationHistory
          QLabel* _pDurationCaption;
          QLabel* _pLatitudeCaption;
          QLabel* _pLongitudeCaption;
+         QGroupBox* _pMapDisplayGroup;
+         QLabel* _pPointSizeCaption;
+         QLabel* _pDrawnLimitCaption;
+         QSpinBox* _pPointRadiusSpin;
+         QSpinBox* _pDrawnPointLimitSpin;
          QPushButton* _pZoomInButton;
          QPushButton* _pZoomOutButton;
          QSlider* _pZoomSlider;

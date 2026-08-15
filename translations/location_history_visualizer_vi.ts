@@ -20,24 +20,12 @@
         <translation>&amp;Cài đặt</translation>
     </message>
     <message>
-        <source>Map display...</source>
-        <translation>Hiển thị bản đồ...</translation>
-    </message>
-    <message>
         <source>&amp;Help</source>
         <translation>Trợ &amp;giúp</translation>
     </message>
     <message>
         <source>About</source>
         <translation>Giới thiệu</translation>
-    </message>
-    <message>
-        <source>Open JSON...</source>
-        <translation>Mở JSON...</translation>
-    </message>
-    <message>
-        <source>No file loaded</source>
-        <translation>Chưa tải tệp</translation>
     </message>
     <message>
         <source>Counts</source>
@@ -262,9 +250,6 @@
         <source>&lt;b&gt;GitHub repository:&lt;/b&gt; %1</source>
         <translation>&lt;b&gt;Kho GitHub:&lt;/b&gt; %1</translation>
     </message>
-</context>
-<context>
-    <name>LocationHistory::MapDisplayDialog</name>
     <message>
         <source>Map display</source>
         <translation>Hiển thị bản đồ</translation>

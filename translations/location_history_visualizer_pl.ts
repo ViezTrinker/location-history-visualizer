@@ -20,24 +20,12 @@
         <translation>&amp;Ustawienia</translation>
     </message>
     <message>
-        <source>Map display...</source>
-        <translation>Widok mapy...</translation>
-    </message>
-    <message>
         <source>&amp;Help</source>
         <translation>Pomo&amp;c</translation>
     </message>
     <message>
         <source>About</source>
         <translation>O programie</translation>
-    </message>
-    <message>
-        <source>Open JSON...</source>
-        <translation>Otwórz JSON...</translation>
-    </message>
-    <message>
-        <source>No file loaded</source>
-        <translation>Nie wczytano pliku</translation>
     </message>
     <message>
         <source>Counts</source>
@@ -262,9 +250,6 @@
         <source>&lt;b&gt;GitHub repository:&lt;/b&gt; %1</source>
         <translation>&lt;b&gt;Repozytorium GitHub:&lt;/b&gt; %1</translation>
     </message>
-</context>
-<context>
-    <name>LocationHistory::MapDisplayDialog</name>
     <message>
         <source>Map display</source>
         <translation>Widok mapy</translation>

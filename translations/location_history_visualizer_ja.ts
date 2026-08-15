@@ -20,24 +20,12 @@
         <translation>設定(&amp;S)</translation>
     </message>
     <message>
-        <source>Map display...</source>
-        <translation>地図の表示...</translation>
-    </message>
-    <message>
         <source>&amp;Help</source>
         <translation>ヘルプ(&amp;H)</translation>
     </message>
     <message>
         <source>About</source>
         <translation>バージョン情報</translation>
-    </message>
-    <message>
-        <source>Open JSON...</source>
-        <translation>JSONを開く...</translation>
-    </message>
-    <message>
-        <source>No file loaded</source>
-        <translation>ファイル未読み込み</translation>
     </message>
     <message>
         <source>Counts</source>
@@ -262,9 +250,6 @@
         <source>&lt;b&gt;GitHub repository:&lt;/b&gt; %1</source>
         <translation>&lt;b&gt;GitHubリポジトリ:&lt;/b&gt; %1</translation>
     </message>
-</context>
-<context>
-    <name>LocationHistory::MapDisplayDialog</name>
     <message>
         <source>Map display</source>
         <translation>地図の表示</translation>
