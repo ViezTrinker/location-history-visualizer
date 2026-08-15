@@ -26,7 +26,7 @@ flowchart TB
     civilTime[civil_time]
     tileMath[tile_math]
     clusterer[clusterer]
-    heatmap[heatmap_renderer]
+    storyTime[story_time]
     mapFocus[map_focus]
     dataModel[location_point / location_data]
   end
@@ -42,11 +42,12 @@ flowchart TB
   mainWindow --> appLanguage
   mainWindow --> jsonLoader
   mainWindow --> filter
+  mainWindow --> storyTime
   mapWidget --> tileCache
   mapWidget --> tileDownloader
   mapWidget --> tileMath
   mapWidget --> clusterer
-  mapWidget --> heatmap
+  mapWidget --> storyTime
   mapWidget --> mapFocus
   jsonLoader --> dataModel
   jsonLoader --> civilTime

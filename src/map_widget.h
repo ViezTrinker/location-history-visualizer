@@ -18,7 +18,6 @@
 #include <QWheelEvent>
 #include <QWidget>
 
-#include "heatmap_renderer.h"
 #include "location_data.h"
 #include "tile_cache.h"
 #include "tile_downloader.h"
@@ -31,6 +30,9 @@ namespace LocationHistory
    inline constexpr int32_t DefaultZoom = 13;
    inline constexpr int32_t HitTestRadiusPx = 12;
    inline constexpr int32_t PointRadiusPx = 4;
+   inline constexpr int32_t PathPointRadiusPx = 3;
+   inline constexpr int32_t VisitMinRadiusPx = 7;
+   inline constexpr int32_t VisitMaxRadiusPx = 16;
    inline constexpr int32_t MaxDrawnPoints = 20000;
    inline constexpr int32_t NoSelection = -1;
    inline constexpr int32_t AttributionPaddingPx = 8;
@@ -58,11 +60,11 @@ namespace LocationHistory
          void SetDisplayMode(DisplayMode displayMode);
 
          /*!
-          *\brief Sets the heat/blur scale used to lift weaker locations
+          *\brief Limits drawing to samples that started at or before this time
           *
-          *\param[in] heatScale Scale factor of at least 1
+          *\param[in] untilUnixTimeMs Inclusive story cutoff
           */
-         void SetHeatScale(float heatScale);
+         void SetUntilTime(int64_t untilUnixTimeMs);
 
          /*!
           *\brief Centers the map on the densest cluster of the current points
@@ -92,7 +94,13 @@ namespace LocationHistory
          void SetZoomLevel(int32_t zoom);
 
       signals:
-         void PointClicked(double latitude, double longitude, int64_t unixTimeMs, int32_t utcOffsetMinutes);
+         void PointClicked(
+            double latitude,
+            double longitude,
+            int64_t unixTimeMs,
+            int32_t utcOffsetMinutes,
+            int64_t endUnixTimeMs,
+            PointSource source);
          void PointCleared(void);
          void ZoomChanged(int32_t zoom);
 
@@ -127,17 +135,19 @@ namespace LocationHistory
          int32_t WorldToScreenY(double worldY) const;
          void SetZoomAround(int32_t newZoom, int32_t anchorScreenX, int32_t anchorScreenY);
          void DrawTiles(QPainter& painter);
-         void DrawPoints(QPainter& painter);
+         void DrawAllPoints(QPainter& painter);
+         void DrawPaths(QPainter& painter);
+         void DrawTrackPoints(QPainter& painter);
+         void DrawVisits(QPainter& painter);
+         void DrawSelection(QPainter& painter);
          void DrawClusters(QPainter& painter);
-         void DrawHeatmap(QPainter& painter);
-         void DrawBlur(QPainter& painter);
-         void DrawIntensityOverlay(QPainter& painter, int32_t blurRadius);
          void DrawAttribution(QPainter& painter);
          CacheLookup EnsureTile(const TileId& tileId, QPixmap& pixmap);
+         bool IsPointVisible(const LocationPoint& point) const;
+         bool IsOnScreen(int32_t screenX, int32_t screenY, int32_t marginPx) const;
          int32_t FindNearestPoint(int32_t screenX, int32_t screenY) const;
          void SelectPointAt(int32_t screenX, int32_t screenY);
-         bool IsHeatCacheCurrent(int32_t downWidth, int32_t downHeight, int32_t blurRadius) const;
-         void RebuildHeatIntensity(int32_t viewWidth, int32_t viewHeight, int32_t blurRadius);
+         void ClearSelectionIfHidden(void);
 
          LocationPointList _points;
          DisplayMode _displayMode;
@@ -151,16 +161,7 @@ namespace LocationHistory
          QPoint _lastMousePosition;
          QPoint _pressMousePosition;
          int32_t _selectedIndex;
-         float _heatScale;
-         uint64_t _pointsRevision;
-         HeatBuffer _cachedHeatIntensity;
-         int32_t _heatCacheDownWidth;
-         int32_t _heatCacheDownHeight;
-         int32_t _heatCacheBlurRadius;
-         int32_t _heatCacheZoom;
-         double _heatCacheCenterX;
-         double _heatCacheCenterY;
-         uint64_t _heatCachePointsRevision;
+         int64_t _untilUnixTimeMs;
    };
 } // namespace LocationHistory
 

@@ -24,6 +24,7 @@ namespace
       const LocationHistory::ParseResult parseResult =
          LocationHistory::ParseIso8601(timestamp, point.unixTimeMs, point.utcOffsetMinutes);
       EXPECT_TRUE(LocationHistory::IsOk(parseResult));
+      point.endUnixTimeMs = point.unixTimeMs;
       return point;
    }
 } // namespace
@@ -95,4 +96,22 @@ TEST(LocationFilter, TimeWindowKeepsMorning)
    LocationHistory::ApplyFilter(input, settings, output);
    EXPECT_EQ(output.size(), 1u);
    EXPECT_NEAR(output[0].latitude, 50.1, 1.0e-9);
+}
+
+TEST(LocationFilter, PassThroughKeepsPathIdAndDuration)
+{
+   LocationHistory::LocationPoint point = MakePoint("2020-01-15T08:30:00.000+01:00", 50.1, 8.6);
+   point.pathId = 3;
+   point.endUnixTimeMs = point.unixTimeMs + 3600000;
+   point.source = LocationHistory::PointSource::Visit;
+
+   LocationHistory::LocationPointList input;
+   input.push_back(point);
+
+   LocationHistory::LocationPointList output;
+   LocationHistory::ApplyFilter(input, LocationHistory::MakePassThroughFilter(), output);
+   ASSERT_EQ(output.size(), 1u);
+   EXPECT_EQ(output[0].pathId, 3);
+   EXPECT_EQ(output[0].endUnixTimeMs, point.endUnixTimeMs);
+   EXPECT_EQ(output[0].source, LocationHistory::PointSource::Visit);
 }

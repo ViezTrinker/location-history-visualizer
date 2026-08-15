@@ -14,7 +14,6 @@
 #include <QColor>
 #include <QFont>
 #include <QFontMetrics>
-#include <QImage>
 #include <QPainter>
 #include <QPen>
 #include <QPixmap>
@@ -24,9 +23,10 @@
 #include <QString>
 
 #include "clusterer.h"
-#include "heatmap_renderer.h"
 #include "location_data.h"
+#include "location_point.h"
 #include "map_focus.h"
+#include "story_time.h"
 #include "tile_cache.h"
 #include "tile_downloader.h"
 #include "tile_math.h"
@@ -38,30 +38,43 @@ namespace LocationHistory
       inline constexpr int32_t DragClickMaxDeltaPx = 4;
       inline constexpr int32_t ClusterMinRadiusPx = 12;
       inline constexpr int32_t ClusterMaxRadiusPx = 40;
+      inline constexpr int32_t PathCullMarginPx = 64;
+      inline constexpr int32_t PathLineWidthPx = 2;
+      inline constexpr double VisitRadiusHours = 8.0;
 
       QString AttributionText(void)
       {
          return QString::fromUtf8(OsmAttribution.data(), static_cast<int>(OsmAttribution.size()));
       }
+
+      int32_t VisitRadiusPx(const LocationPoint& point)
+      {
+         if (!PointHasDuration(point))
+         {
+            return VisitMinRadiusPx;
+         }
+
+         const auto durationMs = static_cast<double>(point.endUnixTimeMs - point.unixTimeMs);
+         const double hours = durationMs / 3600000.0;
+         double ratio = hours / VisitRadiusHours;
+         if (ratio > 1.0)
+         {
+            ratio = 1.0;
+         }
+         return VisitMinRadiusPx + static_cast<int32_t>(
+            ratio * static_cast<double>(VisitMaxRadiusPx - VisitMinRadiusPx));
+      }
    } // namespace
 
    MapWidget::MapWidget(QWidget* pParent)
       : QWidget(pParent)
-      , _displayMode(DisplayMode::AllPoints)
+      , _displayMode(DisplayMode::Points)
       , _pDownloader(new TileDownloader(this))
       , _zoom(DefaultZoom)
       , _dragState(DragState::Idle)
       , _skipReleaseSelect(SkipReleaseSelect::No)
       , _selectedIndex(NoSelection)
-      , _heatScale(HeatScaleDefault)
-      , _pointsRevision(0)
-      , _heatCacheDownWidth(0)
-      , _heatCacheDownHeight(0)
-      , _heatCacheBlurRadius(-1)
-      , _heatCacheZoom(-1)
-      , _heatCacheCenterX(0.0)
-      , _heatCacheCenterY(0.0)
-      , _heatCachePointsRevision(0)
+      , _untilUnixTimeMs(ShowAllUntilTimeMs)
    {
       setMouseTracking(true);
       setMinimumSize(400, 300);
@@ -79,7 +92,7 @@ namespace LocationHistory
    {
       _points = points;
       _selectedIndex = NoSelection;
-      _pointsRevision += 1;
+      ClearSelectionIfHidden();
       update();
    }
 
@@ -89,19 +102,15 @@ namespace LocationHistory
       update();
    }
 
-   void MapWidget::SetHeatScale(const float heatScale)
+   void MapWidget::SetUntilTime(const int64_t untilUnixTimeMs)
    {
-      float clampedScale = heatScale;
-      if (clampedScale < HeatScaleMin)
+      if (untilUnixTimeMs == _untilUnixTimeMs)
       {
-         clampedScale = HeatScaleMin;
-      }
-      if (clampedScale > HeatScaleMax)
-      {
-         clampedScale = HeatScaleMax;
+         return;
       }
 
-      _heatScale = clampedScale;
+      _untilUnixTimeMs = untilUnixTimeMs;
+      ClearSelectionIfHidden();
       update();
    }
 
@@ -234,11 +243,60 @@ namespace LocationHistory
       }
    }
 
-   void MapWidget::DrawPoints(QPainter& painter)
+   bool MapWidget::IsPointVisible(const LocationPoint& point) const
+   {
+      if (_displayMode != DisplayMode::Story)
+      {
+         return true;
+      }
+      return PointVisibleUntil(point, _untilUnixTimeMs);
+   }
+
+   bool MapWidget::IsOnScreen(const int32_t screenX, const int32_t screenY, const int32_t marginPx) const
+   {
+      if (screenX < -marginPx)
+      {
+         return false;
+      }
+      if (screenX > width() + marginPx)
+      {
+         return false;
+      }
+      if (screenY < -marginPx)
+      {
+         return false;
+      }
+      if (screenY > height() + marginPx)
+      {
+         return false;
+      }
+      return true;
+   }
+
+   void MapWidget::ClearSelectionIfHidden(void)
+   {
+      if (_selectedIndex == NoSelection)
+      {
+         return;
+      }
+      if (_selectedIndex >= static_cast<int32_t>(_points.size()))
+      {
+         _selectedIndex = NoSelection;
+         emit PointCleared();
+         return;
+      }
+      if (!IsPointVisible(_points[static_cast<size_t>(_selectedIndex)]))
+      {
+         _selectedIndex = NoSelection;
+         emit PointCleared();
+      }
+   }
+
+   void MapWidget::DrawAllPoints(QPainter& painter)
    {
       painter.setRenderHint(QPainter::Antialiasing, true);
       painter.setPen(Qt::NoPen);
-      painter.setBrush(QColor(220, 40, 40, 180));
+      painter.setBrush(QColor(200, 40, 40, 200));
 
       int32_t step = 1;
       if (_points.size() > static_cast<size_t>(MaxDrawnPoints))
@@ -250,41 +308,181 @@ namespace LocationHistory
          }
       }
 
-      const int32_t viewWidth = width();
-      const int32_t viewHeight = height();
       for (size_t index = 0; index < _points.size(); index += static_cast<size_t>(step))
       {
          const LocationPoint& point = _points[index];
-         const int32_t screenX = WorldToScreenX(LongitudeToWorldX(point.longitude, _zoom));
-         const int32_t screenY = WorldToScreenY(LatitudeToWorldY(point.latitude, _zoom));
-         if ((screenX < -PointRadiusPx) || (screenX > viewWidth + PointRadiusPx))
+         if (!IsPointVisible(point))
          {
             continue;
          }
-         if ((screenY < -PointRadiusPx) || (screenY > viewHeight + PointRadiusPx))
+         const int32_t screenX = WorldToScreenX(LongitudeToWorldX(point.longitude, _zoom));
+         const int32_t screenY = WorldToScreenY(LatitudeToWorldY(point.latitude, _zoom));
+         if (!IsOnScreen(screenX, screenY, PointRadiusPx))
          {
             continue;
          }
          painter.drawEllipse(QPoint(screenX, screenY), PointRadiusPx, PointRadiusPx);
       }
+   }
 
-      if ((_selectedIndex >= 0) && (_selectedIndex < static_cast<int32_t>(_points.size())))
+   void MapWidget::DrawPaths(QPainter& painter)
+   {
+      painter.setRenderHint(QPainter::Antialiasing, true);
+      painter.setPen(QPen(QColor(210, 55, 45, 200), PathLineWidthPx));
+
+      int32_t lastPathId = NoPathId;
+      int32_t lastScreenX = 0;
+      int32_t lastScreenY = 0;
+      bool haveLast = false;
+      for (size_t index = 0; index < _points.size(); ++index)
       {
-         const LocationPoint& selected = _points[static_cast<size_t>(_selectedIndex)];
-         const int32_t screenX = WorldToScreenX(LongitudeToWorldX(selected.longitude, _zoom));
-         const int32_t screenY = WorldToScreenY(LatitudeToWorldY(selected.latitude, _zoom));
-         painter.setBrush(Qt::NoBrush);
-         painter.setPen(QPen(QColor(255, 255, 255), 2));
-         painter.drawEllipse(QPoint(screenX, screenY), PointRadiusPx + 3, PointRadiusPx + 3);
-         painter.setPen(QPen(QColor(30, 30, 30), 1));
-         painter.drawEllipse(QPoint(screenX, screenY), PointRadiusPx + 5, PointRadiusPx + 5);
+         const LocationPoint& point = _points[index];
+         if (point.source != PointSource::TimelinePath)
+         {
+            haveLast = false;
+            continue;
+         }
+         if (!IsPointVisible(point))
+         {
+            haveLast = false;
+            continue;
+         }
+         if (point.pathId == NoPathId)
+         {
+            haveLast = false;
+            continue;
+         }
+
+         const int32_t screenX = WorldToScreenX(LongitudeToWorldX(point.longitude, _zoom));
+         const int32_t screenY = WorldToScreenY(LatitudeToWorldY(point.latitude, _zoom));
+         if (haveLast && (lastPathId == point.pathId))
+         {
+            if (IsOnScreen(lastScreenX, lastScreenY, PathCullMarginPx) ||
+                IsOnScreen(screenX, screenY, PathCullMarginPx))
+            {
+               painter.drawLine(lastScreenX, lastScreenY, screenX, screenY);
+            }
+         }
+
+         lastScreenX = screenX;
+         lastScreenY = screenY;
+         lastPathId = point.pathId;
+         haveLast = true;
       }
+   }
+
+   void MapWidget::DrawTrackPoints(QPainter& painter)
+   {
+      painter.setRenderHint(QPainter::Antialiasing, true);
+      painter.setPen(Qt::NoPen);
+
+      int32_t step = 1;
+      if (_points.size() > static_cast<size_t>(MaxDrawnPoints))
+      {
+         step = static_cast<int32_t>(_points.size() / static_cast<size_t>(MaxDrawnPoints));
+         if (step < 1)
+         {
+            step = 1;
+         }
+      }
+
+      for (size_t index = 0; index < _points.size(); index += static_cast<size_t>(step))
+      {
+         const LocationPoint& point = _points[index];
+         if (point.source == PointSource::Visit)
+         {
+            continue;
+         }
+         if (!IsPointVisible(point))
+         {
+            continue;
+         }
+
+         const int32_t screenX = WorldToScreenX(LongitudeToWorldX(point.longitude, _zoom));
+         const int32_t screenY = WorldToScreenY(LatitudeToWorldY(point.latitude, _zoom));
+         const int32_t radius = (point.source == PointSource::TimelinePath) ? PathPointRadiusPx : PointRadiusPx;
+         if (!IsOnScreen(screenX, screenY, radius))
+         {
+            continue;
+         }
+
+         if (point.source == PointSource::TimelinePath)
+         {
+            painter.setBrush(QColor(200, 40, 40, 200));
+         }
+         else
+         {
+            painter.setBrush(QColor(90, 90, 90, 180));
+         }
+         painter.drawEllipse(QPoint(screenX, screenY), radius, radius);
+      }
+   }
+
+   void MapWidget::DrawVisits(QPainter& painter)
+   {
+      painter.setRenderHint(QPainter::Antialiasing, true);
+      painter.setPen(QPen(QColor(20, 50, 80, 180), 1));
+      painter.setBrush(QColor(30, 110, 170, 200));
+
+      for (size_t index = 0; index < _points.size(); ++index)
+      {
+         const LocationPoint& point = _points[index];
+         if (point.source != PointSource::Visit)
+         {
+            continue;
+         }
+         if (!IsPointVisible(point))
+         {
+            continue;
+         }
+
+         const int32_t screenX = WorldToScreenX(LongitudeToWorldX(point.longitude, _zoom));
+         const int32_t screenY = WorldToScreenY(LatitudeToWorldY(point.latitude, _zoom));
+         const int32_t radius = VisitRadiusPx(point);
+         if (!IsOnScreen(screenX, screenY, radius))
+         {
+            continue;
+         }
+         painter.drawEllipse(QPoint(screenX, screenY), radius, radius);
+      }
+   }
+
+   void MapWidget::DrawSelection(QPainter& painter)
+   {
+      if ((_selectedIndex < 0) || (_selectedIndex >= static_cast<int32_t>(_points.size())))
+      {
+         return;
+      }
+
+      const LocationPoint& selected = _points[static_cast<size_t>(_selectedIndex)];
+      if (!IsPointVisible(selected))
+      {
+         return;
+      }
+
+      const int32_t screenX = WorldToScreenX(LongitudeToWorldX(selected.longitude, _zoom));
+      const int32_t screenY = WorldToScreenY(LatitudeToWorldY(selected.latitude, _zoom));
+      painter.setBrush(Qt::NoBrush);
+      painter.setPen(QPen(QColor(255, 255, 255), 2));
+      painter.drawEllipse(QPoint(screenX, screenY), PointRadiusPx + 3, PointRadiusPx + 3);
+      painter.setPen(QPen(QColor(30, 30, 30), 1));
+      painter.drawEllipse(QPoint(screenX, screenY), PointRadiusPx + 5, PointRadiusPx + 5);
    }
 
    void MapWidget::DrawClusters(QPainter& painter)
    {
+      LocationPointList visiblePoints;
+      visiblePoints.reserve(_points.size());
+      for (size_t index = 0; index < _points.size(); ++index)
+      {
+         if (IsPointVisible(_points[index]))
+         {
+            visiblePoints.push_back(_points[index]);
+         }
+      }
+
       ClusterList clusters;
-      BuildClusters(_points, _zoom, ClusterCellSizePx, clusters);
+      BuildClusters(visiblePoints, _zoom, ClusterCellSizePx, clusters);
 
       int32_t maxCount = 1;
       for (size_t index = 0; index < clusters.size(); ++index)
@@ -327,122 +525,6 @@ namespace LocationHistory
       }
    }
 
-   void MapWidget::DrawHeatmap(QPainter& painter)
-   {
-      const auto blurRadius = static_cast<int32_t>(
-         std::lround(HeatmapSigmaPx / static_cast<double>(HeatmapDownsample) * 2.0));
-      DrawIntensityOverlay(painter, std::max(blurRadius, 1));
-   }
-
-   void MapWidget::DrawBlur(QPainter& painter)
-   {
-      const auto blurRadius = static_cast<int32_t>(
-         std::lround(static_cast<double>(BlurRadiusPx) / static_cast<double>(HeatmapDownsample) * 2.0));
-      DrawIntensityOverlay(painter, std::max(blurRadius, 1));
-   }
-
-   bool MapWidget::IsHeatCacheCurrent(const int32_t downWidth, const int32_t downHeight, const int32_t blurRadius) const
-   {
-      if (_cachedHeatIntensity.empty())
-      {
-         return false;
-      }
-      if (_heatCacheDownWidth != downWidth)
-      {
-         return false;
-      }
-      if (_heatCacheDownHeight != downHeight)
-      {
-         return false;
-      }
-      if (_heatCacheBlurRadius != blurRadius)
-      {
-         return false;
-      }
-      if (_heatCacheZoom != _zoom)
-      {
-         return false;
-      }
-      if (_heatCacheCenterX != _centerWorldX)
-      {
-         return false;
-      }
-      if (_heatCacheCenterY != _centerWorldY)
-      {
-         return false;
-      }
-      if (_heatCachePointsRevision != _pointsRevision)
-      {
-         return false;
-      }
-      return true;
-   }
-
-   void MapWidget::RebuildHeatIntensity(const int32_t viewWidth, const int32_t viewHeight, const int32_t blurRadius)
-   {
-      const int32_t downWidth = std::max(1, viewWidth / HeatmapDownsample);
-      const int32_t downHeight = std::max(1, viewHeight / HeatmapDownsample);
-      const double scaleX = static_cast<double>(downWidth) / static_cast<double>(viewWidth);
-      const double scaleY = static_cast<double>(downHeight) / static_cast<double>(viewHeight);
-
-      HeatBuffer density(static_cast<size_t>(downWidth) * static_cast<size_t>(downHeight), 0.0f);
-      for (size_t index = 0; index < _points.size(); ++index)
-      {
-         const LocationPoint& point = _points[index];
-         const double screenX = static_cast<double>(WorldToScreenX(LongitudeToWorldX(point.longitude, _zoom)));
-         const double screenY = static_cast<double>(WorldToScreenY(LatitudeToWorldY(point.latitude, _zoom)));
-         if ((screenX < 0.0) || (screenX > static_cast<double>(viewWidth)))
-         {
-            continue;
-         }
-         if ((screenY < 0.0) || (screenY > static_cast<double>(viewHeight)))
-         {
-            continue;
-         }
-         AddHeatSample(density, downWidth, downHeight, screenX * scaleX, screenY * scaleY, 1.0f);
-      }
-
-      GaussianBlur(density, _cachedHeatIntensity, downWidth, downHeight, blurRadius);
-      _heatCacheDownWidth = downWidth;
-      _heatCacheDownHeight = downHeight;
-      _heatCacheBlurRadius = blurRadius;
-      _heatCacheZoom = _zoom;
-      _heatCacheCenterX = _centerWorldX;
-      _heatCacheCenterY = _centerWorldY;
-      _heatCachePointsRevision = _pointsRevision;
-   }
-
-   void MapWidget::DrawIntensityOverlay(QPainter& painter, const int32_t blurRadius)
-   {
-      const int32_t viewWidth = width();
-      const int32_t viewHeight = height();
-      if ((viewWidth <= 0) || (viewHeight <= 0))
-      {
-         return;
-      }
-
-      const int32_t downWidth = std::max(1, viewWidth / HeatmapDownsample);
-      const int32_t downHeight = std::max(1, viewHeight / HeatmapDownsample);
-      if (!IsHeatCacheCurrent(downWidth, downHeight, blurRadius))
-      {
-         RebuildHeatIntensity(viewWidth, viewHeight, blurRadius);
-      }
-      if (_cachedHeatIntensity.empty())
-      {
-         return;
-      }
-
-      ArgbBuffer pixels;
-      HeatBufferToArgb(_cachedHeatIntensity, pixels, ScaledHeatCeiling(MaxHeat(_cachedHeatIntensity), _heatScale));
-      QImage image(
-         reinterpret_cast<const uchar*>(pixels.data()),
-         _heatCacheDownWidth,
-         _heatCacheDownHeight,
-         _heatCacheDownWidth * static_cast<int32_t>(sizeof(uint32_t)),
-         QImage::Format_ARGB32);
-      painter.drawImage(QRect(0, 0, viewWidth, viewHeight), image);
-   }
-
    void MapWidget::DrawAttribution(QPainter& painter)
    {
       const QString text = AttributionText();
@@ -463,21 +545,19 @@ namespace LocationHistory
       painter.fillRect(rect(), QColor(200, 200, 200));
       DrawTiles(painter);
 
-      if (_displayMode == DisplayMode::AllPoints)
+      if (_displayMode == DisplayMode::Points)
       {
-         DrawPoints(painter);
+         DrawAllPoints(painter);
+         DrawSelection(painter);
+      }
+      else if (_displayMode == DisplayMode::Story)
+      {
+         DrawAllPoints(painter);
+         DrawSelection(painter);
       }
       else if (_displayMode == DisplayMode::Clustered)
       {
          DrawClusters(painter);
-      }
-      else if (_displayMode == DisplayMode::Heatmap)
-      {
-         DrawHeatmap(painter);
-      }
-      else if (_displayMode == DisplayMode::Blur)
-      {
-         DrawBlur(painter);
       }
 
       DrawAttribution(painter);
@@ -577,15 +657,28 @@ namespace LocationHistory
       for (size_t index = 0; index < _points.size(); ++index)
       {
          const LocationPoint& point = _points[index];
+         if (!IsPointVisible(point))
+         {
+            continue;
+         }
+
          const int32_t pointX = WorldToScreenX(LongitudeToWorldX(point.longitude, _zoom));
          const int32_t pointY = WorldToScreenY(LatitudeToWorldY(point.latitude, _zoom));
          const double deltaX = static_cast<double>(pointX - screenX);
          const double deltaY = static_cast<double>(pointY - screenY);
          const double distance = std::sqrt(deltaX * deltaX + deltaY * deltaY);
-         if (distance <= nearestDistance)
+         double hitRadius = static_cast<double>(HitTestRadiusPx);
+         if (point.source == PointSource::Visit)
          {
-            nearestDistance = distance;
-            nearestIndex = static_cast<int32_t>(index);
+            hitRadius = static_cast<double>(VisitRadiusPx(point) + 4);
+         }
+         if (distance <= hitRadius)
+         {
+            if ((nearestIndex == NoSelection) || (distance < nearestDistance))
+            {
+               nearestDistance = distance;
+               nearestIndex = static_cast<int32_t>(index);
+            }
          }
       }
       return nearestIndex;
@@ -603,7 +696,13 @@ namespace LocationHistory
       }
 
       const LocationPoint& point = _points[static_cast<size_t>(nearestIndex)];
-      emit PointClicked(point.latitude, point.longitude, point.unixTimeMs, point.utcOffsetMinutes);
+      emit PointClicked(
+         point.latitude,
+         point.longitude,
+         point.unixTimeMs,
+         point.utcOffsetMinutes,
+         point.endUnixTimeMs,
+         point.source);
       update();
    }
 

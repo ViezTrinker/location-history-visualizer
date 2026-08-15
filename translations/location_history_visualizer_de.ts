@@ -84,28 +84,32 @@
         <translation>Darstellung</translation>
     </message>
     <message>
-        <source>All points</source>
-        <translation>Alle Punkte</translation>
+        <source>Points</source>
+        <translation>Punkte</translation>
     </message>
     <message>
         <source>Cluster</source>
         <translation>Cluster</translation>
     </message>
     <message>
-        <source>Heatmap</source>
-        <translation>Heatmap</translation>
+        <source>Story</source>
+        <translation>Geschichte</translation>
     </message>
     <message>
-        <source>Blur</source>
-        <translation>Unschärfe</translation>
+        <source>Play</source>
+        <translation>Abspielen</translation>
     </message>
     <message>
-        <source>Scaling</source>
-        <translation>Skalierung</translation>
+        <source>Pause</source>
+        <translation>Pause</translation>
     </message>
     <message>
-        <source>Raises rarer places in Heatmap and Blur. High values saturate frequent places.</source>
-        <translation>Hebt seltenere Orte in Heatmap und Unschärfe an. Hohe Werte sättigen häufige Orte.</translation>
+        <source>Reveal locations up to this time</source>
+        <translation>Orte bis zu diesem Zeitpunkt einblenden</translation>
+    </message>
+    <message>
+        <source>Story start day</source>
+        <translation>Starttag der Geschichte</translation>
     </message>
     <message>
         <source>Point info</source>
@@ -114,6 +118,34 @@
     <message>
         <source>When</source>
         <translation>Wann</translation>
+    </message>
+    <message>
+        <source>Until</source>
+        <translation>Bis</translation>
+    </message>
+    <message>
+        <source>Duration</source>
+        <translation>Dauer</translation>
+    </message>
+    <message>
+        <source>%1 ms</source>
+        <translation>%1 ms</translation>
+    </message>
+    <message>
+        <source>%1 s</source>
+        <translation>%1 s</translation>
+    </message>
+    <message>
+        <source>%1 min</source>
+        <translation>%1 min</translation>
+    </message>
+    <message>
+        <source>%1 h</source>
+        <translation>%1 h</translation>
+    </message>
+    <message>
+        <source>%1 h %2 min</source>
+        <translation>%1 h %2 min</translation>
     </message>
     <message>
         <source>Latitude</source>
@@ -174,10 +206,6 @@
     <message>
         <source>The file could not be loaded.</source>
         <translation>Die Datei konnte nicht geladen werden.</translation>
-    </message>
-    <message>
-        <source>×%1</source>
-        <translation>×%1</translation>
     </message>
 </context>
 <context>

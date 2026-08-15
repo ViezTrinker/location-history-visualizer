@@ -56,8 +56,6 @@ set(LOCATION_HISTORY_CORE_SOURCES
    src/civil_time.h
    src/clusterer.cpp
    src/clusterer.h
-   src/heatmap_renderer.cpp
-   src/heatmap_renderer.h
    src/json_loader.cpp
    src/json_loader.h
    src/load_result.h
@@ -67,6 +65,8 @@ set(LOCATION_HISTORY_CORE_SOURCES
    src/location_point.h
    src/map_focus.cpp
    src/map_focus.h
+   src/story_time.cpp
+   src/story_time.h
    src/tile_math.cpp
    src/tile_math.h
    src/version.h
@@ -137,10 +137,10 @@ enable_testing()
 set(LOCATION_HISTORY_TEST_SOURCES
    tests/app_language_test.cpp
    tests/clusterer_test.cpp
-   tests/heatmap_renderer_test.cpp
    tests/json_loader_test.cpp
    tests/location_filter_test.cpp
    tests/map_focus_test.cpp
+   tests/story_time_test.cpp
    tests/tile_math_test.cpp
 )
 

@@ -130,6 +130,11 @@ namespace LocationHistory
                   _segmentStartTime = value;
                   return true;
                }
+               if ((_currentKey == "endTime") && (current == SaxContext::Segment))
+               {
+                  _segmentEndTime = value;
+                  return true;
+               }
                if ((_currentKey == "point") && (current == SaxContext::TimelinePoint))
                {
                   _pointLatLng = value;
@@ -171,6 +176,7 @@ namespace LocationHistory
                {
                   _context.push_back(SaxContext::Segment);
                   _segmentStartTime.clear();
+                  _segmentEndTime.clear();
                   _visitLatLng.clear();
                   return true;
                }
@@ -223,15 +229,15 @@ namespace LocationHistory
                const SaxContext current = _context.back();
                if (current == SaxContext::TimelinePoint)
                {
-                  TryAddPoint(_pointLatLng, _pointTime, PointSource::TimelinePath);
+                  TryAddPoint(_pointLatLng, _pointTime, "", PointSource::TimelinePath, _currentPathId);
                }
                if (current == SaxContext::Segment)
                {
-                  TryAddPoint(_visitLatLng, _segmentStartTime, PointSource::Visit);
+                  TryAddPoint(_visitLatLng, _segmentStartTime, _segmentEndTime, PointSource::Visit, NoPathId);
                }
                if (current == SaxContext::Position)
                {
-                  TryAddPoint(_pointLatLng, _pointTime, PointSource::RawPosition);
+                  TryAddPoint(_pointLatLng, _pointTime, "", PointSource::RawPosition, NoPathId);
                }
 
                _context.pop_back();
@@ -247,6 +253,7 @@ namespace LocationHistory
                }
                if (_currentKey == "timelinePath")
                {
+                  _currentPathId += 1;
                   _context.push_back(SaxContext::TimelinePath);
                   return true;
                }
@@ -290,7 +297,12 @@ namespace LocationHistory
                return _context.back();
             }
 
-            void TryAddPoint(const std::string& latLngText, const std::string& timeText, const PointSource source)
+            void TryAddPoint(
+               const std::string& latLngText,
+               const std::string& timeText,
+               const std::string& endTimeText,
+               const PointSource source,
+               const int32_t pathId)
             {
                if (latLngText.empty())
                {
@@ -321,6 +333,17 @@ namespace LocationHistory
                point.unixTimeMs = unixTimeMs;
                point.utcOffsetMinutes = utcOffsetMinutes;
                point.source = source;
+               point.endUnixTimeMs = unixTimeMs;
+               point.pathId = pathId;
+               if (!endTimeText.empty())
+               {
+                  int64_t endUnixTimeMs = 0;
+                  int32_t endUtcOffsetMinutes = 0;
+                  if (IsOk(ParseIso8601(endTimeText, endUnixTimeMs, endUtcOffsetMinutes)))
+                  {
+                     point.endUnixTimeMs = endUnixTimeMs;
+                  }
+               }
                _points.push_back(point);
             }
 
@@ -328,9 +351,11 @@ namespace LocationHistory
             std::vector<SaxContext> _context;
             std::string _currentKey;
             std::string _segmentStartTime;
+            std::string _segmentEndTime;
             std::string _visitLatLng;
             std::string _pointLatLng;
             std::string _pointTime;
+            int32_t _currentPathId = NoPathId;
             bool _hadError = false;
       };
    } // namespace

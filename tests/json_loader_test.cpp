@@ -82,6 +82,62 @@ TEST(JsonLoader, LoadFixtureExtractsAllSources)
    EXPECT_EQ(rawCount, 1);
 }
 
+TEST(JsonLoader, TimelinePathsShareAnIdPerSegment)
+{
+   LocationHistory::LocationPointList points;
+   const std::string fixturePath = std::string(TEST_FIXTURE_DIR) + "/sample_timeline.json";
+   ASSERT_TRUE(LocationHistory::IsOk(LocationHistory::LoadFromFile(fixturePath, points)));
+
+   int32_t firstPathId = LocationHistory::NoPathId;
+   int32_t firstPathCount = 0;
+   int32_t secondPathId = LocationHistory::NoPathId;
+   for (size_t index = 0; index < points.size(); ++index)
+   {
+      if (points[index].source != LocationHistory::PointSource::TimelinePath)
+      {
+         continue;
+      }
+      if (firstPathCount == 0)
+      {
+         firstPathId = points[index].pathId;
+      }
+      if (points[index].pathId == firstPathId)
+      {
+         firstPathCount += 1;
+      }
+      else
+      {
+         secondPathId = points[index].pathId;
+      }
+   }
+   EXPECT_NE(firstPathId, LocationHistory::NoPathId);
+   EXPECT_EQ(firstPathCount, 2);
+   EXPECT_NE(secondPathId, LocationHistory::NoPathId);
+   EXPECT_NE(secondPathId, firstPathId);
+}
+
+TEST(JsonLoader, VisitKeepsSegmentDuration)
+{
+   LocationHistory::LocationPointList points;
+   const std::string fixturePath = std::string(TEST_FIXTURE_DIR) + "/sample_timeline.json";
+   ASSERT_TRUE(LocationHistory::IsOk(LocationHistory::LoadFromFile(fixturePath, points)));
+
+   int32_t visitIndex = -1;
+   for (size_t index = 0; index < points.size(); ++index)
+   {
+      if (points[index].source == LocationHistory::PointSource::Visit)
+      {
+         visitIndex = static_cast<int32_t>(index);
+         break;
+      }
+   }
+   ASSERT_GE(visitIndex, 0);
+   const LocationHistory::LocationPoint& visit = points[static_cast<size_t>(visitIndex)];
+   EXPECT_TRUE(LocationHistory::PointHasDuration(visit));
+   EXPECT_EQ(visit.endUnixTimeMs - visit.unixTimeMs, 2 * 60 * 60 * 1000);
+   EXPECT_EQ(visit.pathId, LocationHistory::NoPathId);
+}
+
 TEST(JsonLoader, MissingFileReturnsFileNotFound)
 {
    LocationHistory::LocationPointList points;

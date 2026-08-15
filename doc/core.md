@@ -9,11 +9,13 @@
 | Feld | Bedeutung |
 | --- | --- |
 | `latitude` / `longitude` | WGS84, Grad |
-| `unixTimeMs` | Unix-Zeit in Millisekunden (UTC) |
+| `unixTimeMs` | Unix-Zeit in Millisekunden (UTC), Start des Samples |
 | `utcOffsetMinutes` | Offset aus dem JSON-Zeitstempel (`+02:00` → 120) |
 | `source` | `TimelinePath`, `Visit` oder `RawPosition` |
+| `endUnixTimeMs` | Ende eines Aufenthalts; bei Pfadpunkten gleich `unixTimeMs` |
+| `pathId` | gemeinsame ID aller Punkte eines `timelinePath`-Arrays, sonst `NoPathId` |
 
-[`src/location_data.h`](../src/location_data.h) definiert `LocationPointList` und `DisplayMode` (`AllPoints`, `Clustered`, `Heatmap`, `Blur`).
+[`src/location_data.h`](../src/location_data.h) definiert `LocationPointList` und `DisplayMode` (`Points`, `Clustered`, `Story`).
 
 Fehlercodes stehen in [`src/load_result.h`](../src/load_result.h): `LoadResult` / `ParseResult` plus `IsOk` / `IsErr` / `IsMsg`. Kein `bool` als Erfolg/Fehler nach außen.
 
@@ -27,8 +29,8 @@ Der Parser ist ein nlohmann-JSON-**SAX**-Handler, damit große Dateien nicht als
 
 | JSON-Pfad | `PointSource` |
 | --- | --- |
-| `semanticSegments[].timelinePath[].point` + `time` | `TimelinePath` |
-| `semanticSegments[].visit.topCandidate.placeLocation.latLng` + Segment-`startTime` | `Visit` |
+| `semanticSegments[].timelinePath[].point` + `time` | `TimelinePath` (eine `pathId` pro Array) |
+| `semanticSegments[].visit.topCandidate.placeLocation.latLng` + Segment-`startTime`/`endTime` | `Visit` |
 | `rawSignals[].position.LatLng` + `timestamp` | `RawPosition` |
 
 Ignoriert in v1: `activity`, `timelineMemory`, `userLocationProfile`.
@@ -45,17 +47,9 @@ Ignoriert in v1: `activity`, `timelineMemory`, `userLocationProfile`.
 
 [`src/clusterer.h`](../src/clusterer.h) rastert Punkte in Weltpixeln am aktuellen Zoom. Zellengröße standardmäßig `ClusterCellSizePx` (48). Pro Zelle: Mittelwert der Koordinaten und `count`.
 
-## Heatmap-Mathe
+## Story-Zeit
 
-[`src/heatmap_renderer.h`](../src/heatmap_renderer.h) bleibt pixelbasiert und Qt-frei:
-
-- `AddHeatSample` setzt Intensität auf das nächste Pixel
-- `AddGaussianSpot` akkumuliert einen Gauß-Kern (Tests / älterer Pfad)
-- `ColorFromHeat` mappt 0..1 auf eine transparent→blau→gelb→rot-Rampe
-- `GaussianBlur` ist separabel (horizontal, dann vertikal)
-- `ScaledHeatCeiling(maxHeat, heatScale)` senkt die Normierungsdecke, damit seltene Orte sichtbar bleiben (`heatScale` 1..100, logarithmisch vom UI-Slider)
-
-Die eigentliche `QImage`-Ausgabe macht `MapWidget` (Raster 4× verkleinert, ein Blur, Cache). Siehe [map.md](map.md).
+[`src/story_time.h`](../src/story_time.h) mappt den Scrubber (0..`StorySliderMax`) vom gewählten Starttag bis zum letzten späteren Sample. `CollectPointsFromDate` hält alles ab diesem lokalen Datum. `LastTimeOnCivilDate` setzt die Startposition auf das Ende des Starttags. `PointVisibleUntil` zeigt ein Sample, sobald sein Start (`unixTimeMs`) den Cutoff erreicht hat.
 
 ## Kartenfokus
 

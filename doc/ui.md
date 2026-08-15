@@ -9,7 +9,7 @@ Die UI ist Qt 6 Widgets. Verbindungen laufen über Member-Slots, ohne Lambdas.
 - `_allPoints` — Ergebnis von `LoadFromFile`
 - `_filteredPoints` — nach `ApplyFilter`
 
-Layout: linke Leiste (~280 px) + `MapWidget` + Zoom-Leiste rechts neben der Karte.
+Layout: linke Leiste (~280 px) + `MapWidget` + Zoom-Leiste rechts neben der Karte + Zeit-Scrubber darunter.
 
 | Bereich | Steuerung |
 | --- | --- |
@@ -17,10 +17,10 @@ Layout: linke Leiste (~280 px) + `MapWidget` + Zoom-Leiste rechts neben der Kart
 | Date | `QDateEdit` from/to, set to min/max of the data after load |
 | Weekday | seven checkboxes, bits in `weekdayMask` |
 | Time of day | `QTimeEdit` 00:00–23:59 |
-| Display | ComboBox `DisplayMode` |
-| Scaling | `QSlider`, enabled only for Heatmap and Blur, factor ×1..×100 logarithmic |
+| Display | ComboBox `DisplayMode`: Points, Cluster, or Story |
 | Zoom | `+`, vertical `QSlider` (zoom 2..19), `-` — beside the map |
-| Point info | When, Latitude, Longitude |
+| Story | Visible only in Story mode: start-day picker, Play/Pause, scrubber — Play continues through later days as red points |
+| Point info | When, Until, Duration, Latitude, Longitude |
 | Language | ComboBox: English (default), Deutsch, Español, Français. Stored in `QSettings` (`language`) |
 
 Source UI strings are English. Translations live in [`translations/`](../translations/) (`.ts` → `.qm` via Qt LinguistTools). Changing the language updates the window immediately.
@@ -42,7 +42,7 @@ flowchart LR
   map[MapWidget]
   ui -->|"_allPoints plus FilterSettings"| coreFilter
   coreFilter -->|"_filteredPoints"| map
-  ui -->|DisplayMode HeatScale Zoom| map
+  ui -->|DisplayMode UntilTime Zoom| map
   map -->|PointClicked ZoomChanged| ui
 ```
 

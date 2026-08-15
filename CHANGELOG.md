@@ -2,6 +2,11 @@
 
 All notable releases of Location History Visualizer are listed here.
 
+## Unreleased
+
+- Points mode draws filtered samples as simple red dots. Cluster is unchanged.
+- Story starts on a chosen day. Play reveals later days as raw red points. Heatmap and Blur are removed.
+
 ## 1.0.0.R — 2026-08-14
 
 First public release: a native Windows desktop app that plots a Google Timeline JSON export on OpenStreetMap tiles. Parsing and visualization run locally; the map only downloads OSM raster tiles.

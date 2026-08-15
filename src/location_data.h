@@ -17,10 +17,9 @@ namespace LocationHistory
 
    enum class DisplayMode : uint8_t
    {
-      AllPoints = 0,
+      Points = 0,
       Clustered = 1,
-      Heatmap = 2,
-      Blur = 3
+      Story = 2
    };
 } // namespace LocationHistory
 

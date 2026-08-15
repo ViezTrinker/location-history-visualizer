@@ -34,17 +34,14 @@ Fehlende Kacheln erscheinen grau, bis der Download kommt. Unten links: `© OpenS
 
 ## Overlay-Modi
 
-[`src/map_widget.h`](../src/map_widget.h) zeichnet in `paintEvent` zuerst Tiles, dann je `DisplayMode`:
+[`src/map_widget.h`](../src/map_widget.h) zeichnet in `paintEvent` zuerst Tiles, dann je `DisplayMode`. Der Zeit-Cutoff (`SetUntilTime`) gilt nur in `Story`.
 
 | Modus | Verhalten |
 | --- | --- |
-| `AllPoints` | Kreise, Viewport-Culling, bei mehr als `MaxDrawnPoints` (20000) Downsampling |
+| `Points` | einfache rote Kreise, Viewport-Culling, bei mehr als `MaxDrawnPoints` (20000) Downsampling |
 | `Clustered` | `BuildClusters` am aktuellen Zoom, Kreisgröße ~ log(count) |
-| `Heatmap` | Punkte ins Raster (`AddHeatSample`), Downsample 4×, ein `GaussianBlur`, Color-Ramp |
-| `Blur` | wie Heatmap, anderer Blur-Radius |
-
-Heatmap/Blur cachen den Intensitätsbuffer (`_cachedHeatIntensity`) und bauen ihn nur neu bei Zoom, Pan, Punkten oder Größe. Normalisierung über `ScaledHeatCeiling(MaxHeat, _heatScale)`. Der Skalierungsregler in der UI hebt schwache Intensitäten an; häufige Orte sättigen früher.
+| `Story` | rote Punkte wie in `Points`, aber zeitlich: zuerst der Starttag, mit Play alle folgenden Tage |
 
 ## Trefferprüfung
 
-Linksklick ohne nennenswerten Drag: nächster Punkt innerhalb `HitTestRadiusPx` (12). Signal `PointClicked(lat, lng, unixTimeMs, utcOffsetMinutes)` bzw. `PointCleared`. Der gewählte Punkt bekommt einen Ring im Punkte-Modus.
+Linksklick ohne nennenswerten Drag: nächster sichtbarer Punkt innerhalb `HitTestRadiusPx` (12), Visits etwas größer. Signal `PointClicked(lat, lng, unixTimeMs, utcOffsetMinutes, endUnixTimeMs, source)` bzw. `PointCleared`. Der gewählte Punkt bekommt einen Ring.

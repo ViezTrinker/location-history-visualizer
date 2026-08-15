@@ -9,10 +9,10 @@ GoogleTest liegt als Submodul unter `third_party/googletest`. Fehlt `CMakeLists.
 | Testdatei | Modul | Beispiele |
 | --- | --- | --- |
 | `tests/tile_math_test.cpp` | `tile_math` | Roundtrip Lat/Lng, Zoom-Clamp, Kachelgrenzen |
-| `tests/json_loader_test.cpp` | `json_loader`, `civil_time` | LatLng-String, ISO-8601, Fixture, Fehlercodes |
+| `tests/json_loader_test.cpp` | `json_loader`, `civil_time` | LatLng-String, ISO-8601, Fixture, Pfad-IDs, Visit-Dauer, Fehlercodes |
 | `tests/location_filter_test.cpp` | `location_filter` | Datum, Wochentag, Uhrzeitfenster |
 | `tests/clusterer_test.cpp` | `clusterer` | identische Punkte, getrennte Punkte, leere Eingabe |
-| `tests/heatmap_renderer_test.cpp` | `heatmap_renderer` | Kernel, Blur, Color-Ramp, Heat-Skalierung |
+| `tests/story_time_test.cpp` | `story_time` | Slider ↔ Zeitstempel, Starttag plus folgende Tage, Sichtbarkeit am Cutoff |
 | `tests/map_focus_test.cpp` | `map_focus` | leere Liste, dichteste Zelle, hoher Zoom bei enger Gruppe |
 | `tests/app_language_test.cpp` | `app_language` (header, ohne Qt) | Sprachcodes, Fallback Englisch, Roundtrip |
 

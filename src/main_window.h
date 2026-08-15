@@ -12,6 +12,7 @@
 #include <QAction>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QDate>
 #include <QDateEdit>
 #include <QEvent>
 #include <QGroupBox>
@@ -22,10 +23,13 @@
 #include <QSlider>
 #include <QString>
 #include <QTimeEdit>
+#include <QTimer>
+#include <QWidget>
 
 #include "load_result.h"
 #include "location_data.h"
 #include "location_filter.h"
+#include "location_point.h"
 #include "map_widget.h"
 
 namespace LocationHistory
@@ -45,36 +49,62 @@ namespace LocationHistory
          void OnAbout(void);
          void OnFiltersChanged(void);
          void OnDisplayModeChanged(int index);
-         void OnHeatScaleChanged(int sliderValue);
          void OnZoomInClicked(void);
          void OnZoomOutClicked(void);
          void OnZoomSliderChanged(int zoomValue);
          void OnMapZoomChanged(int32_t zoom);
          void OnLanguageChanged(int index);
-         void OnPointClicked(double latitude, double longitude, int64_t unixTimeMs, int32_t utcOffsetMinutes);
+         void OnStoryDateChanged(const QDate& date);
+         void OnStorySliderChanged(int sliderValue);
+         void OnStoryPlayClicked(void);
+         void OnStoryTimerTick(void);
+         void OnPointClicked(
+            double latitude,
+            double longitude,
+            int64_t unixTimeMs,
+            int32_t utcOffsetMinutes,
+            int64_t endUnixTimeMs,
+            PointSource source);
          void OnPointCleared(void);
 
       protected:
          void changeEvent(QEvent* pEvent) override;
 
       private:
+         enum class StoryPlayback : uint8_t
+         {
+            Stopped = 0,
+            Playing = 1
+         };
+
          void BuildUi(void);
          void BuildMenus(void);
          void RetranslateUi(void);
          void FillLanguageCombo(void);
          void UpdateFileLabel(void);
          void UpdateStatusMessage(void);
+         void UpdateStoryControls(void);
+         void UpdateStoryBarVisibility(void);
+         void UpdateStoryDateLimits(void);
+         void RefreshDisplayedPoints(void);
+         void ApplyStoryCutoff(void);
+         void StopStoryPlayback(void);
+         DisplayMode CurrentDisplayMode(void) const;
          QString WeekdayText(size_t weekdayIndex) const;
          QString LoadResultMessage(LoadResult result) const;
+         QString FormatDuration(int64_t durationMs) const;
          FilterSettings ReadFilterSettings(void) const;
          void ApplyCurrentFilter(void);
          void UpdateDateRangeFromPoints(void);
-         void UpdateHeatScaleControls(void);
          void SyncZoomSlider(void);
 
          LocationPointList _allPoints;
          LocationPointList _filteredPoints;
+         LocationPointList _storyDayPoints;
          QString _loadedFilePath;
+         int64_t _storyMinTimeMs;
+         int64_t _storyMaxTimeMs;
+         StoryPlayback _storyPlayback;
          MapWidget* _pMapWidget;
          QMenu* _pFileMenu;
          QAction* _pOpenAction;
@@ -97,11 +127,10 @@ namespace LocationHistory
          QTimeEdit* _pToTime;
          QGroupBox* _pModeGroup;
          QComboBox* _pDisplayMode;
-         QLabel* _pHeatScaleCaption;
-         QSlider* _pHeatScaleSlider;
-         QLabel* _pHeatScaleValueLabel;
          QGroupBox* _pInfoGroup;
          QLabel* _pWhenCaption;
+         QLabel* _pUntilCaption;
+         QLabel* _pDurationCaption;
          QLabel* _pLatitudeCaption;
          QLabel* _pLongitudeCaption;
          QGroupBox* _pLanguageGroup;
@@ -109,7 +138,15 @@ namespace LocationHistory
          QPushButton* _pZoomInButton;
          QPushButton* _pZoomOutButton;
          QSlider* _pZoomSlider;
+         QPushButton* _pStoryPlayButton;
+         QDateEdit* _pStoryDate;
+         QSlider* _pStorySlider;
+         QLabel* _pStoryTimeLabel;
+         QTimer* _pStoryTimer;
+         QWidget* _pStoryBar;
          QLabel* _pTimeLabel;
+         QLabel* _pUntilLabel;
+         QLabel* _pDurationLabel;
          QLabel* _pLatitudeLabel;
          QLabel* _pLongitudeLabel;
    };
