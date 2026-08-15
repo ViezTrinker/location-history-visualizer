@@ -9,6 +9,8 @@ Die UI ist Qt 6 Widgets. Verbindungen laufen über Member-Slots, ohne Lambdas.
 - `_allPoints` — Ergebnis von `LoadFromFile`
 - `_filteredPoints` — nach `ApplyFilter`
 
+[`src/main.cpp`](../src/main.cpp) zeigt das Fenster maximiert (`showMaximized()`), mit Rahmen und Titelleiste. Die normale Größe nach dem Wiederherstellen ist 1280×800.
+
 Menüleiste: **File | Settings | Help**. Layout darunter: linke Leiste (~280 px) + `MapWidget` + Zoom-Leiste rechts neben der Karte + Zeit-Scrubber darunter.
 
 | Bereich | Steuerung |

@@ -12,6 +12,7 @@ All notable releases of Location History Visualizer are listed here.
 - Weekday filters show the abbreviation under each checkbox so two-letter labels are not clipped.
 - The sidebar shows how many points the JSON contains and how many are currently visible.
 - Opening a JSON file is only in File → Open. The sidebar no longer has an Open button or the loaded file path.
+- The window starts maximized, with the normal window frame.
 
 ## 1.0.0.R — 2026-08-14
 
