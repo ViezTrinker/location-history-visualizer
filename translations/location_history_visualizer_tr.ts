@@ -180,6 +180,18 @@
         <translation>Açık</translation>
     </message>
     <message>
+        <source>Midnight</source>
+        <translation>Gece yarısı</translation>
+    </message>
+    <message>
+        <source>Nord</source>
+        <translation>Nord</translation>
+    </message>
+    <message>
+        <source>Sepia</source>
+        <translation>Sepya</translation>
+    </message>
+    <message>
         <source>Zoom in</source>
         <translation>Yakınlaştır</translation>
     </message>

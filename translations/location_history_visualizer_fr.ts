@@ -180,6 +180,18 @@
         <translation>Clair</translation>
     </message>
     <message>
+        <source>Midnight</source>
+        <translation>Minuit</translation>
+    </message>
+    <message>
+        <source>Nord</source>
+        <translation>Nord</translation>
+    </message>
+    <message>
+        <source>Sepia</source>
+        <translation>Sépia</translation>
+    </message>
+    <message>
         <source>Zoom in</source>
         <translation>Zoom avant</translation>
     </message>

@@ -16,7 +16,7 @@ Menüleiste: **File | Settings | Help**. Layout darunter: linke Leiste (~280 px)
 | Bereich | Steuerung |
 | --- | --- |
 | File | Menu → Open, `QFileDialog` for `*.json`. Last path in `QSettings` (`lastJsonPath`). Exit closes the window. |
-| Settings | **Language** submenu: exclusive checkable actions with native names (English, Deutsch, Español, Français, Русский, العربية, Italiano, Türkçe, Nederlands, Português, Polski, 日本語, 한국어, Bahasa Indonesia, Tiếng Việt, हिन्दी). Stored in `QSettings` (`language`). Arabic sets `Qt::RightToLeft`. **Theme** submenu: Dark (default) or Light. Stored in `QSettings` (`theme`). Fusion palettes, independent of the Windows color mode. |
+| Settings | **Language** submenu: exclusive checkable actions with native names (English, Deutsch, Español, Français, Русский, العربية, Italiano, Türkçe, Nederlands, Português, Polski, 日本語, 한국어, Bahasa Indonesia, Tiếng Việt, हिन्दी). Stored in `QSettings` (`language`). Arabic sets `Qt::RightToLeft`. **Theme** submenu: Dark (default), Light, Midnight, Nord, Sepia. Stored in `QSettings` (`theme`). Fusion palettes, independent of the Windows color mode. |
 | Help | About |
 | Date | `QDateEdit` from/to, set to min/max of the data after load |
 | Weekday | seven columns: checkbox without text, weekday abbreviation as a label underneath. Bits in `weekdayMask` |

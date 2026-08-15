@@ -16,7 +16,7 @@ Version **1.0.0.R**. Author [ViezTrinker](https://github.com/ViezTrinker). Relea
 - **Point info** — click a point for local time, stay duration (visits), latitude, and longitude
 - **Smart start view** — after load, the map focuses on the densest area, not the bounding-box center
 - **Languages** — Settings → Language: English (default), German, Spanish, French, Russian, Arabic, Italian, Turkish, Dutch, Portuguese, Polish, Japanese, Korean, Indonesian, Vietnamese, Hindi. Arabic uses a right-to-left layout
-- **Theme** — Settings → Theme: dark (default) or light; the choice is remembered
+- **Theme** — Settings → Theme: Dark (default), Light, Midnight, Nord, or Sepia; the choice is remembered
 - **Map display** — sidebar: point size and a drawn-point cap (default 20 000); both are remembered
 - **Point counts** — the sidebar shows how many samples the JSON contains and how many are currently visible
 - **Local-first** — your JSON stays on disk; OSM tile requests reveal only the current map viewport

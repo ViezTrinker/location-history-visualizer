@@ -180,6 +180,18 @@
         <translation>ライト</translation>
     </message>
     <message>
+        <source>Midnight</source>
+        <translation>ミッドナイト</translation>
+    </message>
+    <message>
+        <source>Nord</source>
+        <translation>Nord</translation>
+    </message>
+    <message>
+        <source>Sepia</source>
+        <translation>セピア</translation>
+    </message>
+    <message>
         <source>Zoom in</source>
         <translation>拡大</translation>
     </message>

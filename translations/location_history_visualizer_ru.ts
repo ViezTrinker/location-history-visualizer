@@ -180,6 +180,18 @@
         <translation>Светлая</translation>
     </message>
     <message>
+        <source>Midnight</source>
+        <translation>Полночь</translation>
+    </message>
+    <message>
+        <source>Nord</source>
+        <translation>Nord</translation>
+    </message>
+    <message>
+        <source>Sepia</source>
+        <translation>Сепия</translation>
+    </message>
+    <message>
         <source>Zoom in</source>
         <translation>Приблизить</translation>
     </message>

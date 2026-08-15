@@ -180,6 +180,18 @@
         <translation>فاتح</translation>
     </message>
     <message>
+        <source>Midnight</source>
+        <translation>منتصف الليل</translation>
+    </message>
+    <message>
+        <source>Nord</source>
+        <translation>Nord</translation>
+    </message>
+    <message>
+        <source>Sepia</source>
+        <translation>سيبيا</translation>
+    </message>
+    <message>
         <source>Zoom in</source>
         <translation>تكبير</translation>
     </message>

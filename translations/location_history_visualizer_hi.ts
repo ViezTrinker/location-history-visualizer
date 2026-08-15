@@ -180,6 +180,18 @@
         <translation>हल्का</translation>
     </message>
     <message>
+        <source>Midnight</source>
+        <translation>मध्यरात्रि</translation>
+    </message>
+    <message>
+        <source>Nord</source>
+        <translation>Nord</translation>
+    </message>
+    <message>
+        <source>Sepia</source>
+        <translation>सेपिया</translation>
+    </message>
+    <message>
         <source>Zoom in</source>
         <translation>ज़ूम इन</translation>
     </message>

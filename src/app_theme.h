@@ -14,10 +14,13 @@ namespace LocationHistory
    enum class AppTheme : uint8_t
    {
       Dark = 0,
-      Light = 1
+      Light = 1,
+      Midnight = 2,
+      Nord = 3,
+      Sepia = 4
    };
 
-   inline constexpr size_t AppThemeCount = 2;
+   inline constexpr size_t AppThemeCount = 5;
    inline constexpr AppTheme DefaultAppTheme = AppTheme::Dark;
 
    /*!
@@ -31,6 +34,18 @@ namespace LocationHistory
       {
          return "light";
       }
+      if (theme == AppTheme::Midnight)
+      {
+         return "midnight";
+      }
+      if (theme == AppTheme::Nord)
+      {
+         return "nord";
+      }
+      if (theme == AppTheme::Sepia)
+      {
+         return "sepia";
+      }
       return "dark";
    }
 
@@ -39,13 +54,25 @@ namespace LocationHistory
     *
     * Unknown codes fall back to Dark.
     *
-    *\param[in] code Theme code such as dark or light
+    *\param[in] code Theme code such as dark, light, midnight, nord, or sepia
     */
    inline AppTheme ThemeFromCode(const std::string_view code)
    {
       if (code == "light")
       {
          return AppTheme::Light;
+      }
+      if (code == "midnight")
+      {
+         return AppTheme::Midnight;
+      }
+      if (code == "nord")
+      {
+         return AppTheme::Nord;
+      }
+      if (code == "sepia")
+      {
+         return AppTheme::Sepia;
       }
       return AppTheme::Dark;
    }
@@ -65,7 +92,7 @@ namespace LocationHistory
    /*!
     *\brief Applies Fusion style and the matching color palette
     *
-    * Dark is the default look. Light uses a pale Fusion palette.
+    * Dark is the default look. Light, Midnight, Nord, and Sepia are extra palettes.
     *
     *\param[in] theme Theme to apply
     */

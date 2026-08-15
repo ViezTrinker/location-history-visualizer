@@ -28,6 +28,7 @@
 #include <QTimer>
 #include <QWidget>
 
+#include "app_theme.h"
 #include "load_result.h"
 #include "location_data.h"
 #include "location_filter.h"
@@ -39,6 +40,7 @@ namespace LocationHistory
    constexpr size_t WeekdayCount = 7;
    using WeekdayBoxList = std::array<QCheckBox*, WeekdayCount>;
    using WeekdayLabelList = std::array<QLabel*, WeekdayCount>;
+   using ThemeActionList = std::array<QAction*, AppThemeCount>;
 
    class MainWindow : public QMainWindow
    {
@@ -100,6 +102,12 @@ namespace LocationHistory
          size_t MatchingPointCount(void) const;
          size_t VisiblePointCount(void) const;
          QString WeekdayText(size_t weekdayIndex) const;
+         /*!
+          *\brief Returns the translated name of a UI theme
+          *
+          *\param[in] theme Theme to name
+          */
+         QString ThemeText(AppTheme theme) const;
          QString LoadResultMessage(LoadResult result) const;
          QString FormatDuration(int64_t durationMs) const;
          FilterSettings ReadFilterSettings(void) const;
@@ -123,8 +131,7 @@ namespace LocationHistory
          QActionGroup* _pLanguageActions;
          QMenu* _pThemeMenu;
          QActionGroup* _pThemeActions;
-         QAction* _pDarkThemeAction;
-         QAction* _pLightThemeAction;
+         ThemeActionList _pThemeItemActions;
          QMenu* _pHelpMenu;
          QAction* _pAboutAction;
          QGroupBox* _pCountGroup;

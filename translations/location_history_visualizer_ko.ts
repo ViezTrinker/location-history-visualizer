@@ -180,6 +180,18 @@
         <translation>밝게</translation>
     </message>
     <message>
+        <source>Midnight</source>
+        <translation>미드나잇</translation>
+    </message>
+    <message>
+        <source>Nord</source>
+        <translation>Nord</translation>
+    </message>
+    <message>
+        <source>Sepia</source>
+        <translation>세피아</translation>
+    </message>
+    <message>
         <source>Zoom in</source>
         <translation>확대</translation>
     </message>

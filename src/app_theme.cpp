@@ -80,6 +80,81 @@ namespace LocationHistory
          return palette;
       }
 
+      QPalette MakeMidnightPalette(void)
+      {
+         QPalette palette;
+         palette.setColor(QPalette::Window, QColor(16, 16, 18));
+         palette.setColor(QPalette::WindowText, QColor(240, 240, 245));
+         palette.setColor(QPalette::Base, QColor(8, 8, 10));
+         palette.setColor(QPalette::AlternateBase, QColor(28, 28, 32));
+         palette.setColor(QPalette::ToolTipBase, QColor(16, 16, 18));
+         palette.setColor(QPalette::ToolTipText, QColor(240, 240, 245));
+         palette.setColor(QPalette::Text, QColor(240, 240, 245));
+         palette.setColor(QPalette::Button, QColor(24, 24, 28));
+         palette.setColor(QPalette::ButtonText, QColor(240, 240, 245));
+         palette.setColor(QPalette::BrightText, QColor(255, 88, 88));
+         palette.setColor(QPalette::Link, QColor(120, 175, 245));
+         palette.setColor(QPalette::Highlight, QColor(56, 118, 220));
+         palette.setColor(QPalette::HighlightedText, QColor(255, 255, 255));
+         palette.setColor(QPalette::PlaceholderText, QColor(110, 110, 120));
+         palette.setColor(QPalette::Disabled, QPalette::WindowText, QColor(95, 95, 105));
+         palette.setColor(QPalette::Disabled, QPalette::Text, QColor(95, 95, 105));
+         palette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor(95, 95, 105));
+         palette.setColor(QPalette::Disabled, QPalette::Highlight, QColor(40, 40, 48));
+         palette.setColor(QPalette::Disabled, QPalette::HighlightedText, QColor(140, 140, 150));
+         return palette;
+      }
+
+      QPalette MakeNordPalette(void)
+      {
+         QPalette palette;
+         palette.setColor(QPalette::Window, QColor(46, 52, 64));
+         palette.setColor(QPalette::WindowText, QColor(216, 222, 233));
+         palette.setColor(QPalette::Base, QColor(36, 41, 51));
+         palette.setColor(QPalette::AlternateBase, QColor(59, 66, 82));
+         palette.setColor(QPalette::ToolTipBase, QColor(59, 66, 82));
+         palette.setColor(QPalette::ToolTipText, QColor(236, 239, 244));
+         palette.setColor(QPalette::Text, QColor(236, 239, 244));
+         palette.setColor(QPalette::Button, QColor(59, 66, 82));
+         palette.setColor(QPalette::ButtonText, QColor(216, 222, 233));
+         palette.setColor(QPalette::BrightText, QColor(191, 97, 106));
+         palette.setColor(QPalette::Link, QColor(136, 192, 208));
+         palette.setColor(QPalette::Highlight, QColor(94, 129, 172));
+         palette.setColor(QPalette::HighlightedText, QColor(236, 239, 244));
+         palette.setColor(QPalette::PlaceholderText, QColor(76, 86, 106));
+         palette.setColor(QPalette::Disabled, QPalette::WindowText, QColor(76, 86, 106));
+         palette.setColor(QPalette::Disabled, QPalette::Text, QColor(76, 86, 106));
+         palette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor(76, 86, 106));
+         palette.setColor(QPalette::Disabled, QPalette::Highlight, QColor(67, 76, 94));
+         palette.setColor(QPalette::Disabled, QPalette::HighlightedText, QColor(216, 222, 233));
+         return palette;
+      }
+
+      QPalette MakeSepiaPalette(void)
+      {
+         QPalette palette;
+         palette.setColor(QPalette::Window, QColor(232, 220, 196));
+         palette.setColor(QPalette::WindowText, QColor(58, 42, 28));
+         palette.setColor(QPalette::Base, QColor(247, 239, 220));
+         palette.setColor(QPalette::AlternateBase, QColor(224, 208, 180));
+         palette.setColor(QPalette::ToolTipBase, QColor(247, 239, 220));
+         palette.setColor(QPalette::ToolTipText, QColor(58, 42, 28));
+         palette.setColor(QPalette::Text, QColor(58, 42, 28));
+         palette.setColor(QPalette::Button, QColor(226, 210, 182));
+         palette.setColor(QPalette::ButtonText, QColor(58, 42, 28));
+         palette.setColor(QPalette::BrightText, QColor(154, 48, 32));
+         palette.setColor(QPalette::Link, QColor(122, 74, 36));
+         palette.setColor(QPalette::Highlight, QColor(139, 90, 43));
+         palette.setColor(QPalette::HighlightedText, QColor(255, 250, 240));
+         palette.setColor(QPalette::PlaceholderText, QColor(138, 118, 90));
+         palette.setColor(QPalette::Disabled, QPalette::WindowText, QColor(150, 132, 108));
+         palette.setColor(QPalette::Disabled, QPalette::Text, QColor(150, 132, 108));
+         palette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor(150, 132, 108));
+         palette.setColor(QPalette::Disabled, QPalette::Highlight, QColor(200, 184, 156));
+         palette.setColor(QPalette::Disabled, QPalette::HighlightedText, QColor(80, 64, 48));
+         return palette;
+      }
+
       void ApplyFusionStyle(void)
       {
          QStyle* pStyle = QStyleFactory::create(QStringLiteral("Fusion"));
@@ -115,6 +190,21 @@ namespace LocationHistory
       if (theme == AppTheme::Light)
       {
          QApplication::setPalette(MakeLightPalette());
+         return;
+      }
+      if (theme == AppTheme::Midnight)
+      {
+         QApplication::setPalette(MakeMidnightPalette());
+         return;
+      }
+      if (theme == AppTheme::Nord)
+      {
+         QApplication::setPalette(MakeNordPalette());
+         return;
+      }
+      if (theme == AppTheme::Sepia)
+      {
+         QApplication::setPalette(MakeSepiaPalette());
          return;
       }
       QApplication::setPalette(MakeDarkPalette());

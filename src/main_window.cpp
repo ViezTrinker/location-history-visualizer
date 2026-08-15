@@ -100,8 +100,7 @@ namespace LocationHistory
       , _pLanguageActions(nullptr)
       , _pThemeMenu(nullptr)
       , _pThemeActions(nullptr)
-      , _pDarkThemeAction(nullptr)
-      , _pLightThemeAction(nullptr)
+      , _pThemeItemActions{}
       , _pHelpMenu(nullptr)
       , _pAboutAction(nullptr)
       , _pCountGroup(nullptr)
@@ -423,24 +422,19 @@ namespace LocationHistory
       _pThemeActions->setExclusive(true);
       connect(_pThemeActions, &QActionGroup::triggered, this, &MainWindow::OnThemeActionTriggered);
 
-      _pDarkThemeAction = _pThemeMenu->addAction(QString());
-      _pDarkThemeAction->setCheckable(true);
-      _pDarkThemeAction->setData(static_cast<int>(AppTheme::Dark));
-      _pThemeActions->addAction(_pDarkThemeAction);
-
-      _pLightThemeAction = _pThemeMenu->addAction(QString());
-      _pLightThemeAction->setCheckable(true);
-      _pLightThemeAction->setData(static_cast<int>(AppTheme::Light));
-      _pThemeActions->addAction(_pLightThemeAction);
-
       const AppTheme currentTheme = LoadThemeSetting();
-      if (currentTheme == AppTheme::Light)
+      for (uint8_t themeValue = 0; themeValue < AppThemeCount; ++themeValue)
       {
-         _pLightThemeAction->setChecked(true);
-      }
-      else
-      {
-         _pDarkThemeAction->setChecked(true);
+         const auto theme = static_cast<AppTheme>(themeValue);
+         QAction* pAction = _pThemeMenu->addAction(QString());
+         pAction->setCheckable(true);
+         pAction->setData(static_cast<int>(themeValue));
+         _pThemeActions->addAction(pAction);
+         _pThemeItemActions[themeValue] = pAction;
+         if (theme == currentTheme)
+         {
+            pAction->setChecked(true);
+         }
       }
    }
 
@@ -452,8 +446,11 @@ namespace LocationHistory
       _pSettingsMenu->setTitle(tr("&Settings"));
       _pLanguageMenu->setTitle(tr("Language"));
       _pThemeMenu->setTitle(tr("Theme"));
-      _pDarkThemeAction->setText(tr("Dark"));
-      _pLightThemeAction->setText(tr("Light"));
+      for (uint8_t themeValue = 0; themeValue < AppThemeCount; ++themeValue)
+      {
+         const auto theme = static_cast<AppTheme>(themeValue);
+         _pThemeItemActions[themeValue]->setText(ThemeText(theme));
+      }
       _pHelpMenu->setTitle(tr("&Help"));
       _pAboutAction->setText(tr("About"));
       _pCountGroup->setTitle(tr("Counts"));
@@ -577,6 +574,27 @@ namespace LocationHistory
          default:
             return tr("Sun");
       }
+   }
+
+   QString MainWindow::ThemeText(const AppTheme theme) const
+   {
+      if (theme == AppTheme::Light)
+      {
+         return tr("Light");
+      }
+      if (theme == AppTheme::Midnight)
+      {
+         return tr("Midnight");
+      }
+      if (theme == AppTheme::Nord)
+      {
+         return tr("Nord");
+      }
+      if (theme == AppTheme::Sepia)
+      {
+         return tr("Sepia");
+      }
+      return tr("Dark");
    }
 
    QString MainWindow::LoadResultMessage(const LoadResult result) const

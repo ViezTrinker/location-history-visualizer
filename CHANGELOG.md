@@ -7,7 +7,7 @@ All notable releases of Location History Visualizer are listed here.
 - Points mode draws filtered samples as simple red dots. Cluster is unchanged.
 - Story starts on a chosen day. Play reveals later days as raw red points. Heatmap and Blur are removed.
 - Russian, Arabic, Italian, Turkish, Dutch, Portuguese, Polish, Japanese, Korean, Indonesian, Vietnamese, and Hindi UI translations. Arabic mirrors the layout right-to-left.
-- Dark UI is the default. A Light theme is available and remembered. Language and Theme live under Settings in the menu bar.
+- Dark UI is the default. Light, Midnight, Nord, and Sepia themes are available and remembered. Language and Theme live under Settings in the menu bar.
 - Point size and the drawn-point cap (default 20 000) are adjustable in the sidebar under Map display.
 - Weekday filters show the abbreviation under each checkbox so two-letter labels are not clipped.
 - The sidebar shows how many points the JSON contains and how many are currently visible.

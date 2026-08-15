@@ -180,6 +180,18 @@
         <translation>Jasny</translation>
     </message>
     <message>
+        <source>Midnight</source>
+        <translation>Północ</translation>
+    </message>
+    <message>
+        <source>Nord</source>
+        <translation>Nord</translation>
+    </message>
+    <message>
+        <source>Sepia</source>
+        <translation>Sepia</translation>
+    </message>
+    <message>
         <source>Zoom in</source>
         <translation>Przybliż</translation>
     </message>
