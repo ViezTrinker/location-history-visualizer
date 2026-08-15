@@ -195,18 +195,6 @@ namespace LocationHistory
       pSideLayout->addWidget(_pOpenButton);
       pSideLayout->addWidget(_pFileLabel);
 
-      _pCountGroup = new QGroupBox(pSidePanel);
-      QFormLayout* pCountLayout = new QFormLayout(_pCountGroup);
-      _pInFileCaption = new QLabel(_pCountGroup);
-      _pVisibleCaption = new QLabel(_pCountGroup);
-      _pInFileCountLabel = new QLabel(QStringLiteral("0"), _pCountGroup);
-      _pVisibleCountLabel = new QLabel(QStringLiteral("0"), _pCountGroup);
-      _pInFileCountLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
-      _pVisibleCountLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
-      pCountLayout->addRow(_pInFileCaption, _pInFileCountLabel);
-      pCountLayout->addRow(_pVisibleCaption, _pVisibleCountLabel);
-      pSideLayout->addWidget(_pCountGroup);
-
       _pDateGroup = new QGroupBox(pSidePanel);
       QFormLayout* pDateLayout = new QFormLayout(_pDateGroup);
       _pFromDate = new QDateEdit(QDate(1970, 1, 1), _pDateGroup);
@@ -283,6 +271,18 @@ namespace LocationHistory
       pInfoLayout->addRow(_pLongitudeCaption, _pLongitudeLabel);
       pSideLayout->addWidget(_pInfoGroup);
       pSideLayout->addStretch();
+
+      _pCountGroup = new QGroupBox(pSidePanel);
+      QFormLayout* pCountLayout = new QFormLayout(_pCountGroup);
+      _pInFileCaption = new QLabel(_pCountGroup);
+      _pVisibleCaption = new QLabel(_pCountGroup);
+      _pInFileCountLabel = new QLabel(QStringLiteral("0"), _pCountGroup);
+      _pVisibleCountLabel = new QLabel(QStringLiteral("0"), _pCountGroup);
+      _pInFileCountLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+      _pVisibleCountLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+      pCountLayout->addRow(_pInFileCaption, _pInFileCountLabel);
+      pCountLayout->addRow(_pVisibleCaption, _pVisibleCountLabel);
+      pSideLayout->addWidget(_pCountGroup);
 
       _pMapWidget = new MapWidget(pCentral);
       connect(_pMapWidget, &MapWidget::PointClicked, this, &MainWindow::OnPointClicked);
