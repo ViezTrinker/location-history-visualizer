@@ -1,6 +1,6 @@
 /*!
  *\file main_window.cpp
- *\brief Main application window with filters, map, and About menu
+ *\brief Main application window with filters, map, Settings, and About menus
  */
 
 #include "main_window.h"
@@ -9,6 +9,8 @@
 #include <string>
 #include <string_view>
 
+#include <QAction>
+#include <QActionGroup>
 #include <QApplication>
 #include <QDate>
 #include <QDir>
@@ -27,6 +29,7 @@
 
 #include "about_dialog.h"
 #include "app_language.h"
+#include "app_theme.h"
 #include "civil_time.h"
 #include "json_loader.h"
 #include "load_result.h"
@@ -84,6 +87,13 @@ namespace LocationHistory
       , _pFileMenu(nullptr)
       , _pOpenAction(nullptr)
       , _pQuitAction(nullptr)
+      , _pSettingsMenu(nullptr)
+      , _pLanguageMenu(nullptr)
+      , _pLanguageActions(nullptr)
+      , _pThemeMenu(nullptr)
+      , _pThemeActions(nullptr)
+      , _pDarkThemeAction(nullptr)
+      , _pLightThemeAction(nullptr)
       , _pHelpMenu(nullptr)
       , _pAboutAction(nullptr)
       , _pOpenButton(nullptr)
@@ -108,8 +118,6 @@ namespace LocationHistory
       , _pDurationCaption(nullptr)
       , _pLatitudeCaption(nullptr)
       , _pLongitudeCaption(nullptr)
-      , _pLanguageGroup(nullptr)
-      , _pLanguageCombo(nullptr)
       , _pZoomInButton(nullptr)
       , _pZoomOutButton(nullptr)
       , _pZoomSlider(nullptr)
@@ -143,6 +151,10 @@ namespace LocationHistory
       _pQuitAction = _pFileMenu->addAction(QString());
       _pQuitAction->setShortcut(QKeySequence::Quit);
       connect(_pQuitAction, &QAction::triggered, this, &MainWindow::close);
+
+      _pSettingsMenu = menuBar()->addMenu(QString());
+      FillLanguageMenu();
+      FillThemeMenu();
 
       _pHelpMenu = menuBar()->addMenu(QString());
       _pAboutAction = _pHelpMenu->addAction(QString());
@@ -240,14 +252,6 @@ namespace LocationHistory
       pInfoLayout->addRow(_pLatitudeCaption, _pLatitudeLabel);
       pInfoLayout->addRow(_pLongitudeCaption, _pLongitudeLabel);
       pSideLayout->addWidget(_pInfoGroup);
-
-      _pLanguageGroup = new QGroupBox(pSidePanel);
-      QVBoxLayout* pLanguageLayout = new QVBoxLayout(_pLanguageGroup);
-      _pLanguageCombo = new QComboBox(_pLanguageGroup);
-      FillLanguageCombo();
-      connect(_pLanguageCombo, &QComboBox::currentIndexChanged, this, &MainWindow::OnLanguageChanged);
-      pLanguageLayout->addWidget(_pLanguageCombo);
-      pSideLayout->addWidget(_pLanguageGroup);
       pSideLayout->addStretch();
 
       _pMapWidget = new MapWidget(pCentral);
@@ -317,24 +321,66 @@ namespace LocationHistory
       RefreshDisplayedPoints();
    }
 
-   void MainWindow::FillLanguageCombo(void)
+   void MainWindow::FillLanguageMenu(void)
    {
+      if (_pSettingsMenu == nullptr)
+      {
+         return;
+      }
+
+      _pLanguageMenu = _pSettingsMenu->addMenu(QString());
+      _pLanguageActions = new QActionGroup(this);
+      _pLanguageActions->setExclusive(true);
+      connect(_pLanguageActions, &QActionGroup::triggered, this, &MainWindow::OnLanguageActionTriggered);
+
       const AppLanguage currentLanguage = LoadLanguageSetting();
-      _pLanguageCombo->blockSignals(true);
-      _pLanguageCombo->clear();
       for (uint8_t languageValue = 0; languageValue < AppLanguageCount; ++languageValue)
       {
          const auto language = static_cast<AppLanguage>(languageValue);
          const std::string_view nativeName = LanguageNativeName(language);
-         _pLanguageCombo->addItem(
-            QString::fromUtf8(nativeName.data(), static_cast<int>(nativeName.size())),
-            static_cast<int>(languageValue));
+         QAction* pAction = _pLanguageMenu->addAction(
+            QString::fromUtf8(nativeName.data(), static_cast<int>(nativeName.size())));
+         pAction->setCheckable(true);
+         pAction->setData(static_cast<int>(languageValue));
+         _pLanguageActions->addAction(pAction);
          if (language == currentLanguage)
          {
-            _pLanguageCombo->setCurrentIndex(static_cast<int>(languageValue));
+            pAction->setChecked(true);
          }
       }
-      _pLanguageCombo->blockSignals(false);
+   }
+
+   void MainWindow::FillThemeMenu(void)
+   {
+      if (_pSettingsMenu == nullptr)
+      {
+         return;
+      }
+
+      _pThemeMenu = _pSettingsMenu->addMenu(QString());
+      _pThemeActions = new QActionGroup(this);
+      _pThemeActions->setExclusive(true);
+      connect(_pThemeActions, &QActionGroup::triggered, this, &MainWindow::OnThemeActionTriggered);
+
+      _pDarkThemeAction = _pThemeMenu->addAction(QString());
+      _pDarkThemeAction->setCheckable(true);
+      _pDarkThemeAction->setData(static_cast<int>(AppTheme::Dark));
+      _pThemeActions->addAction(_pDarkThemeAction);
+
+      _pLightThemeAction = _pThemeMenu->addAction(QString());
+      _pLightThemeAction->setCheckable(true);
+      _pLightThemeAction->setData(static_cast<int>(AppTheme::Light));
+      _pThemeActions->addAction(_pLightThemeAction);
+
+      const AppTheme currentTheme = LoadThemeSetting();
+      if (currentTheme == AppTheme::Light)
+      {
+         _pLightThemeAction->setChecked(true);
+      }
+      else
+      {
+         _pDarkThemeAction->setChecked(true);
+      }
    }
 
    void MainWindow::RetranslateUi(void)
@@ -342,6 +388,11 @@ namespace LocationHistory
       _pFileMenu->setTitle(tr("&File"));
       _pOpenAction->setText(tr("Open..."));
       _pQuitAction->setText(tr("E&xit"));
+      _pSettingsMenu->setTitle(tr("&Settings"));
+      _pLanguageMenu->setTitle(tr("Language"));
+      _pThemeMenu->setTitle(tr("Theme"));
+      _pDarkThemeAction->setText(tr("Dark"));
+      _pLightThemeAction->setText(tr("Light"));
       _pHelpMenu->setTitle(tr("&Help"));
       _pAboutAction->setText(tr("About"));
       _pOpenButton->setText(tr("Open JSON..."));
@@ -376,7 +427,6 @@ namespace LocationHistory
       }
       _pStorySlider->setToolTip(tr("Reveal locations up to this time"));
       _pStoryDate->setToolTip(tr("Story start day"));
-      _pLanguageGroup->setTitle(tr("Language"));
       _pZoomInButton->setToolTip(tr("Zoom in"));
       _pZoomOutButton->setToolTip(tr("Zoom out"));
       _pZoomSlider->setToolTip(tr("Zoom"));
@@ -876,12 +926,30 @@ namespace LocationHistory
       _pZoomSlider->blockSignals(false);
    }
 
-   void MainWindow::OnLanguageChanged(const int index)
+   void MainWindow::OnLanguageActionTriggered(QAction* pAction)
    {
-      const int languageValue = _pLanguageCombo->itemData(index).toInt();
+      if (pAction == nullptr)
+      {
+         return;
+      }
+
+      const int languageValue = pAction->data().toInt();
       const auto language = static_cast<AppLanguage>(languageValue);
       SaveLanguageSetting(language);
       ApplyAppLanguage(language);
+   }
+
+   void MainWindow::OnThemeActionTriggered(QAction* pAction)
+   {
+      if (pAction == nullptr)
+      {
+         return;
+      }
+
+      const int themeValue = pAction->data().toInt();
+      const auto theme = static_cast<AppTheme>(themeValue);
+      SaveThemeSetting(theme);
+      ApplyAppTheme(theme);
    }
 
    void MainWindow::SyncZoomSlider(void)

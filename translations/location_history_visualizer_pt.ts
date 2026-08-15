@@ -16,6 +16,10 @@
         <translation>&amp;Sair</translation>
     </message>
     <message>
+        <source>&amp;Settings</source>
+        <translation>&amp;Definições</translation>
+    </message>
+    <message>
         <source>&amp;Help</source>
         <translation>&amp;Ajuda</translation>
     </message>
@@ -158,6 +162,18 @@
     <message>
         <source>Language</source>
         <translation>Idioma</translation>
+    </message>
+    <message>
+        <source>Theme</source>
+        <translation>Tema</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Escuro</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Claro</translation>
     </message>
     <message>
         <source>Zoom in</source>

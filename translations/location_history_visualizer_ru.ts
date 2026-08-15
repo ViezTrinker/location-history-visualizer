@@ -16,6 +16,10 @@
         <translation>В&amp;ыход</translation>
     </message>
     <message>
+        <source>&amp;Settings</source>
+        <translation>&amp;Настройки</translation>
+    </message>
+    <message>
         <source>&amp;Help</source>
         <translation>&amp;Справка</translation>
     </message>
@@ -158,6 +162,18 @@
     <message>
         <source>Language</source>
         <translation>Язык</translation>
+    </message>
+    <message>
+        <source>Theme</source>
+        <translation>Тема</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Тёмная</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Светлая</translation>
     </message>
     <message>
         <source>Zoom in</source>

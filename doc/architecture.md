@@ -16,6 +16,7 @@ flowchart TB
     mapWidget[MapWidget]
     aboutDialog[AboutDialog]
     appLanguage[app_language]
+    appTheme[app_theme]
     tileCache[TileCache]
     tileDownloader[TileDownloader]
   end
@@ -37,9 +38,11 @@ flowchart TB
 
   mainCpp --> mainWindow
   mainCpp --> appLanguage
+  mainCpp --> appTheme
   mainWindow --> mapWidget
   mainWindow --> aboutDialog
   mainWindow --> appLanguage
+  mainWindow --> appTheme
   mainWindow --> jsonLoader
   mainWindow --> filter
   mainWindow --> storyTime

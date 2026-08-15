@@ -16,6 +16,10 @@
         <translation>&amp;Quitter</translation>
     </message>
     <message>
+        <source>&amp;Settings</source>
+        <translation>&amp;Paramètres</translation>
+    </message>
+    <message>
         <source>&amp;Help</source>
         <translation>Aid&amp;e</translation>
     </message>
@@ -158,6 +162,18 @@
     <message>
         <source>Language</source>
         <translation>Langue</translation>
+    </message>
+    <message>
+        <source>Theme</source>
+        <translation>Thème</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Sombre</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Clair</translation>
     </message>
     <message>
         <source>Zoom in</source>

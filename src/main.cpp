@@ -6,6 +6,7 @@
 #include <QApplication>
 
 #include "app_language.h"
+#include "app_theme.h"
 #include "main_window.h"
 #include "version.h"
 
@@ -20,6 +21,7 @@ int main(int argc, char* argv[])
       static_cast<int>(LocationHistory::AuthorName.size())));
 
    LocationHistory::ApplySavedAppLanguage();
+   LocationHistory::ApplySavedAppTheme();
 
    LocationHistory::MainWindow window;
    window.show();

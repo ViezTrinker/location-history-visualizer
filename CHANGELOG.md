@@ -7,6 +7,7 @@ All notable releases of Location History Visualizer are listed here.
 - Points mode draws filtered samples as simple red dots. Cluster is unchanged.
 - Story starts on a chosen day. Play reveals later days as raw red points. Heatmap and Blur are removed.
 - Russian, Arabic, Italian, Turkish, Dutch, Portuguese, and Polish UI translations. Arabic mirrors the layout right-to-left.
+- Dark UI is the default. A Light theme is available and remembered. Language and Theme live under Settings in the menu bar.
 
 ## 1.0.0.R — 2026-08-14
 

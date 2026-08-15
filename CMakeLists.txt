@@ -87,6 +87,8 @@ set(LOCATION_HISTORY_APP_SOURCES
    src/about_dialog.h
    src/app_language.cpp
    src/app_language.h
+   src/app_theme.cpp
+   src/app_theme.h
    src/main.cpp
    src/main_window.cpp
    src/main_window.h
@@ -143,6 +145,7 @@ enable_testing()
 
 set(LOCATION_HISTORY_TEST_SOURCES
    tests/app_language_test.cpp
+   tests/app_theme_test.cpp
    tests/clusterer_test.cpp
    tests/json_loader_test.cpp
    tests/location_filter_test.cpp

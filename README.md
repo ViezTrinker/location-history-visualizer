@@ -15,7 +15,8 @@ Version **1.0.0.R**. Author [ViezTrinker](https://github.com/ViezTrinker). Relea
 - **Story view** — starts on a chosen day as red points; Play continues through all following days
 - **Point info** — click a point for local time, stay duration (visits), latitude, and longitude
 - **Smart start view** — after load, the map focuses on the densest area, not the bounding-box center
-- **Languages** — English (default), German, Spanish, French, Russian, Arabic, Italian, Turkish, Dutch, Portuguese, Polish. Arabic uses a right-to-left layout.
+- **Languages** — Settings → Language: English (default), German, Spanish, French, Russian, Arabic, Italian, Turkish, Dutch, Portuguese, Polish. Arabic uses a right-to-left layout
+- **Theme** — Settings → Theme: dark (default) or light; the choice is remembered
 - **Local-first** — your JSON stays on disk; OSM tile requests reveal only the current map viewport
 
 ## Architecture

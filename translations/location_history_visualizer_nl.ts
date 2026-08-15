@@ -16,6 +16,10 @@
         <translation>A&amp;fsluiten</translation>
     </message>
     <message>
+        <source>&amp;Settings</source>
+        <translation>&amp;Instellingen</translation>
+    </message>
+    <message>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
@@ -158,6 +162,18 @@
     <message>
         <source>Language</source>
         <translation>Taal</translation>
+    </message>
+    <message>
+        <source>Theme</source>
+        <translation>Thema</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Donker</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Licht</translation>
     </message>
     <message>
         <source>Zoom in</source>

@@ -16,6 +16,10 @@
         <translation>&amp;خروج</translation>
     </message>
     <message>
+        <source>&amp;Settings</source>
+        <translation>&amp;إعدادات</translation>
+    </message>
+    <message>
         <source>&amp;Help</source>
         <translation>&amp;مساعدة</translation>
     </message>
@@ -158,6 +162,18 @@
     <message>
         <source>Language</source>
         <translation>اللغة</translation>
+    </message>
+    <message>
+        <source>Theme</source>
+        <translation>المظهر</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>داكن</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>فاتح</translation>
     </message>
     <message>
         <source>Zoom in</source>

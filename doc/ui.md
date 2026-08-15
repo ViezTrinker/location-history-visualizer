@@ -9,11 +9,13 @@ Die UI ist Qt 6 Widgets. Verbindungen laufen über Member-Slots, ohne Lambdas.
 - `_allPoints` — Ergebnis von `LoadFromFile`
 - `_filteredPoints` — nach `ApplyFilter`
 
-Layout: linke Leiste (~280 px) + `MapWidget` + Zoom-Leiste rechts neben der Karte + Zeit-Scrubber darunter.
+Menüleiste: **File | Settings | Help**. Layout darunter: linke Leiste (~280 px) + `MapWidget` + Zoom-Leiste rechts neben der Karte + Zeit-Scrubber darunter.
 
 | Bereich | Steuerung |
 | --- | --- |
-| File | Button / File → Open, `QFileDialog` for `*.json`. Last path in `QSettings` (`lastJsonPath`) |
+| File | Menu and sidebar button → Open, `QFileDialog` for `*.json`. Last path in `QSettings` (`lastJsonPath`). Exit closes the window. |
+| Settings | **Language** submenu: exclusive checkable actions with native names (English, Deutsch, Español, Français, Русский, العربية, Italiano, Türkçe, Nederlands, Português, Polski). Stored in `QSettings` (`language`). Arabic sets `Qt::RightToLeft`. **Theme** submenu: Dark (default) or Light. Stored in `QSettings` (`theme`). Fusion palettes, independent of the Windows color mode. |
+| Help | About |
 | Date | `QDateEdit` from/to, set to min/max of the data after load |
 | Weekday | seven checkboxes, bits in `weekdayMask` |
 | Time of day | `QTimeEdit` 00:00–23:59 |
@@ -21,7 +23,6 @@ Layout: linke Leiste (~280 px) + `MapWidget` + Zoom-Leiste rechts neben der Kart
 | Zoom | `+`, vertical `QSlider` (zoom 2..19), `-` — beside the map |
 | Story | Visible only in Story mode: start-day picker, Play/Pause, scrubber — Play continues through later days as red points |
 | Point info | When, Until, Duration, Latitude, Longitude |
-| Language | ComboBox: English (default), Deutsch, Español, Français, Русский, العربية, Italiano, Türkçe, Nederlands, Português, Polski. Stored in `QSettings` (`language`). Arabic sets `Qt::RightToLeft`. |
 
 Source UI strings are English. Translations live in [`translations/`](../translations/) (`.ts` → `.qm` via Qt LinguistTools). Changing the language updates the window immediately.
 

@@ -16,6 +16,10 @@
         <translation>Ç&amp;ıkış</translation>
     </message>
     <message>
+        <source>&amp;Settings</source>
+        <translation>&amp;Ayarlar</translation>
+    </message>
+    <message>
         <source>&amp;Help</source>
         <translation>&amp;Yardım</translation>
     </message>
@@ -158,6 +162,18 @@
     <message>
         <source>Language</source>
         <translation>Dil</translation>
+    </message>
+    <message>
+        <source>Theme</source>
+        <translation>Tema</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Koyu</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Açık</translation>
     </message>
     <message>
         <source>Zoom in</source>

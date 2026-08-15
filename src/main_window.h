@@ -1,6 +1,6 @@
 /*!
  *\file main_window.h
- *\brief Main application window with filters, map, and About menu
+ *\brief Main application window with filters, map, Settings, and About menus
  */
 
 #ifndef MAIN_WINDOW_H
@@ -10,6 +10,7 @@
 #include <cstdint>
 
 #include <QAction>
+#include <QActionGroup>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDate>
@@ -53,7 +54,8 @@ namespace LocationHistory
          void OnZoomOutClicked(void);
          void OnZoomSliderChanged(int zoomValue);
          void OnMapZoomChanged(int32_t zoom);
-         void OnLanguageChanged(int index);
+         void OnLanguageActionTriggered(QAction* pAction);
+         void OnThemeActionTriggered(QAction* pAction);
          void OnStoryDateChanged(const QDate& date);
          void OnStorySliderChanged(int sliderValue);
          void OnStoryPlayClicked(void);
@@ -80,7 +82,8 @@ namespace LocationHistory
          void BuildUi(void);
          void BuildMenus(void);
          void RetranslateUi(void);
-         void FillLanguageCombo(void);
+         void FillLanguageMenu(void);
+         void FillThemeMenu(void);
          void UpdateFileLabel(void);
          void UpdateStatusMessage(void);
          void UpdateStoryControls(void);
@@ -109,6 +112,13 @@ namespace LocationHistory
          QMenu* _pFileMenu;
          QAction* _pOpenAction;
          QAction* _pQuitAction;
+         QMenu* _pSettingsMenu;
+         QMenu* _pLanguageMenu;
+         QActionGroup* _pLanguageActions;
+         QMenu* _pThemeMenu;
+         QActionGroup* _pThemeActions;
+         QAction* _pDarkThemeAction;
+         QAction* _pLightThemeAction;
          QMenu* _pHelpMenu;
          QAction* _pAboutAction;
          QPushButton* _pOpenButton;
@@ -133,8 +143,6 @@ namespace LocationHistory
          QLabel* _pDurationCaption;
          QLabel* _pLatitudeCaption;
          QLabel* _pLongitudeCaption;
-         QGroupBox* _pLanguageGroup;
-         QComboBox* _pLanguageCombo;
          QPushButton* _pZoomInButton;
          QPushButton* _pZoomOutButton;
          QSlider* _pZoomSlider;
