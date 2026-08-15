@@ -69,6 +69,26 @@ namespace LocationHistory
          {
             return QLocale(QLocale::Polish, QLocale::Poland);
          }
+         if (language == AppLanguage::Japanese)
+         {
+            return QLocale(QLocale::Japanese, QLocale::Japan);
+         }
+         if (language == AppLanguage::Korean)
+         {
+            return QLocale(QLocale::Korean, QLocale::SouthKorea);
+         }
+         if (language == AppLanguage::Indonesian)
+         {
+            return QLocale(QLocale::Indonesian, QLocale::Indonesia);
+         }
+         if (language == AppLanguage::Vietnamese)
+         {
+            return QLocale(QLocale::Vietnamese, QLocale::Vietnam);
+         }
+         if (language == AppLanguage::Hindi)
+         {
+            return QLocale(QLocale::Hindi, QLocale::India);
+         }
          return QLocale(QLocale::English, QLocale::UnitedStates);
       }
 

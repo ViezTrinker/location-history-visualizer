@@ -14,7 +14,7 @@ Menüleiste: **File | Settings | Help**. Layout darunter: linke Leiste (~280 px)
 | Bereich | Steuerung |
 | --- | --- |
 | File | Menu and sidebar button → Open, `QFileDialog` for `*.json`. Last path in `QSettings` (`lastJsonPath`). Exit closes the window. |
-| Settings | **Language** submenu: exclusive checkable actions with native names (English, Deutsch, Español, Français, Русский, العربية, Italiano, Türkçe, Nederlands, Português, Polski). Stored in `QSettings` (`language`). Arabic sets `Qt::RightToLeft`. **Theme** submenu: Dark (default) or Light. Stored in `QSettings` (`theme`). Fusion palettes, independent of the Windows color mode. **Map display...** opens [`src/map_display_dialog.h`](../src/map_display_dialog.h): point radius 1–16 px (default 4) and maximum drawn points 1000–1 000 000 (default 20 000). Stored in `QSettings` (`pointRadiusPx`, `drawnPointLimit`). |
+| Settings | **Language** submenu: exclusive checkable actions with native names (English, Deutsch, Español, Français, Русский, العربية, Italiano, Türkçe, Nederlands, Português, Polski, 日本語, 한국어, Bahasa Indonesia, Tiếng Việt, हिन्दी). Stored in `QSettings` (`language`). Arabic sets `Qt::RightToLeft`. **Theme** submenu: Dark (default) or Light. Stored in `QSettings` (`theme`). Fusion palettes, independent of the Windows color mode. **Map display...** opens [`src/map_display_dialog.h`](../src/map_display_dialog.h): point radius 1–16 px (default 4) and maximum drawn points 1000–1 000 000 (default 20 000). Stored in `QSettings` (`pointRadiusPx`, `drawnPointLimit`). |
 | Help | About |
 | Date | `QDateEdit` from/to, set to min/max of the data after load |
 | Weekday | seven checkboxes, bits in `weekdayMask` |

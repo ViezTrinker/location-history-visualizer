@@ -14,7 +14,7 @@ GoogleTest liegt als Submodul unter `third_party/googletest`. Fehlt `CMakeLists.
 | `tests/clusterer_test.cpp` | `clusterer` | identische Punkte, getrennte Punkte, leere Eingabe |
 | `tests/story_time_test.cpp` | `story_time` | Slider ↔ Zeitstempel, Starttag plus folgende Tage, Sichtbarkeit am Cutoff |
 | `tests/map_focus_test.cpp` | `map_focus` | leere Liste, dichteste Zelle, hoher Zoom bei enger Gruppe |
-| `tests/app_language_test.cpp` | `app_language` (header, ohne Qt) | Sprachcodes inkl. ru/ar, Fallback Englisch, Roundtrip, Schreibrichtung |
+| `tests/app_language_test.cpp` | `app_language` (header, ohne Qt) | Sprachcodes inkl. ja/ko/id/vi/hi, Fallback Englisch, Roundtrip, Schreibrichtung |
 | `tests/app_theme_test.cpp` | `app_theme` (header, ohne Qt) | Dark-Default, light/dark Codes, Roundtrip |
 | `tests/map_display_settings_test.cpp` | `map_display_settings` (header, ohne Qt) | Clamp, Default 20000/4 px, Downsampling-Schritt |
 

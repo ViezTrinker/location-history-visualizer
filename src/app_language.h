@@ -23,7 +23,12 @@ namespace LocationHistory
       Turkish = 7,
       Dutch = 8,
       Portuguese = 9,
-      Polish = 10
+      Polish = 10,
+      Japanese = 11,
+      Korean = 12,
+      Indonesian = 13,
+      Vietnamese = 14,
+      Hindi = 15
    };
 
    enum class TextDirection : uint8_t
@@ -32,7 +37,7 @@ namespace LocationHistory
       RightToLeft = 1
    };
 
-   inline constexpr size_t AppLanguageCount = 11;
+   inline constexpr size_t AppLanguageCount = 16;
    inline constexpr AppLanguage DefaultAppLanguage = AppLanguage::English;
 
    /*!
@@ -81,6 +86,26 @@ namespace LocationHistory
       if (language == AppLanguage::Polish)
       {
          return "pl";
+      }
+      if (language == AppLanguage::Japanese)
+      {
+         return "ja";
+      }
+      if (language == AppLanguage::Korean)
+      {
+         return "ko";
+      }
+      if (language == AppLanguage::Indonesian)
+      {
+         return "id";
+      }
+      if (language == AppLanguage::Vietnamese)
+      {
+         return "vi";
+      }
+      if (language == AppLanguage::Hindi)
+      {
+         return "hi";
       }
       return "en";
    }
@@ -132,6 +157,26 @@ namespace LocationHistory
       {
          return "Polski";
       }
+      if (language == AppLanguage::Japanese)
+      {
+         return "日本語";
+      }
+      if (language == AppLanguage::Korean)
+      {
+         return "한국어";
+      }
+      if (language == AppLanguage::Indonesian)
+      {
+         return "Bahasa Indonesia";
+      }
+      if (language == AppLanguage::Vietnamese)
+      {
+         return "Tiếng Việt";
+      }
+      if (language == AppLanguage::Hindi)
+      {
+         return "हिन्दी";
+      }
       return "English";
    }
 
@@ -154,7 +199,7 @@ namespace LocationHistory
     *
     * Unknown codes fall back to English.
     *
-    *\param[in] code Language code such as en, de, es, fr, ru, ar, it, tr, nl, pt, pl
+    *\param[in] code Language code such as en, de, es, fr, ru, ar, it, tr, nl, pt, pl, ja, ko, id, vi, hi
     */
    inline AppLanguage LanguageFromCode(const std::string_view code)
    {
@@ -197,6 +242,26 @@ namespace LocationHistory
       if (code == "pl")
       {
          return AppLanguage::Polish;
+      }
+      if (code == "ja")
+      {
+         return AppLanguage::Japanese;
+      }
+      if (code == "ko")
+      {
+         return AppLanguage::Korean;
+      }
+      if (code == "id")
+      {
+         return AppLanguage::Indonesian;
+      }
+      if (code == "vi")
+      {
+         return AppLanguage::Vietnamese;
+      }
+      if (code == "hi")
+      {
+         return AppLanguage::Hindi;
       }
       return AppLanguage::English;
    }

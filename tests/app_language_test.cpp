@@ -20,6 +20,11 @@ TEST(AppLanguage, LanguageCodeMatchesEnum)
    EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Dutch), "nl");
    EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Portuguese), "pt");
    EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Polish), "pl");
+   EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Japanese), "ja");
+   EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Korean), "ko");
+   EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Indonesian), "id");
+   EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Vietnamese), "vi");
+   EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Hindi), "hi");
 }
 
 TEST(AppLanguage, LanguageFromCodeFallsBackToEnglish)
@@ -34,6 +39,11 @@ TEST(AppLanguage, LanguageFromCodeFallsBackToEnglish)
    EXPECT_EQ(LocationHistory::LanguageFromCode("nl"), LocationHistory::AppLanguage::Dutch);
    EXPECT_EQ(LocationHistory::LanguageFromCode("pt"), LocationHistory::AppLanguage::Portuguese);
    EXPECT_EQ(LocationHistory::LanguageFromCode("pl"), LocationHistory::AppLanguage::Polish);
+   EXPECT_EQ(LocationHistory::LanguageFromCode("ja"), LocationHistory::AppLanguage::Japanese);
+   EXPECT_EQ(LocationHistory::LanguageFromCode("ko"), LocationHistory::AppLanguage::Korean);
+   EXPECT_EQ(LocationHistory::LanguageFromCode("id"), LocationHistory::AppLanguage::Indonesian);
+   EXPECT_EQ(LocationHistory::LanguageFromCode("vi"), LocationHistory::AppLanguage::Vietnamese);
+   EXPECT_EQ(LocationHistory::LanguageFromCode("hi"), LocationHistory::AppLanguage::Hindi);
    EXPECT_EQ(LocationHistory::LanguageFromCode("en"), LocationHistory::AppLanguage::English);
    EXPECT_EQ(LocationHistory::LanguageFromCode(""), LocationHistory::AppLanguage::English);
    EXPECT_EQ(LocationHistory::LanguageFromCode("xx"), LocationHistory::AppLanguage::English);
@@ -60,6 +70,12 @@ TEST(AppLanguage, ArabicUsesRightToLeft)
       LocationHistory::TextDirection::LeftToRight);
    EXPECT_EQ(
       LocationHistory::LanguageTextDirection(LocationHistory::AppLanguage::English),
+      LocationHistory::TextDirection::LeftToRight);
+   EXPECT_EQ(
+      LocationHistory::LanguageTextDirection(LocationHistory::AppLanguage::Hindi),
+      LocationHistory::TextDirection::LeftToRight);
+   EXPECT_EQ(
+      LocationHistory::LanguageTextDirection(LocationHistory::AppLanguage::Japanese),
       LocationHistory::TextDirection::LeftToRight);
 }
 
