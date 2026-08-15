@@ -1,47 +1,47 @@
-# Karte und Overlay
+# Map and overlay
 
-Die Karte ist kein Google-Maps-Widget. `MapWidget` rechnet selbst Web Mercator, holt OSM-PNGs und zeichnet Standorte darüber.
+The map is not a Google Maps widget. `MapWidget` computes Web Mercator itself, fetches OSM PNGs, and draws locations on top.
 
-## Projektion
+## Projection
 
-[`src/tile_math.h`](../src/tile_math.h) setzt geografische Koordinaten in Weltpixel um, identisch zu OSM:
+[`src/tile_math.h`](../src/tile_math.h) converts geographic coordinates to world pixels, matching OSM:
 
-- Kachelgröße 256 px
+- Tile size 256 px
 - Zoom 2..19
-- Latitude auf ±85.05112878° begrenzt (Mercator-Pol)
+- Latitude clamped to ±85.05112878° (Mercator pole)
 
-`MapWidget` speichert die Ansicht als `_centerWorldX` / `_centerWorldY` plus `_zoom`. Mausrad und Doppelklick zoomen um den Cursor (Weltkoordinaten skalieren mit `2^(newZoom-oldZoom)`). Die Zoom-Leiste in `MainWindow` (`+` / Slider / `-`) zoomt um die Kartenmitte und bleibt über `ZoomChanged` synchron. Ziehen verschiebt das Zentrum in Pixeln.
+`MapWidget` stores the view as `_centerWorldX` / `_centerWorldY` plus `_zoom`. Mouse wheel and double-click zoom around the cursor (world coordinates scale by `2^(newZoom-oldZoom)`). The zoom bar in `MainWindow` (`+` / slider / `-`) zooms around the map center and stays in sync via `ZoomChanged`. Dragging shifts the center in pixels.
 
-Nach dem Laden zentriert `CenterOnPoints` auf die dichteste Zelle, nicht auf die Bounding-Box. Die Berechnung liegt in [`src/map_focus.h`](../src/map_focus.h) (`ComputeDensestFocus`, Raster ~0.02°).
+After load, `CenterOnPoints` focuses on the densest cell, not the bounding box. The calculation lives in [`src/map_focus.h`](../src/map_focus.h) (`ComputeDensestFocus`, grid ~0.02°).
 
-## Kachel-Pipeline
+## Tile pipeline
 
 ```mermaid
 flowchart LR
-  paint[paintEvent] --> visible[sichtbare TileIds]
+  paint[paintEvent] --> visible[visible TileIds]
   visible --> mem[TileCache RAM LRU]
-  mem --> disk[TileCache Disk]
+  mem --> disk[TileCache disk]
   disk --> http[TileDownloader]
   http --> osm["tile.openstreetmap.org/z/x/y.png"]
   mem --> blit[QPainter drawPixmap]
 ```
 
-[`src/tile_cache.h`](../src/tile_cache.h): bis `MaxMemoryTiles` (256) im RAM, LRU-Eviction. Disk unter `%LOCALAPPDATA%/<AppName>/tiles/{z}/{x}/{y}.png`.
+[`src/tile_cache.h`](../src/tile_cache.h): up to `MaxMemoryTiles` (256) in RAM, LRU eviction. Disk under `%LOCALAPPDATA%/<AppName>/tiles/{z}/{x}/{y}.png`.
 
-[`src/tile_downloader.h`](../src/tile_downloader.h): `QNetworkAccessManager`, maximal **2** parallele Requests (OSM Tile Policy), fester User-Agent. Queue plus In-Flight-Set verhindern Doppel-Downloads. Fertige PNGs gehen per Signal `TileDownloaded` an `MapWidget`, das Cache schreibt und `update()` auslöst.
+[`src/tile_downloader.h`](../src/tile_downloader.h): `QNetworkAccessManager`, at most **2** parallel requests (OSM tile policy), fixed User-Agent. A queue plus an in-flight set prevent duplicate downloads. Finished PNGs go to `MapWidget` via the `TileDownloaded` signal, which writes the cache and calls `update()`.
 
-Fehlende Kacheln erscheinen grau, bis der Download kommt. Unten links: `© OpenStreetMap contributors`.
+Missing tiles appear gray until the download arrives. Bottom left: `© OpenStreetMap contributors`.
 
-## Overlay-Modi
+## Overlay modes
 
-[`src/map_widget.h`](../src/map_widget.h) zeichnet in `paintEvent` zuerst Tiles, dann je `DisplayMode`. Der Zeit-Cutoff (`SetUntilTime`) gilt nur in `Story`.
+[`src/map_widget.h`](../src/map_widget.h) draws tiles first in `paintEvent`, then the current `DisplayMode`. The time cutoff (`SetUntilTime`) applies only in `Story`.
 
-| Modus | Verhalten |
+| Mode | Behavior |
 | --- | --- |
-| `Points` | einfache rote Kreise, Viewport-Culling. Punktgröße und gezeichnete Obergrenze kommen aus der Seitenleiste (Map display; Default 4 px bzw. 20 000) |
-| `Clustered` | `BuildClusters` am aktuellen Zoom, Kreisgröße ~ log(count) |
-| `Story` | rote Punkte wie in `Points` (gleiche Größe und Obergrenze), aber zeitlich: zuerst der Starttag, mit Play alle folgenden Tage |
+| `Points` | simple red circles, viewport culling. Point size and drawn-point cap come from the sidebar (Map display; default 4 px and 20 000) |
+| `Clustered` | `BuildClusters` at the current zoom, circle size ~ log(count) |
+| `Story` | red points as in `Points` (same size and cap), but timed: first the start day, then all later days while Play is running |
 
-## Trefferprüfung
+## Hit testing
 
-Linksklick ohne nennenswerten Drag: nächster sichtbarer Punkt innerhalb `HitTestRadiusPx` (12), Visits etwas größer. Signal `PointClicked(lat, lng, unixTimeMs, utcOffsetMinutes, endUnixTimeMs, source)` bzw. `PointCleared`. Der gewählte Punkt bekommt einen Ring.
+Left-click without a meaningful drag: nearest visible point within `HitTestRadiusPx` (12); visits are slightly larger. Signal `PointClicked(lat, lng, unixTimeMs, utcOffsetMinutes, endUnixTimeMs, source)` or `PointCleared`. The selected point gets a ring.

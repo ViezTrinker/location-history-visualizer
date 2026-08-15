@@ -1,19 +1,19 @@
-# Benutzeroberfläche
+# User interface
 
-Die UI ist Qt 6 Widgets. Verbindungen laufen über Member-Slots, ohne Lambdas.
+The UI is Qt 6 Widgets. Connections use member slots, not lambdas.
 
 ## MainWindow
 
-[`src/main_window.h`](../src/main_window.h) hält zwei Punktlisten:
+[`src/main_window.h`](../src/main_window.h) holds two point lists:
 
-- `_allPoints` — Ergebnis von `LoadFromFile`
-- `_filteredPoints` — nach `ApplyFilter`
+- `_allPoints` — result of `LoadFromFile`
+- `_filteredPoints` — after `ApplyFilter`
 
-[`src/main.cpp`](../src/main.cpp) zeigt das Fenster maximiert (`showMaximized()`), mit Rahmen und Titelleiste. Die normale Größe nach dem Wiederherstellen ist 1280×800.
+[`src/main.cpp`](../src/main.cpp) shows the window maximized (`showMaximized()`), with frame and title bar. The normal size after restore is 1280×800.
 
-Menüleiste: **File | Settings | Help**. Layout darunter: linke Leiste (~280 px) + `MapWidget` + Zoom-Leiste rechts neben der Karte + Zeit-Scrubber darunter.
+Menu bar: **File | Settings | Help**. Layout below: left sidebar (~280 px) + `MapWidget` + zoom bar to the right of the map + time scrubber underneath.
 
-| Bereich | Steuerung |
+| Area | Controls |
 | --- | --- |
 | File | Menu → Open, `QFileDialog` for `*.json`. Last path in `QSettings` (`lastJsonPath`). Exit closes the window. |
 | Settings | **Language** submenu: exclusive checkable actions with native names (English, Deutsch, Español, Français, Русский, العربية, Italiano, Türkçe, Nederlands, Português, Polski, 日本語, 한국어, Bahasa Indonesia, Tiếng Việt, हिन्दी). Stored in `QSettings` (`language`). Arabic sets `Qt::RightToLeft`. **Theme** submenu: Dark (default), Light, Midnight, Nord, Sepia. Stored in `QSettings` (`theme`). Fusion palettes, independent of the Windows color mode. |
@@ -34,15 +34,15 @@ Source UI strings are English. Translations live in [`translations/`](../transla
 
 Menu **Help → About** opens [`src/about_dialog.h`](../src/about_dialog.h): version `1.1.0.R`, date, ViezTrinker link, repo [location-history-visualizer](https://github.com/ViezTrinker/location-history-visualizer). Strings and URLs come from [`src/version.h`](../src/version.h). Links are `QLabel` with `setOpenExternalLinks`.
 
-## Einstieg
+## Startup
 
-[`src/main.cpp`](../src/main.cpp) setzt `applicationName` / `organizationName` aus denselben Version-Strings. Davon hängt der Tile-Cache-Pfad über `QStandardPaths::AppLocalDataLocation` ab.
+[`src/main.cpp`](../src/main.cpp) sets `applicationName` / `organizationName` from the same version strings. The tile cache path depends on that via `QStandardPaths::AppLocalDataLocation`.
 
-## Zuständigkeiten
+## Responsibilities
 
 ```mermaid
 flowchart LR
-  ui[MainWindow Filter und Datei]
+  ui[MainWindow filters and file]
   coreFilter[ApplyFilter]
   map[MapWidget]
   ui -->|"_allPoints plus FilterSettings"| coreFilter
@@ -51,4 +51,4 @@ flowchart LR
   map -->|PointClicked ZoomChanged| ui
 ```
 
-`MainWindow` orchestriert. Zeichnen und Kacheln bleiben in `MapWidget`. Zoom-Logik (`SetZoomAround`, Mausrad, Doppelklick) ebenfalls dort; die Zoom-Leiste gehört zu `MainWindow` und folgt über `ZoomChanged`. Parse/Filter bleiben in der Kernbibliothek.
+`MainWindow` orchestrates. Drawing and tiles stay in `MapWidget`. Zoom logic (`SetZoomAround`, mouse wheel, double-click) lives there too; the zoom bar belongs to `MainWindow` and follows via `ZoomChanged`. Parse and filter stay in the core library.

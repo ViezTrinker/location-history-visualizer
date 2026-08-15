@@ -1,12 +1,12 @@
-# Architektur
+# Architecture
 
-Der Visualizer ist eine native Windows-Desktopanwendung in C++20. Die GUI sitzt auf Qt 6, die Karte besteht aus OpenStreetMap-Rasterkacheln plus selbst gezeichnetem Overlay.
+The visualizer is a native Windows desktop app in C++20. The GUI sits on Qt 6. The map is OpenStreetMap raster tiles plus a self-drawn overlay.
 
-Alles fachliche liegt im Namespace `LocationHistory`. `src/main.cpp` startet nur `QApplication` und `MainWindow`.
+All domain code lives in the `LocationHistory` namespace. `src/main.cpp` only starts `QApplication` and `MainWindow`.
 
-## Schichten
+## Layers
 
-CMake teilt den Code in drei Targets. Die Kernbibliothek kennt Qt nicht. Die Tests linken nur den Kern.
+CMake splits the code into three targets. The core library does not use Qt. The tests link only the core.
 
 ```mermaid
 flowchart TB
@@ -63,13 +63,13 @@ flowchart TB
   tests --> gtest
 ```
 
-| Target | Rolle | Qt |
+| Target | Role | Qt |
 | --- | --- | --- |
-| `location_history_core` | Statische Bibliothek: Parse, Filter, Projektion, Visualisierungsmathe | nein |
-| `location_history_visualizer` | `.exe`: Fenster, Kacheln, Zeichnen | Widgets + Network |
-| `location_history_visualizer_tests` | gtest gegen den Kern | nein |
+| `location_history_core` | Static library: parse, filter, projection, visualization math | no |
+| `location_history_visualizer` | `.exe`: window, tiles, drawing | Widgets + Network |
+| `location_history_visualizer_tests` | gtest against the core | no |
 
-## Laufzeitfluss
+## Runtime flow
 
 ```mermaid
 sequenceDiagram
@@ -80,34 +80,34 @@ sequenceDiagram
   participant MapWidget
   participant TileDownloader
 
-  User->>MainWindow: JSON öffnen
+  User->>MainWindow: Open JSON
   MainWindow->>JsonLoader: LoadFromFile
   JsonLoader-->>MainWindow: LocationPointList
   MainWindow->>Filter: ApplyFilter
-  Filter-->>MainWindow: gefilterte Punkte
+  Filter-->>MainWindow: filtered points
   MainWindow->>MapWidget: SetPoints
   MainWindow->>MapWidget: CenterOnPoints
-  MapWidget->>MapWidget: paintEvent Tiles plus Overlay
-  MapWidget->>TileDownloader: fehlende Kacheln
+  MapWidget->>MapWidget: paintEvent tiles plus overlay
+  MapWidget->>TileDownloader: missing tiles
   TileDownloader-->>MapWidget: TileDownloaded
-  User->>MapWidget: Klick auf Punkt
+  User->>MapWidget: click a point
   MapWidget-->>MainWindow: PointClicked
 ```
 
-1. Datei laden → flache Punktliste (`LocationPoint`).
-2. Filter (Datum, Wochentag, Uhrzeit) erzeugen `_filteredPoints`.
-3. `MapWidget` zentriert auf die dichteste Zelle (`ComputeDensestFocus`) und zeichnet OSM-Kacheln plus Overlay je `DisplayMode`.
-4. Klick trifft den nächsten Punkt im Pixelradius und füllt die Punktinfo.
+1. Load a file → flat point list (`LocationPoint`).
+2. Filters (date, weekday, time of day) produce `_filteredPoints`.
+3. `MapWidget` centers on the densest cell (`ComputeDensestFocus`) and draws OSM tiles plus the overlay for the current `DisplayMode`.
+4. A click hits the nearest point within the pixel radius and fills the point-info panel.
 
 Details: [core.md](core.md), [map.md](map.md), [ui.md](ui.md).
 
-## Verzeichnislayout
+## Directory layout
 
 ```text
-src/           Kern + Qt-UI
-tests/         gtest, Fixture sample_timeline.json
-third_party/   googletest (Git-Submodul)
-doc/           diese Dokumentation
+src/           core + Qt UI
+tests/         gtest, fixture sample_timeline.json
+third_party/   googletest (Git submodule)
+doc/           this documentation
 ```
 
-Abhängigkeiten außerhalb des Repos: Qt 6. nlohmann/json kommt per FetchContent, gtest per Submodul. Siehe Root-[README.md](../README.md).
+Dependencies outside the repo: Qt 6. nlohmann/json comes via FetchContent, gtest via submodule. See the root [README.md](../README.md).

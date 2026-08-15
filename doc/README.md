@@ -1,11 +1,11 @@
-# Dokumentation
+# Documentation
 
-Architektur und Modulübersicht für den Location History Visualizer.
+Architecture and module notes for Location History Visualizer.
 
-| Dokument | Inhalt |
+| Document | Contents |
 | --- | --- |
-| [architecture.md](architecture.md) | Schichten, CMake-Targets, Datenfluss |
-| [core.md](core.md) | Qt-freie Kernbibliothek: JSON, Filter, Cluster, Story-Zeit, Kartenfokus |
-| [map.md](map.md) | Karte: Web Mercator, OSM-Kacheln, Overlay-Modi, Zoom |
-| [ui.md](ui.md) | Qt-Oberfläche: MainWindow, Filterleiste, Zoom-Leiste, About |
-| [testing.md](testing.md) | gtest-Zuordnung zu den Kernmodulen |
+| [architecture.md](architecture.md) | Layers, CMake targets, data flow |
+| [core.md](core.md) | Qt-free core library: JSON, filters, clusters, story time, map focus |
+| [map.md](map.md) | Map: Web Mercator, OSM tiles, overlay modes, zoom |
+| [ui.md](ui.md) | Qt UI: MainWindow, filter sidebar, zoom bar, About |
+| [testing.md](testing.md) | gtest mapping to core modules |

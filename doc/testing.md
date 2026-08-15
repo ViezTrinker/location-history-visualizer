@@ -1,30 +1,30 @@
 # Tests
 
-Die Tests linken nur `location_history_core` und `GTest::gtest_main`. Kein Qt, keine Netzwerk-Kacheln.
+The tests link only `location_history_core` and `GTest::gtest_main`. No Qt, no network tiles.
 
-GoogleTest liegt als Submodul unter `third_party/googletest`. Fehlt `CMakeLists.txt` dort, bricht CMake mit dem Hinweis auf `git submodule update --init --recursive` ab.
+GoogleTest lives as a submodule under `third_party/googletest`. If `CMakeLists.txt` is missing there, CMake stops with a hint to run `git submodule update --init --recursive`.
 
-## Zuordnung
+## Mapping
 
-| Testdatei | Modul | Beispiele |
+| Test file | Module | Examples |
 | --- | --- | --- |
-| `tests/tile_math_test.cpp` | `tile_math` | Roundtrip Lat/Lng, Zoom-Clamp, Kachelgrenzen |
-| `tests/json_loader_test.cpp` | `json_loader`, `civil_time` | LatLng-String, ISO-8601, Fixture, Pfad-IDs, Visit-Dauer, Fehlercodes |
-| `tests/location_filter_test.cpp` | `location_filter` | Datum, Wochentag, Uhrzeitfenster |
-| `tests/clusterer_test.cpp` | `clusterer` | identische Punkte, getrennte Punkte, leere Eingabe |
-| `tests/story_time_test.cpp` | `story_time` | Slider ↔ Zeitstempel, Starttag plus folgende Tage, Sichtbarkeit am Cutoff |
-| `tests/map_focus_test.cpp` | `map_focus` | leere Liste, dichteste Zelle, hoher Zoom bei enger Gruppe |
-| `tests/app_language_test.cpp` | `app_language` (header, ohne Qt) | Sprachcodes inkl. ja/ko/id/vi/hi, Fallback Englisch, Roundtrip, Schreibrichtung |
-| `tests/app_theme_test.cpp` | `app_theme` (header, ohne Qt) | Dark-Default, light/midnight/nord/sepia Codes, Roundtrip |
-| `tests/map_display_settings_test.cpp` | `map_display_settings` (header, ohne Qt) | Clamp, Default 20000/4 px, Downsampling-Schritt |
+| `tests/tile_math_test.cpp` | `tile_math` | lat/lng round-trip, zoom clamp, tile bounds |
+| `tests/json_loader_test.cpp` | `json_loader`, `civil_time` | LatLng string, ISO-8601, fixture, path ids, visit duration, error codes |
+| `tests/location_filter_test.cpp` | `location_filter` | date, weekday, time-of-day window |
+| `tests/clusterer_test.cpp` | `clusterer` | identical points, separated points, empty input |
+| `tests/story_time_test.cpp` | `story_time` | slider ↔ timestamp, start day plus later days, visibility at cutoff |
+| `tests/map_focus_test.cpp` | `map_focus` | empty list, densest cell, high zoom for a tight group |
+| `tests/app_language_test.cpp` | `app_language` (header, no Qt) | language codes including ja/ko/id/vi/hi, English fallback, round-trip, text direction |
+| `tests/app_theme_test.cpp` | `app_theme` (header, no Qt) | Dark default, light/midnight/nord/sepia codes, round-trip |
+| `tests/map_display_settings_test.cpp` | `map_display_settings` (header, no Qt) | clamp, default 20000/4 px, downsampling step |
 
-Fixture: [`tests/fixtures/sample_timeline.json`](../tests/fixtures/sample_timeline.json) — anonymisierte Mini-Timeline mit `timelinePath`, `visit` und `rawSignals.position`. Der Pfad kommt als Compile-Definition `TEST_FIXTURE_DIR`.
+Fixture: [`tests/fixtures/sample_timeline.json`](../tests/fixtures/sample_timeline.json) — anonymized mini timeline with `timelinePath`, `visit`, and `rawSignals.position`. The path is supplied as the compile definition `TEST_FIXTURE_DIR`.
 
-## Ausführen
+## Running
 
 ```text
 cmake --build build --config Release --target location_history_visualizer_tests
 .\build\Release\location_history_visualizer_tests.exe
 ```
 
-Oder `ctest -C Release` im Build-Ordner (`gtest_discover_tests`, `DISCOVERY_MODE PRE_TEST`).
+Or `ctest -C Release` from the build folder (`gtest_discover_tests`, `DISCOVERY_MODE PRE_TEST`).
