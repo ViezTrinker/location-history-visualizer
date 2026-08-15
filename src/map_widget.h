@@ -29,11 +29,8 @@ namespace LocationHistory
    inline constexpr double DefaultLongitude = 9.45;
    inline constexpr int32_t DefaultZoom = 13;
    inline constexpr int32_t HitTestRadiusPx = 12;
-   inline constexpr int32_t PointRadiusPx = 4;
-   inline constexpr int32_t PathPointRadiusPx = 3;
    inline constexpr int32_t VisitMinRadiusPx = 7;
    inline constexpr int32_t VisitMaxRadiusPx = 16;
-   inline constexpr int32_t MaxDrawnPoints = 20000;
    inline constexpr int32_t NoSelection = -1;
    inline constexpr int32_t AttributionPaddingPx = 8;
    inline constexpr std::string_view OsmAttribution = "© OpenStreetMap contributors";
@@ -65,6 +62,30 @@ namespace LocationHistory
           *\param[in] untilUnixTimeMs Inclusive story cutoff
           */
          void SetUntilTime(int64_t untilUnixTimeMs);
+
+         /*!
+          *\brief Sets how many location circles may be painted
+          *
+          *\param[in] drawnPointLimit Maximum number of drawn points
+          */
+         void SetDrawnPointLimit(int32_t drawnPointLimit);
+
+         /*!
+          *\brief Returns the current drawn-point limit
+          */
+         int32_t DrawnPointLimit(void) const;
+
+         /*!
+          *\brief Sets the radius of location circles in pixels
+          *
+          *\param[in] pointRadiusPx Circle radius
+          */
+         void SetPointRadiusPx(int32_t pointRadiusPx);
+
+         /*!
+          *\brief Returns the current location circle radius in pixels
+          */
+         int32_t PointRadiusPx(void) const;
 
          /*!
           *\brief Centers the map on the densest cluster of the current points
@@ -162,6 +183,8 @@ namespace LocationHistory
          QPoint _pressMousePosition;
          int32_t _selectedIndex;
          int64_t _untilUnixTimeMs;
+         int32_t _drawnPointLimit;
+         int32_t _pointRadiusPx;
    };
 } // namespace LocationHistory
 

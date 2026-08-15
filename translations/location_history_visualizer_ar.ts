@@ -20,6 +20,10 @@
         <translation>&amp;إعدادات</translation>
     </message>
     <message>
+        <source>Map display...</source>
+        <translation>عرض الخريطة...</translation>
+    </message>
+    <message>
         <source>&amp;Help</source>
         <translation>&amp;مساعدة</translation>
     </message>
@@ -34,6 +38,18 @@
     <message>
         <source>No file loaded</source>
         <translation>لم يتم تحميل ملف</translation>
+    </message>
+    <message>
+        <source>Counts</source>
+        <translation>العدد</translation>
+    </message>
+    <message>
+        <source>In file</source>
+        <translation>في الملف</translation>
+    </message>
+    <message>
+        <source>Visible</source>
+        <translation>ظاهرة</translation>
     </message>
     <message>
         <source>Date</source>
@@ -196,6 +212,10 @@
         <translation>تم عرض %1 نقطة</translation>
     </message>
     <message>
+        <source>%1 of %2 points shown</source>
+        <translation>تم عرض %1 من أصل %2 نقطة</translation>
+    </message>
+    <message>
         <source>Open Timeline JSON</source>
         <translation>فتح JSON للخط الزمني</translation>
     </message>
@@ -241,6 +261,25 @@
     <message>
         <source>&lt;b&gt;GitHub repository:&lt;/b&gt; %1</source>
         <translation>&lt;b&gt;مستودع GitHub:&lt;/b&gt; %1</translation>
+    </message>
+</context>
+<context>
+    <name>LocationHistory::MapDisplayDialog</name>
+    <message>
+        <source>Map display</source>
+        <translation>عرض الخريطة</translation>
+    </message>
+    <message>
+        <source> px</source>
+        <translation> px</translation>
+    </message>
+    <message>
+        <source>Point size</source>
+        <translation>حجم النقطة</translation>
+    </message>
+    <message>
+        <source>Maximum drawn points</source>
+        <translation>الحد الأقصى للنقاط المرسومة</translation>
     </message>
 </context>
 </TS>

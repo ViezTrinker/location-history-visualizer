@@ -20,6 +20,10 @@
         <translation>&amp;Ustawienia</translation>
     </message>
     <message>
+        <source>Map display...</source>
+        <translation>Widok mapy...</translation>
+    </message>
+    <message>
         <source>&amp;Help</source>
         <translation>Pomo&amp;c</translation>
     </message>
@@ -34,6 +38,18 @@
     <message>
         <source>No file loaded</source>
         <translation>Nie wczytano pliku</translation>
+    </message>
+    <message>
+        <source>Counts</source>
+        <translation>Liczba</translation>
+    </message>
+    <message>
+        <source>In file</source>
+        <translation>W pliku</translation>
+    </message>
+    <message>
+        <source>Visible</source>
+        <translation>Widoczne</translation>
     </message>
     <message>
         <source>Date</source>
@@ -196,6 +212,10 @@
         <translation>Wyświetlono punktów: %1</translation>
     </message>
     <message>
+        <source>%1 of %2 points shown</source>
+        <translation>Pokazano %1 z %2 punktów</translation>
+    </message>
+    <message>
         <source>Open Timeline JSON</source>
         <translation>Otwórz JSON Timeline</translation>
     </message>
@@ -241,6 +261,25 @@
     <message>
         <source>&lt;b&gt;GitHub repository:&lt;/b&gt; %1</source>
         <translation>&lt;b&gt;Repozytorium GitHub:&lt;/b&gt; %1</translation>
+    </message>
+</context>
+<context>
+    <name>LocationHistory::MapDisplayDialog</name>
+    <message>
+        <source>Map display</source>
+        <translation>Widok mapy</translation>
+    </message>
+    <message>
+        <source> px</source>
+        <translation> px</translation>
+    </message>
+    <message>
+        <source>Point size</source>
+        <translation>Rozmiar punktów</translation>
+    </message>
+    <message>
+        <source>Maximum drawn points</source>
+        <translation>Maksymalna liczba rysowanych punktów</translation>
     </message>
 </context>
 </TS>

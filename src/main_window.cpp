@@ -13,12 +13,14 @@
 #include <QActionGroup>
 #include <QApplication>
 #include <QDate>
+#include <QDialog>
 #include <QDir>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QFormLayout>
 #include <QHBoxLayout>
 #include <QKeySequence>
+#include <QLocale>
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QSettings>
@@ -35,6 +37,8 @@
 #include "load_result.h"
 #include "location_filter.h"
 #include "location_point.h"
+#include "map_display_dialog.h"
+#include "map_display_settings.h"
 #include "map_widget.h"
 #include "story_time.h"
 #include "tile_math.h"
@@ -76,6 +80,11 @@ namespace LocationHistory
 
          return QString();
       }
+
+      QString FormatCount(const size_t count)
+      {
+         return QLocale().toString(static_cast<qulonglong>(count));
+      }
    } // namespace
 
    MainWindow::MainWindow(QWidget* pParent)
@@ -94,10 +103,16 @@ namespace LocationHistory
       , _pThemeActions(nullptr)
       , _pDarkThemeAction(nullptr)
       , _pLightThemeAction(nullptr)
+      , _pMapDisplayAction(nullptr)
       , _pHelpMenu(nullptr)
       , _pAboutAction(nullptr)
       , _pOpenButton(nullptr)
       , _pFileLabel(nullptr)
+      , _pCountGroup(nullptr)
+      , _pInFileCaption(nullptr)
+      , _pVisibleCaption(nullptr)
+      , _pInFileCountLabel(nullptr)
+      , _pVisibleCountLabel(nullptr)
       , _pDateGroup(nullptr)
       , _pFromDateLabel(nullptr)
       , _pToDateLabel(nullptr)
@@ -155,6 +170,9 @@ namespace LocationHistory
       _pSettingsMenu = menuBar()->addMenu(QString());
       FillLanguageMenu();
       FillThemeMenu();
+      _pSettingsMenu->addSeparator();
+      _pMapDisplayAction = _pSettingsMenu->addAction(QString());
+      connect(_pMapDisplayAction, &QAction::triggered, this, &MainWindow::OnMapDisplayClicked);
 
       _pHelpMenu = menuBar()->addMenu(QString());
       _pAboutAction = _pHelpMenu->addAction(QString());
@@ -176,6 +194,18 @@ namespace LocationHistory
       _pFileLabel->setWordWrap(true);
       pSideLayout->addWidget(_pOpenButton);
       pSideLayout->addWidget(_pFileLabel);
+
+      _pCountGroup = new QGroupBox(pSidePanel);
+      QFormLayout* pCountLayout = new QFormLayout(_pCountGroup);
+      _pInFileCaption = new QLabel(_pCountGroup);
+      _pVisibleCaption = new QLabel(_pCountGroup);
+      _pInFileCountLabel = new QLabel(QStringLiteral("0"), _pCountGroup);
+      _pVisibleCountLabel = new QLabel(QStringLiteral("0"), _pCountGroup);
+      _pInFileCountLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+      _pVisibleCountLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+      pCountLayout->addRow(_pInFileCaption, _pInFileCountLabel);
+      pCountLayout->addRow(_pVisibleCaption, _pVisibleCountLabel);
+      pSideLayout->addWidget(_pCountGroup);
 
       _pDateGroup = new QGroupBox(pSidePanel);
       QFormLayout* pDateLayout = new QFormLayout(_pDateGroup);
@@ -393,9 +423,13 @@ namespace LocationHistory
       _pThemeMenu->setTitle(tr("Theme"));
       _pDarkThemeAction->setText(tr("Dark"));
       _pLightThemeAction->setText(tr("Light"));
+      _pMapDisplayAction->setText(tr("Map display..."));
       _pHelpMenu->setTitle(tr("&Help"));
       _pAboutAction->setText(tr("About"));
       _pOpenButton->setText(tr("Open JSON..."));
+      _pCountGroup->setTitle(tr("Counts"));
+      _pInFileCaption->setText(tr("In file"));
+      _pVisibleCaption->setText(tr("Visible"));
       _pDateGroup->setTitle(tr("Date"));
       _pFromDateLabel->setText(tr("From"));
       _pToDateLabel->setText(tr("To"));
@@ -446,20 +480,61 @@ namespace LocationHistory
       _pFileLabel->setText(_loadedFilePath);
    }
 
+   void MainWindow::UpdatePointCounts(void)
+   {
+      if (_pInFileCountLabel == nullptr)
+      {
+         return;
+      }
+      if (_pVisibleCountLabel == nullptr)
+      {
+         return;
+      }
+
+      _pInFileCountLabel->setText(FormatCount(_allPoints.size()));
+      _pVisibleCountLabel->setText(FormatCount(VisiblePointCount()));
+   }
+
    void MainWindow::UpdateStatusMessage(void)
    {
+      UpdatePointCounts();
       if (_loadedFilePath.isEmpty())
       {
          statusBar()->showMessage(tr("Ready"));
          return;
       }
 
-      size_t shownCount = _filteredPoints.size();
+      const size_t matchingCount = MatchingPointCount();
+      const size_t visibleCount = VisiblePointCount();
+      if (visibleCount < matchingCount)
+      {
+         statusBar()->showMessage(tr("%1 of %2 points shown").arg(visibleCount).arg(matchingCount));
+         return;
+      }
+      statusBar()->showMessage(tr("%1 points shown").arg(visibleCount));
+   }
+
+   size_t MainWindow::MatchingPointCount(void) const
+   {
       if (CurrentDisplayMode() == DisplayMode::Story)
       {
-         shownCount = _storyDayPoints.size();
+         return _storyDayPoints.size();
       }
-      statusBar()->showMessage(tr("%1 points shown").arg(shownCount));
+      return _filteredPoints.size();
+   }
+
+   size_t MainWindow::VisiblePointCount(void) const
+   {
+      const size_t matchingCount = MatchingPointCount();
+      if (CurrentDisplayMode() == DisplayMode::Clustered)
+      {
+         return matchingCount;
+      }
+      if (_pMapWidget == nullptr)
+      {
+         return matchingCount;
+      }
+      return DrawnPointCount(matchingCount, _pMapWidget->DrawnPointLimit());
    }
 
    QString MainWindow::WeekdayText(const size_t weekdayIndex) const
@@ -621,6 +696,31 @@ namespace LocationHistory
    {
       AboutDialog dialog(this);
       dialog.exec();
+   }
+
+   void MainWindow::OnMapDisplayClicked(void)
+   {
+      if (_pMapWidget == nullptr)
+      {
+         return;
+      }
+
+      MapDisplayDialog dialog(
+         _pMapWidget->PointRadiusPx(),
+         _pMapWidget->DrawnPointLimit(),
+         this);
+      if (dialog.exec() != QDialog::Accepted)
+      {
+         return;
+      }
+
+      const int32_t pointRadiusPx = dialog.PointRadiusPx();
+      const int32_t drawnPointLimit = dialog.DrawnPointLimit();
+      SavePointRadiusPx(pointRadiusPx);
+      SaveDrawnPointLimit(drawnPointLimit);
+      _pMapWidget->SetPointRadiusPx(pointRadiusPx);
+      _pMapWidget->SetDrawnPointLimit(drawnPointLimit);
+      UpdateStatusMessage();
    }
 
    void MainWindow::OnFiltersChanged(void)

@@ -20,6 +20,10 @@
         <translation>&amp;Instellingen</translation>
     </message>
     <message>
+        <source>Map display...</source>
+        <translation>Kaartweergave...</translation>
+    </message>
+    <message>
         <source>&amp;Help</source>
         <translation>&amp;Help</translation>
     </message>
@@ -34,6 +38,18 @@
     <message>
         <source>No file loaded</source>
         <translation>Geen bestand geladen</translation>
+    </message>
+    <message>
+        <source>Counts</source>
+        <translation>Aantallen</translation>
+    </message>
+    <message>
+        <source>In file</source>
+        <translation>In bestand</translation>
+    </message>
+    <message>
+        <source>Visible</source>
+        <translation>Zichtbaar</translation>
     </message>
     <message>
         <source>Date</source>
@@ -196,6 +212,10 @@
         <translation>%1 punten weergegeven</translation>
     </message>
     <message>
+        <source>%1 of %2 points shown</source>
+        <translation>%1 van %2 punten getoond</translation>
+    </message>
+    <message>
         <source>Open Timeline JSON</source>
         <translation>Timeline-JSON openen</translation>
     </message>
@@ -241,6 +261,25 @@
     <message>
         <source>&lt;b&gt;GitHub repository:&lt;/b&gt; %1</source>
         <translation>&lt;b&gt;GitHub-repository:&lt;/b&gt; %1</translation>
+    </message>
+</context>
+<context>
+    <name>LocationHistory::MapDisplayDialog</name>
+    <message>
+        <source>Map display</source>
+        <translation>Kaartweergave</translation>
+    </message>
+    <message>
+        <source> px</source>
+        <translation> px</translation>
+    </message>
+    <message>
+        <source>Point size</source>
+        <translation>Puntgrootte</translation>
+    </message>
+    <message>
+        <source>Maximum drawn points</source>
+        <translation>Maximum getekende punten</translation>
     </message>
 </context>
 </TS>

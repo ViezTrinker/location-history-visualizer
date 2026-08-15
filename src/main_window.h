@@ -56,6 +56,7 @@ namespace LocationHistory
          void OnMapZoomChanged(int32_t zoom);
          void OnLanguageActionTriggered(QAction* pAction);
          void OnThemeActionTriggered(QAction* pAction);
+         void OnMapDisplayClicked(void);
          void OnStoryDateChanged(const QDate& date);
          void OnStorySliderChanged(int sliderValue);
          void OnStoryPlayClicked(void);
@@ -85,6 +86,7 @@ namespace LocationHistory
          void FillLanguageMenu(void);
          void FillThemeMenu(void);
          void UpdateFileLabel(void);
+         void UpdatePointCounts(void);
          void UpdateStatusMessage(void);
          void UpdateStoryControls(void);
          void UpdateStoryBarVisibility(void);
@@ -93,6 +95,8 @@ namespace LocationHistory
          void ApplyStoryCutoff(void);
          void StopStoryPlayback(void);
          DisplayMode CurrentDisplayMode(void) const;
+         size_t MatchingPointCount(void) const;
+         size_t VisiblePointCount(void) const;
          QString WeekdayText(size_t weekdayIndex) const;
          QString LoadResultMessage(LoadResult result) const;
          QString FormatDuration(int64_t durationMs) const;
@@ -119,10 +123,16 @@ namespace LocationHistory
          QActionGroup* _pThemeActions;
          QAction* _pDarkThemeAction;
          QAction* _pLightThemeAction;
+         QAction* _pMapDisplayAction;
          QMenu* _pHelpMenu;
          QAction* _pAboutAction;
          QPushButton* _pOpenButton;
          QLabel* _pFileLabel;
+         QGroupBox* _pCountGroup;
+         QLabel* _pInFileCaption;
+         QLabel* _pVisibleCaption;
+         QLabel* _pInFileCountLabel;
+         QLabel* _pVisibleCountLabel;
          QGroupBox* _pDateGroup;
          QLabel* _pFromDateLabel;
          QLabel* _pToDateLabel;

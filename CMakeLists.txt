@@ -92,6 +92,10 @@ set(LOCATION_HISTORY_APP_SOURCES
    src/main.cpp
    src/main_window.cpp
    src/main_window.h
+   src/map_display_dialog.cpp
+   src/map_display_dialog.h
+   src/map_display_settings.cpp
+   src/map_display_settings.h
    src/map_widget.cpp
    src/map_widget.h
    src/tile_cache.cpp
@@ -149,6 +153,7 @@ set(LOCATION_HISTORY_TEST_SOURCES
    tests/clusterer_test.cpp
    tests/json_loader_test.cpp
    tests/location_filter_test.cpp
+   tests/map_display_settings_test.cpp
    tests/map_focus_test.cpp
    tests/story_time_test.cpp
    tests/tile_math_test.cpp

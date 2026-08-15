@@ -38,9 +38,9 @@ Fehlende Kacheln erscheinen grau, bis der Download kommt. Unten links: `© OpenS
 
 | Modus | Verhalten |
 | --- | --- |
-| `Points` | einfache rote Kreise, Viewport-Culling, bei mehr als `MaxDrawnPoints` (20000) Downsampling |
+| `Points` | einfache rote Kreise, Viewport-Culling. Punktgröße und gezeichnete Obergrenze kommen aus Settings → Map display (Default 4 px bzw. 20 000) |
 | `Clustered` | `BuildClusters` am aktuellen Zoom, Kreisgröße ~ log(count) |
-| `Story` | rote Punkte wie in `Points`, aber zeitlich: zuerst der Starttag, mit Play alle folgenden Tage |
+| `Story` | rote Punkte wie in `Points` (gleiche Größe und Obergrenze), aber zeitlich: zuerst der Starttag, mit Play alle folgenden Tage |
 
 ## Trefferprüfung
 

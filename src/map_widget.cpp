@@ -25,6 +25,7 @@
 #include "clusterer.h"
 #include "location_data.h"
 #include "location_point.h"
+#include "map_display_settings.h"
 #include "map_focus.h"
 #include "story_time.h"
 #include "tile_cache.h"
@@ -40,7 +41,17 @@ namespace LocationHistory
       inline constexpr int32_t ClusterMaxRadiusPx = 40;
       inline constexpr int32_t PathCullMarginPx = 64;
       inline constexpr int32_t PathLineWidthPx = 2;
+      inline constexpr int32_t PointHitPaddingPx = 2;
       inline constexpr double VisitRadiusHours = 8.0;
+
+      int32_t PathPointRadiusPx(const int32_t pointRadiusPx)
+      {
+         if (pointRadiusPx <= 1)
+         {
+            return 1;
+         }
+         return pointRadiusPx - 1;
+      }
 
       QString AttributionText(void)
       {
@@ -75,6 +86,8 @@ namespace LocationHistory
       , _skipReleaseSelect(SkipReleaseSelect::No)
       , _selectedIndex(NoSelection)
       , _untilUnixTimeMs(ShowAllUntilTimeMs)
+      , _drawnPointLimit(LoadDrawnPointLimit())
+      , _pointRadiusPx(LoadPointRadiusPx())
    {
       setMouseTracking(true);
       setMinimumSize(400, 300);
@@ -112,6 +125,40 @@ namespace LocationHistory
       _untilUnixTimeMs = untilUnixTimeMs;
       ClearSelectionIfHidden();
       update();
+   }
+
+   void MapWidget::SetDrawnPointLimit(const int32_t drawnPointLimit)
+   {
+      const int32_t clamped = ClampDrawnPointLimit(drawnPointLimit);
+      if (clamped == _drawnPointLimit)
+      {
+         return;
+      }
+
+      _drawnPointLimit = clamped;
+      update();
+   }
+
+   int32_t MapWidget::DrawnPointLimit(void) const
+   {
+      return _drawnPointLimit;
+   }
+
+   void MapWidget::SetPointRadiusPx(const int32_t pointRadiusPx)
+   {
+      const int32_t clamped = ClampPointRadiusPx(pointRadiusPx);
+      if (clamped == _pointRadiusPx)
+      {
+         return;
+      }
+
+      _pointRadiusPx = clamped;
+      update();
+   }
+
+   int32_t MapWidget::PointRadiusPx(void) const
+   {
+      return _pointRadiusPx;
    }
 
    void MapWidget::CenterOnPoints(void)
@@ -298,15 +345,8 @@ namespace LocationHistory
       painter.setPen(Qt::NoPen);
       painter.setBrush(QColor(200, 40, 40, 200));
 
-      int32_t step = 1;
-      if (_points.size() > static_cast<size_t>(MaxDrawnPoints))
-      {
-         step = static_cast<int32_t>(_points.size() / static_cast<size_t>(MaxDrawnPoints));
-         if (step < 1)
-         {
-            step = 1;
-         }
-      }
+      const int32_t step = DrawnPointStep(_points.size(), _drawnPointLimit);
+      const int32_t radius = _pointRadiusPx;
 
       for (size_t index = 0; index < _points.size(); index += static_cast<size_t>(step))
       {
@@ -317,11 +357,11 @@ namespace LocationHistory
          }
          const int32_t screenX = WorldToScreenX(LongitudeToWorldX(point.longitude, _zoom));
          const int32_t screenY = WorldToScreenY(LatitudeToWorldY(point.latitude, _zoom));
-         if (!IsOnScreen(screenX, screenY, PointRadiusPx))
+         if (!IsOnScreen(screenX, screenY, radius))
          {
             continue;
          }
-         painter.drawEllipse(QPoint(screenX, screenY), PointRadiusPx, PointRadiusPx);
+         painter.drawEllipse(QPoint(screenX, screenY), radius, radius);
       }
    }
 
@@ -376,15 +416,8 @@ namespace LocationHistory
       painter.setRenderHint(QPainter::Antialiasing, true);
       painter.setPen(Qt::NoPen);
 
-      int32_t step = 1;
-      if (_points.size() > static_cast<size_t>(MaxDrawnPoints))
-      {
-         step = static_cast<int32_t>(_points.size() / static_cast<size_t>(MaxDrawnPoints));
-         if (step < 1)
-         {
-            step = 1;
-         }
-      }
+      const int32_t step = DrawnPointStep(_points.size(), _drawnPointLimit);
+      const int32_t pathRadius = PathPointRadiusPx(_pointRadiusPx);
 
       for (size_t index = 0; index < _points.size(); index += static_cast<size_t>(step))
       {
@@ -400,7 +433,7 @@ namespace LocationHistory
 
          const int32_t screenX = WorldToScreenX(LongitudeToWorldX(point.longitude, _zoom));
          const int32_t screenY = WorldToScreenY(LatitudeToWorldY(point.latitude, _zoom));
-         const int32_t radius = (point.source == PointSource::TimelinePath) ? PathPointRadiusPx : PointRadiusPx;
+         const int32_t radius = (point.source == PointSource::TimelinePath) ? pathRadius : _pointRadiusPx;
          if (!IsOnScreen(screenX, screenY, radius))
          {
             continue;
@@ -464,9 +497,9 @@ namespace LocationHistory
       const int32_t screenY = WorldToScreenY(LatitudeToWorldY(selected.latitude, _zoom));
       painter.setBrush(Qt::NoBrush);
       painter.setPen(QPen(QColor(255, 255, 255), 2));
-      painter.drawEllipse(QPoint(screenX, screenY), PointRadiusPx + 3, PointRadiusPx + 3);
+      painter.drawEllipse(QPoint(screenX, screenY), _pointRadiusPx + 3, _pointRadiusPx + 3);
       painter.setPen(QPen(QColor(30, 30, 30), 1));
-      painter.drawEllipse(QPoint(screenX, screenY), PointRadiusPx + 5, PointRadiusPx + 5);
+      painter.drawEllipse(QPoint(screenX, screenY), _pointRadiusPx + 5, _pointRadiusPx + 5);
    }
 
    void MapWidget::DrawClusters(QPainter& painter)
@@ -653,7 +686,9 @@ namespace LocationHistory
    int32_t MapWidget::FindNearestPoint(const int32_t screenX, const int32_t screenY) const
    {
       int32_t nearestIndex = NoSelection;
-      double nearestDistance = static_cast<double>(HitTestRadiusPx);
+      const auto defaultHitRadius = static_cast<double>(
+         std::max(HitTestRadiusPx, _pointRadiusPx + PointHitPaddingPx));
+      double nearestDistance = defaultHitRadius;
       for (size_t index = 0; index < _points.size(); ++index)
       {
          const LocationPoint& point = _points[index];
@@ -667,7 +702,7 @@ namespace LocationHistory
          const double deltaX = static_cast<double>(pointX - screenX);
          const double deltaY = static_cast<double>(pointY - screenY);
          const double distance = std::sqrt(deltaX * deltaX + deltaY * deltaY);
-         double hitRadius = static_cast<double>(HitTestRadiusPx);
+         double hitRadius = defaultHitRadius;
          if (point.source == PointSource::Visit)
          {
             hitRadius = static_cast<double>(VisitRadiusPx(point) + 4);
