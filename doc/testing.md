@@ -14,7 +14,7 @@ GoogleTest liegt als Submodul unter `third_party/googletest`. Fehlt `CMakeLists.
 | `tests/clusterer_test.cpp` | `clusterer` | identische Punkte, getrennte Punkte, leere Eingabe |
 | `tests/story_time_test.cpp` | `story_time` | Slider ↔ Zeitstempel, Starttag plus folgende Tage, Sichtbarkeit am Cutoff |
 | `tests/map_focus_test.cpp` | `map_focus` | leere Liste, dichteste Zelle, hoher Zoom bei enger Gruppe |
-| `tests/app_language_test.cpp` | `app_language` (header, ohne Qt) | Sprachcodes, Fallback Englisch, Roundtrip |
+| `tests/app_language_test.cpp` | `app_language` (header, ohne Qt) | Sprachcodes inkl. ru/ar, Fallback Englisch, Roundtrip, Schreibrichtung |
 
 Fixture: [`tests/fixtures/sample_timeline.json`](../tests/fixtures/sample_timeline.json) — anonymisierte Mini-Timeline mit `timelinePath`, `visit` und `rawSignals.position`. Der Pfad kommt als Compile-Definition `TEST_FIXTURE_DIR`.
 

@@ -13,6 +13,13 @@ TEST(AppLanguage, LanguageCodeMatchesEnum)
    EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::German), "de");
    EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Spanish), "es");
    EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::French), "fr");
+   EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Russian), "ru");
+   EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Arabic), "ar");
+   EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Italian), "it");
+   EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Turkish), "tr");
+   EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Dutch), "nl");
+   EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Portuguese), "pt");
+   EXPECT_EQ(LocationHistory::LanguageCode(LocationHistory::AppLanguage::Polish), "pl");
 }
 
 TEST(AppLanguage, LanguageFromCodeFallsBackToEnglish)
@@ -20,6 +27,13 @@ TEST(AppLanguage, LanguageFromCodeFallsBackToEnglish)
    EXPECT_EQ(LocationHistory::LanguageFromCode("de"), LocationHistory::AppLanguage::German);
    EXPECT_EQ(LocationHistory::LanguageFromCode("es"), LocationHistory::AppLanguage::Spanish);
    EXPECT_EQ(LocationHistory::LanguageFromCode("fr"), LocationHistory::AppLanguage::French);
+   EXPECT_EQ(LocationHistory::LanguageFromCode("ru"), LocationHistory::AppLanguage::Russian);
+   EXPECT_EQ(LocationHistory::LanguageFromCode("ar"), LocationHistory::AppLanguage::Arabic);
+   EXPECT_EQ(LocationHistory::LanguageFromCode("it"), LocationHistory::AppLanguage::Italian);
+   EXPECT_EQ(LocationHistory::LanguageFromCode("tr"), LocationHistory::AppLanguage::Turkish);
+   EXPECT_EQ(LocationHistory::LanguageFromCode("nl"), LocationHistory::AppLanguage::Dutch);
+   EXPECT_EQ(LocationHistory::LanguageFromCode("pt"), LocationHistory::AppLanguage::Portuguese);
+   EXPECT_EQ(LocationHistory::LanguageFromCode("pl"), LocationHistory::AppLanguage::Polish);
    EXPECT_EQ(LocationHistory::LanguageFromCode("en"), LocationHistory::AppLanguage::English);
    EXPECT_EQ(LocationHistory::LanguageFromCode(""), LocationHistory::AppLanguage::English);
    EXPECT_EQ(LocationHistory::LanguageFromCode("xx"), LocationHistory::AppLanguage::English);
@@ -33,5 +47,27 @@ TEST(AppLanguage, RoundTripKnownCodes)
       const LocationHistory::AppLanguage restored =
          LocationHistory::LanguageFromCode(LocationHistory::LanguageCode(language));
       EXPECT_EQ(restored, language);
+   }
+}
+
+TEST(AppLanguage, ArabicUsesRightToLeft)
+{
+   EXPECT_EQ(
+      LocationHistory::LanguageTextDirection(LocationHistory::AppLanguage::Arabic),
+      LocationHistory::TextDirection::RightToLeft);
+   EXPECT_EQ(
+      LocationHistory::LanguageTextDirection(LocationHistory::AppLanguage::Russian),
+      LocationHistory::TextDirection::LeftToRight);
+   EXPECT_EQ(
+      LocationHistory::LanguageTextDirection(LocationHistory::AppLanguage::English),
+      LocationHistory::TextDirection::LeftToRight);
+}
+
+TEST(AppLanguage, NativeNamesAreNonEmpty)
+{
+   for (uint8_t languageValue = 0; languageValue < LocationHistory::AppLanguageCount; ++languageValue)
+   {
+      const auto language = static_cast<LocationHistory::AppLanguage>(languageValue);
+      EXPECT_FALSE(LocationHistory::LanguageNativeName(language).empty());
    }
 }

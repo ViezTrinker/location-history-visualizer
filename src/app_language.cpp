@@ -8,6 +8,7 @@
 #include <string_view>
 
 #include <QCoreApplication>
+#include <QGuiApplication>
 #include <QLibraryInfo>
 #include <QLocale>
 #include <QSettings>
@@ -39,6 +40,34 @@ namespace LocationHistory
          if (language == AppLanguage::French)
          {
             return QLocale(QLocale::French, QLocale::France);
+         }
+         if (language == AppLanguage::Russian)
+         {
+            return QLocale(QLocale::Russian, QLocale::Russia);
+         }
+         if (language == AppLanguage::Arabic)
+         {
+            return QLocale(QLocale::Arabic, QLocale::SaudiArabia);
+         }
+         if (language == AppLanguage::Italian)
+         {
+            return QLocale(QLocale::Italian, QLocale::Italy);
+         }
+         if (language == AppLanguage::Turkish)
+         {
+            return QLocale(QLocale::Turkish, QLocale::Turkey);
+         }
+         if (language == AppLanguage::Dutch)
+         {
+            return QLocale(QLocale::Dutch, QLocale::Netherlands);
+         }
+         if (language == AppLanguage::Portuguese)
+         {
+            return QLocale(QLocale::Portuguese, QLocale::Portugal);
+         }
+         if (language == AppLanguage::Polish)
+         {
+            return QLocale(QLocale::Polish, QLocale::Poland);
          }
          return QLocale(QLocale::English, QLocale::UnitedStates);
       }
@@ -111,6 +140,14 @@ namespace LocationHistory
       QCoreApplication::removeTranslator(&appTranslator);
       QCoreApplication::removeTranslator(&qtTranslator);
       QLocale::setDefault(LocaleForLanguage(language));
+      if (LanguageTextDirection(language) == TextDirection::RightToLeft)
+      {
+         QGuiApplication::setLayoutDirection(Qt::RightToLeft);
+      }
+      else
+      {
+         QGuiApplication::setLayoutDirection(Qt::LeftToRight);
+      }
       LoadAppTranslator(language);
       LoadQtBaseTranslator(language);
    }

@@ -1,131 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de_DE">
+<TS version="2.1" language="pt_PT">
 <context>
     <name>LocationHistory::MainWindow</name>
     <message>
         <source>&amp;File</source>
-        <translation>&amp;Datei</translation>
+        <translation>&amp;Ficheiro</translation>
     </message>
     <message>
         <source>Open...</source>
-        <translation>Öffnen...</translation>
+        <translation>Abrir...</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation>B&amp;eenden</translation>
+        <translation>&amp;Sair</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Hilfe</translation>
+        <translation>&amp;Ajuda</translation>
     </message>
     <message>
         <source>About</source>
-        <translation>Info</translation>
+        <translation>Acerca de</translation>
     </message>
     <message>
         <source>Open JSON...</source>
-        <translation>JSON öffnen...</translation>
+        <translation>Abrir JSON...</translation>
     </message>
     <message>
         <source>No file loaded</source>
-        <translation>Keine Datei geladen</translation>
+        <translation>Nenhum ficheiro carregado</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Datum</translation>
+        <translation>Data</translation>
     </message>
     <message>
         <source>From</source>
-        <translation>Von</translation>
+        <translation>De</translation>
     </message>
     <message>
         <source>To</source>
-        <translation>Bis</translation>
+        <translation>Até</translation>
     </message>
     <message>
         <source>Weekday</source>
-        <translation>Wochentag</translation>
+        <translation>Dia da semana</translation>
     </message>
     <message>
         <source>Mon</source>
-        <translation>Mo</translation>
+        <translation>Seg</translation>
     </message>
     <message>
         <source>Tue</source>
-        <translation>Di</translation>
+        <translation>Ter</translation>
     </message>
     <message>
         <source>Wed</source>
-        <translation>Mi</translation>
+        <translation>Qua</translation>
     </message>
     <message>
         <source>Thu</source>
-        <translation>Do</translation>
+        <translation>Qui</translation>
     </message>
     <message>
         <source>Fri</source>
-        <translation>Fr</translation>
+        <translation>Sex</translation>
     </message>
     <message>
         <source>Sat</source>
-        <translation>Sa</translation>
+        <translation>Sáb</translation>
     </message>
     <message>
         <source>Sun</source>
-        <translation>So</translation>
+        <translation>Dom</translation>
     </message>
     <message>
         <source>Time of day</source>
-        <translation>Uhrzeit</translation>
+        <translation>Hora do dia</translation>
     </message>
     <message>
         <source>Display</source>
-        <translation>Darstellung</translation>
+        <translation>Visualização</translation>
     </message>
     <message>
         <source>Points</source>
-        <translation>Punkte</translation>
+        <translation>Pontos</translation>
     </message>
     <message>
         <source>Cluster</source>
-        <translation>Cluster</translation>
+        <translation>Agrupamento</translation>
     </message>
     <message>
         <source>Story</source>
-        <translation>Geschichte</translation>
+        <translation>História</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Abspielen</translation>
+        <translation>Reproduzir</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation>Pause</translation>
+        <translation>Pausa</translation>
     </message>
     <message>
         <source>Reveal locations up to this time</source>
-        <translation>Orte bis zu diesem Zeitpunkt einblenden</translation>
+        <translation>Mostrar localizações até este momento</translation>
     </message>
     <message>
         <source>Story start day</source>
-        <translation>Starttag der Geschichte</translation>
+        <translation>Dia de início da história</translation>
     </message>
     <message>
         <source>Point info</source>
-        <translation>Punktinfo</translation>
+        <translation>Informação do ponto</translation>
     </message>
     <message>
         <source>When</source>
-        <translation>Wann</translation>
+        <translation>Quando</translation>
     </message>
     <message>
         <source>Until</source>
-        <translation>Bis</translation>
+        <translation>Até</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation>Dauer</translation>
+        <translation>Duração</translation>
     </message>
     <message>
         <source>%1 ms</source>
@@ -149,23 +149,23 @@
     </message>
     <message>
         <source>Latitude</source>
-        <translation>Breitengrad</translation>
+        <translation>Latitude</translation>
     </message>
     <message>
         <source>Longitude</source>
-        <translation>Längengrad</translation>
+        <translation>Longitude</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Sprache</translation>
+        <translation>Idioma</translation>
     </message>
     <message>
         <source>Zoom in</source>
-        <translation>Hineinzoomen</translation>
+        <translation>Aproximar</translation>
     </message>
     <message>
         <source>Zoom out</source>
-        <translation>Herauszoomen</translation>
+        <translation>Afastar</translation>
     </message>
     <message>
         <source>Zoom</source>
@@ -173,58 +173,58 @@
     </message>
     <message>
         <source>Ready</source>
-        <translation>Bereit</translation>
+        <translation>Pronto</translation>
     </message>
     <message>
         <source>%1 points shown</source>
-        <translation>%1 Punkte angezeigt</translation>
+        <translation>%1 pontos mostrados</translation>
     </message>
     <message>
         <source>Open Timeline JSON</source>
-        <translation>Timeline JSON öffnen</translation>
+        <translation>Abrir JSON Timeline</translation>
     </message>
     <message>
         <source>JSON files (*.json);;All files (*.*)</source>
-        <translation>JSON-Dateien (*.json);;Alle Dateien (*.*)</translation>
+        <translation>Ficheiros JSON (*.json);;Todos os ficheiros (*.*)</translation>
     </message>
     <message>
         <source>Load failed</source>
-        <translation>Laden fehlgeschlagen</translation>
+        <translation>Falha ao carregar</translation>
     </message>
     <message>
         <source>File not found.</source>
-        <translation>Datei wurde nicht gefunden.</translation>
+        <translation>Ficheiro não encontrado.</translation>
     </message>
     <message>
         <source>The JSON file is invalid.</source>
-        <translation>Die JSON-Datei ist ungültig.</translation>
+        <translation>O ficheiro JSON é inválido.</translation>
     </message>
     <message>
         <source>The file contains no location data.</source>
-        <translation>Die Datei enthält keine Standortdaten.</translation>
+        <translation>O ficheiro não contém dados de localização.</translation>
     </message>
     <message>
         <source>The file could not be loaded.</source>
-        <translation>Die Datei konnte nicht geladen werden.</translation>
+        <translation>Não foi possível carregar o ficheiro.</translation>
     </message>
 </context>
 <context>
     <name>LocationHistory::AboutDialog</name>
     <message>
         <source>About</source>
-        <translation>Info</translation>
+        <translation>Acerca de</translation>
     </message>
     <message>
         <source>&lt;b&gt;Version:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Version:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;Versão:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;Date:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Datum:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;Data:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;GitHub repository:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;GitHub-Repository:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;Repositório GitHub:&lt;/b&gt; %1</translation>
     </message>
 </context>
 </TS>

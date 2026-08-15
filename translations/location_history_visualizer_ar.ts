@@ -1,230 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de_DE">
+<TS version="2.1" language="ar_SA">
 <context>
     <name>LocationHistory::MainWindow</name>
     <message>
         <source>&amp;File</source>
-        <translation>&amp;Datei</translation>
+        <translation>&amp;ملف</translation>
     </message>
     <message>
         <source>Open...</source>
-        <translation>Öffnen...</translation>
+        <translation>فتح...</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation>B&amp;eenden</translation>
+        <translation>&amp;خروج</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Hilfe</translation>
+        <translation>&amp;مساعدة</translation>
     </message>
     <message>
         <source>About</source>
-        <translation>Info</translation>
+        <translation>حول</translation>
     </message>
     <message>
         <source>Open JSON...</source>
-        <translation>JSON öffnen...</translation>
+        <translation>فتح JSON...</translation>
     </message>
     <message>
         <source>No file loaded</source>
-        <translation>Keine Datei geladen</translation>
+        <translation>لم يتم تحميل ملف</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Datum</translation>
+        <translation>التاريخ</translation>
     </message>
     <message>
         <source>From</source>
-        <translation>Von</translation>
+        <translation>من</translation>
     </message>
     <message>
         <source>To</source>
-        <translation>Bis</translation>
+        <translation>إلى</translation>
     </message>
     <message>
         <source>Weekday</source>
-        <translation>Wochentag</translation>
+        <translation>أيام الأسبوع</translation>
     </message>
     <message>
         <source>Mon</source>
-        <translation>Mo</translation>
+        <translation>ن</translation>
     </message>
     <message>
         <source>Tue</source>
-        <translation>Di</translation>
+        <translation>ث</translation>
     </message>
     <message>
         <source>Wed</source>
-        <translation>Mi</translation>
+        <translation>ر</translation>
     </message>
     <message>
         <source>Thu</source>
-        <translation>Do</translation>
+        <translation>خ</translation>
     </message>
     <message>
         <source>Fri</source>
-        <translation>Fr</translation>
+        <translation>ج</translation>
     </message>
     <message>
         <source>Sat</source>
-        <translation>Sa</translation>
+        <translation>س</translation>
     </message>
     <message>
         <source>Sun</source>
-        <translation>So</translation>
+        <translation>ح</translation>
     </message>
     <message>
         <source>Time of day</source>
-        <translation>Uhrzeit</translation>
+        <translation>وقت اليوم</translation>
     </message>
     <message>
         <source>Display</source>
-        <translation>Darstellung</translation>
+        <translation>العرض</translation>
     </message>
     <message>
         <source>Points</source>
-        <translation>Punkte</translation>
+        <translation>نقاط</translation>
     </message>
     <message>
         <source>Cluster</source>
-        <translation>Cluster</translation>
+        <translation>تجميع</translation>
     </message>
     <message>
         <source>Story</source>
-        <translation>Geschichte</translation>
+        <translation>قصة</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Abspielen</translation>
+        <translation>تشغيل</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation>Pause</translation>
+        <translation>إيقاف</translation>
     </message>
     <message>
         <source>Reveal locations up to this time</source>
-        <translation>Orte bis zu diesem Zeitpunkt einblenden</translation>
+        <translation>إظهار المواقع حتى هذا الوقت</translation>
     </message>
     <message>
         <source>Story start day</source>
-        <translation>Starttag der Geschichte</translation>
+        <translation>يوم بداية القصة</translation>
     </message>
     <message>
         <source>Point info</source>
-        <translation>Punktinfo</translation>
+        <translation>معلومات النقطة</translation>
     </message>
     <message>
         <source>When</source>
-        <translation>Wann</translation>
+        <translation>متى</translation>
     </message>
     <message>
         <source>Until</source>
-        <translation>Bis</translation>
+        <translation>حتى</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation>Dauer</translation>
+        <translation>المدة</translation>
     </message>
     <message>
         <source>%1 ms</source>
-        <translation>%1 ms</translation>
+        <translation>%1 مللي ثانية</translation>
     </message>
     <message>
         <source>%1 s</source>
-        <translation>%1 s</translation>
+        <translation>%1 ث</translation>
     </message>
     <message>
         <source>%1 min</source>
-        <translation>%1 min</translation>
+        <translation>%1 د</translation>
     </message>
     <message>
         <source>%1 h</source>
-        <translation>%1 h</translation>
+        <translation>%1 س</translation>
     </message>
     <message>
         <source>%1 h %2 min</source>
-        <translation>%1 h %2 min</translation>
+        <translation>%1 س %2 د</translation>
     </message>
     <message>
         <source>Latitude</source>
-        <translation>Breitengrad</translation>
+        <translation>خط العرض</translation>
     </message>
     <message>
         <source>Longitude</source>
-        <translation>Längengrad</translation>
+        <translation>خط الطول</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Sprache</translation>
+        <translation>اللغة</translation>
     </message>
     <message>
         <source>Zoom in</source>
-        <translation>Hineinzoomen</translation>
+        <translation>تكبير</translation>
     </message>
     <message>
         <source>Zoom out</source>
-        <translation>Herauszoomen</translation>
+        <translation>تصغير</translation>
     </message>
     <message>
         <source>Zoom</source>
-        <translation>Zoom</translation>
+        <translation>التكبير</translation>
     </message>
     <message>
         <source>Ready</source>
-        <translation>Bereit</translation>
+        <translation>جاهز</translation>
     </message>
     <message>
         <source>%1 points shown</source>
-        <translation>%1 Punkte angezeigt</translation>
+        <translation>تم عرض %1 نقطة</translation>
     </message>
     <message>
         <source>Open Timeline JSON</source>
-        <translation>Timeline JSON öffnen</translation>
+        <translation>فتح JSON للخط الزمني</translation>
     </message>
     <message>
         <source>JSON files (*.json);;All files (*.*)</source>
-        <translation>JSON-Dateien (*.json);;Alle Dateien (*.*)</translation>
+        <translation>ملفات JSON (*.json);;كل الملفات (*.*)</translation>
     </message>
     <message>
         <source>Load failed</source>
-        <translation>Laden fehlgeschlagen</translation>
+        <translation>فشل التحميل</translation>
     </message>
     <message>
         <source>File not found.</source>
-        <translation>Datei wurde nicht gefunden.</translation>
+        <translation>الملف غير موجود.</translation>
     </message>
     <message>
         <source>The JSON file is invalid.</source>
-        <translation>Die JSON-Datei ist ungültig.</translation>
+        <translation>ملف JSON غير صالح.</translation>
     </message>
     <message>
         <source>The file contains no location data.</source>
-        <translation>Die Datei enthält keine Standortdaten.</translation>
+        <translation>الملف لا يحتوي على بيانات موقع.</translation>
     </message>
     <message>
         <source>The file could not be loaded.</source>
-        <translation>Die Datei konnte nicht geladen werden.</translation>
+        <translation>تعذر تحميل الملف.</translation>
     </message>
 </context>
 <context>
     <name>LocationHistory::AboutDialog</name>
     <message>
         <source>About</source>
-        <translation>Info</translation>
+        <translation>حول</translation>
     </message>
     <message>
         <source>&lt;b&gt;Version:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Version:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;الإصدار:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;Date:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;Datum:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;التاريخ:&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&lt;b&gt;GitHub repository:&lt;/b&gt; %1</source>
-        <translation>&lt;b&gt;GitHub-Repository:&lt;/b&gt; %1</translation>
+        <translation>&lt;b&gt;مستودع GitHub:&lt;/b&gt; %1</translation>
     </message>
 </context>
 </TS>

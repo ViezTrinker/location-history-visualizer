@@ -21,7 +21,7 @@ Layout: linke Leiste (~280 px) + `MapWidget` + Zoom-Leiste rechts neben der Kart
 | Zoom | `+`, vertical `QSlider` (zoom 2..19), `-` — beside the map |
 | Story | Visible only in Story mode: start-day picker, Play/Pause, scrubber — Play continues through later days as red points |
 | Point info | When, Until, Duration, Latitude, Longitude |
-| Language | ComboBox: English (default), Deutsch, Español, Français. Stored in `QSettings` (`language`) |
+| Language | ComboBox: English (default), Deutsch, Español, Français, Русский, العربية, Italiano, Türkçe, Nederlands, Português, Polski. Stored in `QSettings` (`language`). Arabic sets `Qt::RightToLeft`. |
 
 Source UI strings are English. Translations live in [`translations/`](../translations/) (`.ts` → `.qm` via Qt LinguistTools). Changing the language updates the window immediately.
 

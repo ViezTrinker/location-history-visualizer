@@ -113,9 +113,16 @@ target_link_libraries(location_history_visualizer PRIVATE
 qt_add_translations(location_history_visualizer
    SOURCE_TARGETS location_history_visualizer
    TS_FILES
+      translations/location_history_visualizer_ar.ts
       translations/location_history_visualizer_de.ts
       translations/location_history_visualizer_es.ts
       translations/location_history_visualizer_fr.ts
+      translations/location_history_visualizer_it.ts
+      translations/location_history_visualizer_nl.ts
+      translations/location_history_visualizer_pl.ts
+      translations/location_history_visualizer_pt.ts
+      translations/location_history_visualizer_ru.ts
+      translations/location_history_visualizer_tr.ts
    NO_GENERATE_PLURALS_TS_FILE
    RESOURCE_PREFIX "/i18n"
 )
@@ -167,7 +174,7 @@ if(WIN32)
    find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT6_BIN_DIR}")
    if(WINDEPLOYQT_EXECUTABLE)
       add_custom_command(TARGET location_history_visualizer POST_BUILD
-         COMMAND "${WINDEPLOYQT_EXECUTABLE}" --translations de,es,fr "$<TARGET_FILE:location_history_visualizer>"
+         COMMAND "${WINDEPLOYQT_EXECUTABLE}" --translations ar,de,es,fr,it,nl,pl,pt,ru,tr "$<TARGET_FILE:location_history_visualizer>"
          COMMENT "Deploying Qt runtime next to the executable"
       )
    endif()
