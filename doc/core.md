@@ -57,4 +57,4 @@ Ignoriert in v1: `activity`, `timelineMemory`, `userLocationProfile`.
 
 ## Version
 
-[`src/version.h`](../src/version.h) hält About-Strings (`AppVersion` `1.0.0.R`, `ReleaseDate` `2026-08-14`, Author- und Repo-URL `https://github.com/ViezTrinker/location-history-visualizer`). Keine Qt-Abhängigkeit.
+[`src/version.h`](../src/version.h) hält About-Strings (`AppVersion` `1.1.0.R`, `ReleaseDate` `2026-08-15`, Author- und Repo-URL `https://github.com/ViezTrinker/location-history-visualizer`). Keine Qt-Abhängigkeit.

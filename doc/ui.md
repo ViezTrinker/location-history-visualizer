@@ -32,7 +32,7 @@ Source UI strings are English. Translations live in [`translations/`](../transla
 
 `OnOpenClicked` sets a wait cursor, loads synchronously, shows `LoadResult` as a message box on error, and centers the map on the densest cell (`CenterOnPoints`).
 
-Menu **Help → About** opens [`src/about_dialog.h`](../src/about_dialog.h): version `1.0.0.R`, date, ViezTrinker link, repo [location-history-visualizer](https://github.com/ViezTrinker/location-history-visualizer). Strings and URLs come from [`src/version.h`](../src/version.h). Links are `QLabel` with `setOpenExternalLinks`.
+Menu **Help → About** opens [`src/about_dialog.h`](../src/about_dialog.h): version `1.1.0.R`, date, ViezTrinker link, repo [location-history-visualizer](https://github.com/ViezTrinker/location-history-visualizer). Strings and URLs come from [`src/version.h`](../src/version.h). Links are `QLabel` with `setOpenExternalLinks`.
 
 ## Einstieg
 

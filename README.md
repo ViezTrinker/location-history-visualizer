@@ -4,7 +4,7 @@ Native **C++20 / Qt 6** desktop app that plots a [Google Timeline](https://timel
 
 ![Location History Visualizer with filters on the left and location points on an OpenStreetMap of Central Europe](doc/screenshots/app.png)
 
-Version **1.0.0.R**. Author [ViezTrinker](https://github.com/ViezTrinker). Release notes: [CHANGELOG.md](CHANGELOG.md).
+Version **1.1.0.R**. Author [ViezTrinker](https://github.com/ViezTrinker). Release notes: [CHANGELOG.md](CHANGELOG.md).
 
 ## Features
 

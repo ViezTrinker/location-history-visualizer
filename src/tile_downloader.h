@@ -21,7 +21,7 @@
 namespace LocationHistory
 {
    inline constexpr int32_t MaxConcurrentDownloads = 2;
-   inline constexpr std::string_view TileUserAgent = "LocationHistoryVisualizer/1.0.0.R (https://github.com/ViezTrinker/location-history-visualizer)";
+   inline constexpr std::string_view TileUserAgent = "LocationHistoryVisualizer/1.1.0.R (https://github.com/ViezTrinker/location-history-visualizer)";
    inline constexpr std::string_view TileUrlPrefix = "https://tile.openstreetmap.org/";
 
    class TileDownloader : public QObject
