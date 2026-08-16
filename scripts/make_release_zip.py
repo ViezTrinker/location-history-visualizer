@@ -127,7 +127,7 @@ def main(argv: list[str]) -> int:
         print("The Qt platform plugin is required. Rebuild so the windeployqt post-build step runs.", file=sys.stderr)
         return 1
 
-    version = read_app_version(repo_root / "src" / "version.h")
+    version = read_app_version(repo_root / "src" / "core" / "version.h")
     package_folder = f"location-history-visualizer-{version}-windows-x64"
     output_path = arguments.output
     if output_path is None:
