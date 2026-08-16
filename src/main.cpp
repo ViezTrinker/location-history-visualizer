@@ -24,6 +24,6 @@ int main(int argc, char* argv[])
    LocationHistory::ApplySavedAppTheme();
 
    LocationHistory::MainWindow window;
-   window.showMaximized();
+   window.show();
    return application.exec();
 }

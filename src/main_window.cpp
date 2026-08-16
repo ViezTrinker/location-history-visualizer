@@ -11,6 +11,8 @@
 
 #include <QAction>
 #include <QActionGroup>
+#include <QByteArray>
+#include <QCloseEvent>
 #include <QDate>
 #include <QDir>
 #include <QFileDialog>
@@ -52,10 +54,17 @@ namespace LocationHistory
       inline constexpr int32_t ZoomPanelWidthPx = 48;
       inline constexpr int32_t StoryTimerIntervalMs = 40;
       inline constexpr int32_t LoadProgressMax = 1000;
+      inline constexpr int32_t DefaultWindowWidthPx = 1280;
+      inline constexpr int32_t DefaultWindowHeightPx = 800;
 
       QString LastJsonSettingsKey(void)
       {
          return QStringLiteral("lastJsonPath");
+      }
+
+      QString WindowGeometrySettingsKey(void)
+      {
+         return QStringLiteral("windowGeometry");
       }
 
       QString LastJsonDialogPath(void)
@@ -154,7 +163,7 @@ namespace LocationHistory
       , _pLoadThread(nullptr)
    {
       setWindowTitle(QString::fromUtf8(AppName.data(), static_cast<int>(AppName.size())));
-      resize(1280, 800);
+      RestoreWindowGeometry();
       BuildMenus();
       BuildUi();
       RetranslateUi();
@@ -640,6 +649,39 @@ namespace LocationHistory
          RetranslateUi();
       }
       QMainWindow::changeEvent(pEvent);
+   }
+
+   void MainWindow::closeEvent(QCloseEvent* pEvent)
+   {
+      SaveWindowGeometry();
+      QMainWindow::closeEvent(pEvent);
+   }
+
+   void MainWindow::RestoreWindowGeometry(void)
+   {
+      QSettings settings;
+      if (!settings.contains(WindowGeometrySettingsKey()))
+      {
+         resize(DefaultWindowWidthPx, DefaultWindowHeightPx);
+         return;
+      }
+
+      const QByteArray geometry = settings.value(WindowGeometrySettingsKey()).toByteArray();
+      if (geometry.isEmpty())
+      {
+         resize(DefaultWindowWidthPx, DefaultWindowHeightPx);
+         return;
+      }
+      if (!restoreGeometry(geometry))
+      {
+         resize(DefaultWindowWidthPx, DefaultWindowHeightPx);
+      }
+   }
+
+   void MainWindow::SaveWindowGeometry(void)
+   {
+      QSettings settings;
+      settings.setValue(WindowGeometrySettingsKey(), saveGeometry());
    }
 
    FilterSettings MainWindow::ReadFilterSettings(void) const

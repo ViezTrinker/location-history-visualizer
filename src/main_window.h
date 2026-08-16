@@ -12,6 +12,7 @@
 #include <QAction>
 #include <QActionGroup>
 #include <QCheckBox>
+#include <QCloseEvent>
 #include <QComboBox>
 #include <QDate>
 #include <QDateEdit>
@@ -84,6 +85,7 @@ namespace LocationHistory
 
       protected:
          void changeEvent(QEvent* pEvent) override;
+         void closeEvent(QCloseEvent* pEvent) override;
 
       private:
          enum class StoryPlayback : uint8_t
@@ -124,6 +126,14 @@ namespace LocationHistory
          void BeginFileLoad(const QString& path);
          void CloseLoadDialog(void);
          void UpdateLoadDialogText(void);
+         /*!
+          *\brief Restores the last window size, position, and maximized state
+          */
+         void RestoreWindowGeometry(void);
+         /*!
+          *\brief Stores the current window size, position, and maximized state
+          */
+         void SaveWindowGeometry(void);
 
          LocationPointList _allPoints;
          LocationPointList _filteredPoints;

@@ -9,7 +9,7 @@ The UI is Qt 6 Widgets. Connections use member slots, not lambdas.
 - `_allPoints` — result of `LoadFromFile`
 - `_filteredPoints` — after `ApplyFilter`
 
-[`src/main.cpp`](../src/main.cpp) shows the window maximized (`showMaximized()`), with frame and title bar. The normal size after restore is 1280×800.
+[`src/main.cpp`](../src/main.cpp) shows the window (`show()`). Size, position, and maximized state come from `QSettings` (`windowGeometry`) via `saveGeometry` / `restoreGeometry`. First launch uses 1280×800.
 
 Menu bar: **File | Settings | Help**. Layout below: left sidebar (~280 px) + `MapWidget` + zoom bar to the right of the map + time scrubber underneath.
 

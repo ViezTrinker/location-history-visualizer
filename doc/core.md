@@ -57,4 +57,4 @@ Ignored in v1: `activity`, `timelineMemory`, `userLocationProfile`.
 
 ## Version
 
-[`src/version.h`](../src/version.h) holds About strings (`AppVersion` `1.1.0.R`, `ReleaseDate` `2026-08-15`, author and repo URL `https://github.com/ViezTrinker/location-history-visualizer`). No Qt dependency.
+[`src/version.h`](../src/version.h) holds About strings (`AppVersion` `1.1.0.R`, `ReleaseDate` `2026-08-15`, author and repo URL `https://github.com/ViezTrinker/location-history-visualizer`). No Qt dependency. CMake `project(... VERSION ...)` is `1.1.0` (numeric prefix of `AppVersion`; CMake does not allow the `.R` suffix).

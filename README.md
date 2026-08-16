@@ -18,6 +18,7 @@ Version **1.1.0.R**. Author [ViezTrinker](https://github.com/ViezTrinker). Relea
 - **Languages** — Settings → Language: English (default), German, Spanish, French, Russian, Arabic, Italian, Turkish, Dutch, Portuguese, Polish, Japanese, Korean, Indonesian, Vietnamese, Hindi. Arabic uses a right-to-left layout
 - **Theme** — Settings → Theme: Dark (default), Light, Midnight, Nord, or Sepia; the choice is remembered
 - **Map display** — sidebar: point size and a drawn-point cap (default 20 000); both are remembered
+- **Window size** — size, position, and maximized state are restored on the next start
 - **Point counts** — the sidebar shows how many samples the JSON contains and how many are currently visible
 - **Local-first** — your JSON stays on disk; OSM tile requests reveal only the current map viewport
 
