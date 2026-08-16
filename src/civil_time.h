@@ -68,6 +68,15 @@ namespace LocationHistory
    void FormatLocalTime(int64_t unixTimeMs, int32_t utcOffsetMinutes, std::string& output);
 
    /*!
+    *\brief Formats a timestamp as ISO-8601 with milliseconds and numeric offset
+    *
+    *\param[in] unixTimeMs Unix time in milliseconds
+    *\param[in] utcOffsetMinutes Offset east of UTC in minutes
+    *\param[out] output Formatted timestamp, for example 2020-01-15T08:30:00.000+01:00
+    */
+   void FormatIso8601(int64_t unixTimeMs, int32_t utcOffsetMinutes, std::string& output);
+
+   /*!
     *\brief Parses an ISO-8601 timestamp with numeric offset or Z
     *
     *\param[in] text Timestamp text from Google Timeline JSON

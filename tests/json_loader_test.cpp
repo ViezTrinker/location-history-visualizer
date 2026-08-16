@@ -109,6 +109,42 @@ TEST(JsonLoader, ParseIso8601WithOffset)
    EXPECT_EQ(dateTime.minute, 30);
 }
 
+TEST(JsonLoader, FormatIso8601RoundTripsWithOffset)
+{
+   int64_t unixTimeMs = 0;
+   int32_t utcOffsetMinutes = 0;
+   ASSERT_TRUE(LocationHistory::IsOk(
+      LocationHistory::ParseIso8601("2020-01-15T08:30:00.000+01:00", unixTimeMs, utcOffsetMinutes)));
+
+   std::string formatted;
+   LocationHistory::FormatIso8601(unixTimeMs, utcOffsetMinutes, formatted);
+   EXPECT_EQ(formatted, "2020-01-15T08:30:00.000+01:00");
+
+   int64_t parsedAgain = 0;
+   int32_t parsedOffset = 0;
+   ASSERT_TRUE(LocationHistory::IsOk(LocationHistory::ParseIso8601(formatted, parsedAgain, parsedOffset)));
+   EXPECT_EQ(parsedAgain, unixTimeMs);
+   EXPECT_EQ(parsedOffset, utcOffsetMinutes);
+}
+
+TEST(JsonLoader, FormatIso8601FormatsNegativeOffset)
+{
+   LocationHistory::CivilDateTime dateTime{};
+   dateTime.year = 2020;
+   dateTime.month = 6;
+   dateTime.day = 1;
+   dateTime.hour = 12;
+   dateTime.minute = 0;
+   dateTime.second = 0;
+   dateTime.millisecond = 0;
+   const int32_t utcOffsetMinutes = -300;
+   const int64_t unixTimeMs = LocationHistory::CivilToUnixMs(dateTime, utcOffsetMinutes);
+
+   std::string formatted;
+   LocationHistory::FormatIso8601(unixTimeMs, utcOffsetMinutes, formatted);
+   EXPECT_EQ(formatted, "2020-06-01T12:00:00.000-05:00");
+}
+
 TEST(JsonLoader, LoadFixtureExtractsAllSources)
 {
    LocationHistory::LocationPointList points;

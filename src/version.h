@@ -11,8 +11,8 @@
 namespace LocationHistory
 {
    inline constexpr std::string_view AppName = "Location History Visualizer";
-   inline constexpr std::string_view AppVersion = "1.1.0.R";
-   inline constexpr std::string_view ReleaseDate = "2026-08-15";
+   inline constexpr std::string_view AppVersion = "2.0.0.R";
+   inline constexpr std::string_view ReleaseDate = "2026-08-16";
    inline constexpr std::string_view AuthorName = "ViezTrinker";
    inline constexpr std::string_view AuthorUrl = "https://github.com/ViezTrinker";
    inline constexpr std::string_view RepositoryUrl = "https://github.com/ViezTrinker/location-history-visualizer";

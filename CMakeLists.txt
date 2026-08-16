@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(location_history_visualizer VERSION 1.1.0 LANGUAGES CXX)
+project(location_history_visualizer VERSION 2.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -56,6 +56,11 @@ set(LOCATION_HISTORY_CORE_SOURCES
    src/civil_time.h
    src/clusterer.cpp
    src/clusterer.h
+   src/export_result.h
+   src/geojson_exporter.cpp
+   src/geojson_exporter.h
+   src/gpx_exporter.cpp
+   src/gpx_exporter.h
    src/json_loader.cpp
    src/json_loader.h
    src/load_observer.h
@@ -157,6 +162,8 @@ set(LOCATION_HISTORY_TEST_SOURCES
    tests/app_language_test.cpp
    tests/app_theme_test.cpp
    tests/clusterer_test.cpp
+   tests/geojson_exporter_test.cpp
+   tests/gpx_exporter_test.cpp
    tests/json_loader_test.cpp
    tests/location_filter_test.cpp
    tests/map_display_settings_test.cpp

@@ -12,6 +12,74 @@
         <translation>Öffnen...</translation>
     </message>
     <message>
+        <source>&amp;Export</source>
+        <translation>&amp;Exportieren</translation>
+    </message>
+    <message>
+        <source>GPX...</source>
+        <translation>GPX...</translation>
+    </message>
+    <message>
+        <source>GeoJSON...</source>
+        <translation>GeoJSON...</translation>
+    </message>
+    <message>
+        <source>Map image...</source>
+        <translation>Kartenbild...</translation>
+    </message>
+    <message>
+        <source>Export GPX</source>
+        <translation>GPX exportieren</translation>
+    </message>
+    <message>
+        <source>Export GeoJSON</source>
+        <translation>GeoJSON exportieren</translation>
+    </message>
+    <message>
+        <source>Export map image</source>
+        <translation>Kartenbild exportieren</translation>
+    </message>
+    <message>
+        <source>GPX files (*.gpx);;All files (*.*)</source>
+        <translation>GPX-Dateien (*.gpx);;Alle Dateien (*.*)</translation>
+    </message>
+    <message>
+        <source>GeoJSON files (*.geojson *.json);;All files (*.*)</source>
+        <translation>GeoJSON-Dateien (*.geojson *.json);;Alle Dateien (*.*)</translation>
+    </message>
+    <message>
+        <source>Export failed</source>
+        <translation>Export fehlgeschlagen</translation>
+    </message>
+    <message>
+        <source>There are no filtered points to export.</source>
+        <translation>Es gibt keine gefilterten Punkte zum Exportieren.</translation>
+    </message>
+    <message>
+        <source>The file could not be written.</source>
+        <translation>Die Datei konnte nicht geschrieben werden.</translation>
+    </message>
+    <message>
+        <source>The map image could not be saved.</source>
+        <translation>Das Kartenbild konnte nicht gespeichert werden.</translation>
+    </message>
+    <message>
+        <source>PNG image (*.png)</source>
+        <translation>PNG-Bild (*.png)</translation>
+    </message>
+    <message>
+        <source>JPEG image (*.jpg *.jpeg)</source>
+        <translation>JPEG-Bild (*.jpg *.jpeg)</translation>
+    </message>
+    <message>
+        <source>Windows bitmap (*.bmp)</source>
+        <translation>Windows-Bitmap (*.bmp)</translation>
+    </message>
+    <message>
+        <source>WebP image (*.webp)</source>
+        <translation>WebP-Bild (*.webp)</translation>
+    </message>
+    <message>
         <source>E&amp;xit</source>
         <translation>B&amp;eenden</translation>
     </message>

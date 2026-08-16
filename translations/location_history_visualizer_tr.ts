@@ -12,6 +12,74 @@
         <translation>Aç...</translation>
     </message>
     <message>
+        <source>&amp;Export</source>
+        <translation>&amp;Dışa aktar</translation>
+    </message>
+    <message>
+        <source>GPX...</source>
+        <translation>GPX...</translation>
+    </message>
+    <message>
+        <source>GeoJSON...</source>
+        <translation>GeoJSON...</translation>
+    </message>
+    <message>
+        <source>Map image...</source>
+        <translation>Harita görüntüsü...</translation>
+    </message>
+    <message>
+        <source>Export GPX</source>
+        <translation>GPX dışa aktar</translation>
+    </message>
+    <message>
+        <source>Export GeoJSON</source>
+        <translation>GeoJSON dışa aktar</translation>
+    </message>
+    <message>
+        <source>Export map image</source>
+        <translation>Harita görüntüsünü dışa aktar</translation>
+    </message>
+    <message>
+        <source>GPX files (*.gpx);;All files (*.*)</source>
+        <translation>GPX dosyaları (*.gpx);;Tüm dosyalar (*.*)</translation>
+    </message>
+    <message>
+        <source>GeoJSON files (*.geojson *.json);;All files (*.*)</source>
+        <translation>GeoJSON dosyaları (*.geojson *.json);;Tüm dosyalar (*.*)</translation>
+    </message>
+    <message>
+        <source>Export failed</source>
+        <translation>Dışa aktarma başarısız</translation>
+    </message>
+    <message>
+        <source>There are no filtered points to export.</source>
+        <translation>Dışa aktarılacak filtrelenmiş nokta yok.</translation>
+    </message>
+    <message>
+        <source>The file could not be written.</source>
+        <translation>Dosya yazılamadı.</translation>
+    </message>
+    <message>
+        <source>The map image could not be saved.</source>
+        <translation>Harita görüntüsü kaydedilemedi.</translation>
+    </message>
+    <message>
+        <source>PNG image (*.png)</source>
+        <translation>PNG görüntüsü (*.png)</translation>
+    </message>
+    <message>
+        <source>JPEG image (*.jpg *.jpeg)</source>
+        <translation>JPEG görüntüsü (*.jpg *.jpeg)</translation>
+    </message>
+    <message>
+        <source>Windows bitmap (*.bmp)</source>
+        <translation>Windows bitmap (*.bmp)</translation>
+    </message>
+    <message>
+        <source>WebP image (*.webp)</source>
+        <translation>WebP görüntüsü (*.webp)</translation>
+    </message>
+    <message>
         <source>E&amp;xit</source>
         <translation>Ç&amp;ıkış</translation>
     </message>

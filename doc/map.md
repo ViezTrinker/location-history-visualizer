@@ -30,7 +30,7 @@ flowchart LR
 
 [`src/tile_downloader.h`](../src/tile_downloader.h): `QNetworkAccessManager`, at most **2** parallel requests (OSM tile policy), fixed User-Agent. A queue plus an in-flight set prevent duplicate downloads. Finished PNGs go to `MapWidget` via the `TileDownloaded` signal, which writes the cache and calls `update()`.
 
-Missing tiles appear gray until the download arrives. Bottom left: `© OpenStreetMap contributors`.
+Missing tiles appear gray until the download arrives. Bottom left: `© OpenStreetMap contributors`. File → Export → Map image captures the `MapWidget` as shown (tiles, overlay, Story frame, attribution), so missing tiles stay gray in the file and attribution remains in the image.
 
 ## Overlay modes
 

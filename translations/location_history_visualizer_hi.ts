@@ -12,6 +12,74 @@
         <translation>खोलें...</translation>
     </message>
     <message>
+        <source>&amp;Export</source>
+        <translation>&amp;निर्यात</translation>
+    </message>
+    <message>
+        <source>GPX...</source>
+        <translation>GPX...</translation>
+    </message>
+    <message>
+        <source>GeoJSON...</source>
+        <translation>GeoJSON...</translation>
+    </message>
+    <message>
+        <source>Map image...</source>
+        <translation>मानचित्र छवि...</translation>
+    </message>
+    <message>
+        <source>Export GPX</source>
+        <translation>GPX निर्यात करें</translation>
+    </message>
+    <message>
+        <source>Export GeoJSON</source>
+        <translation>GeoJSON निर्यात करें</translation>
+    </message>
+    <message>
+        <source>Export map image</source>
+        <translation>मानचित्र छवि निर्यात करें</translation>
+    </message>
+    <message>
+        <source>GPX files (*.gpx);;All files (*.*)</source>
+        <translation>GPX फ़ाइलें (*.gpx);;सभी फ़ाइलें (*.*)</translation>
+    </message>
+    <message>
+        <source>GeoJSON files (*.geojson *.json);;All files (*.*)</source>
+        <translation>GeoJSON फ़ाइलें (*.geojson *.json);;सभी फ़ाइलें (*.*)</translation>
+    </message>
+    <message>
+        <source>Export failed</source>
+        <translation>निर्यात विफल</translation>
+    </message>
+    <message>
+        <source>There are no filtered points to export.</source>
+        <translation>निर्यात करने के लिए कोई फ़िल्टर किए गए बिंदु नहीं हैं।</translation>
+    </message>
+    <message>
+        <source>The file could not be written.</source>
+        <translation>फ़ाइल लिखी नहीं जा सकी।</translation>
+    </message>
+    <message>
+        <source>The map image could not be saved.</source>
+        <translation>मानचित्र छवि सहेजी नहीं जा सकी।</translation>
+    </message>
+    <message>
+        <source>PNG image (*.png)</source>
+        <translation>PNG छवि (*.png)</translation>
+    </message>
+    <message>
+        <source>JPEG image (*.jpg *.jpeg)</source>
+        <translation>JPEG छवि (*.jpg *.jpeg)</translation>
+    </message>
+    <message>
+        <source>Windows bitmap (*.bmp)</source>
+        <translation>Windows बिटमैप (*.bmp)</translation>
+    </message>
+    <message>
+        <source>WebP image (*.webp)</source>
+        <translation>WebP छवि (*.webp)</translation>
+    </message>
+    <message>
         <source>E&amp;xit</source>
         <translation>बाहर निकलें</translation>
     </message>

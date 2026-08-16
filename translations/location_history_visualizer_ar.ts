@@ -12,6 +12,74 @@
         <translation>فتح...</translation>
     </message>
     <message>
+        <source>&amp;Export</source>
+        <translation>&amp;تصدير</translation>
+    </message>
+    <message>
+        <source>GPX...</source>
+        <translation>GPX...</translation>
+    </message>
+    <message>
+        <source>GeoJSON...</source>
+        <translation>GeoJSON...</translation>
+    </message>
+    <message>
+        <source>Map image...</source>
+        <translation>صورة الخريطة...</translation>
+    </message>
+    <message>
+        <source>Export GPX</source>
+        <translation>تصدير GPX</translation>
+    </message>
+    <message>
+        <source>Export GeoJSON</source>
+        <translation>تصدير GeoJSON</translation>
+    </message>
+    <message>
+        <source>Export map image</source>
+        <translation>تصدير صورة الخريطة</translation>
+    </message>
+    <message>
+        <source>GPX files (*.gpx);;All files (*.*)</source>
+        <translation>ملفات GPX (*.gpx);;كل الملفات (*.*)</translation>
+    </message>
+    <message>
+        <source>GeoJSON files (*.geojson *.json);;All files (*.*)</source>
+        <translation>ملفات GeoJSON (*.geojson *.json);;كل الملفات (*.*)</translation>
+    </message>
+    <message>
+        <source>Export failed</source>
+        <translation>فشل التصدير</translation>
+    </message>
+    <message>
+        <source>There are no filtered points to export.</source>
+        <translation>لا توجد نقاط مُصفّاة للتصدير.</translation>
+    </message>
+    <message>
+        <source>The file could not be written.</source>
+        <translation>تعذر كتابة الملف.</translation>
+    </message>
+    <message>
+        <source>The map image could not be saved.</source>
+        <translation>تعذر حفظ صورة الخريطة.</translation>
+    </message>
+    <message>
+        <source>PNG image (*.png)</source>
+        <translation>صورة PNG (*.png)</translation>
+    </message>
+    <message>
+        <source>JPEG image (*.jpg *.jpeg)</source>
+        <translation>صورة JPEG (*.jpg *.jpeg)</translation>
+    </message>
+    <message>
+        <source>Windows bitmap (*.bmp)</source>
+        <translation>صورة Windows النقطية (*.bmp)</translation>
+    </message>
+    <message>
+        <source>WebP image (*.webp)</source>
+        <translation>صورة WebP (*.webp)</translation>
+    </message>
+    <message>
         <source>E&amp;xit</source>
         <translation>&amp;خروج</translation>
     </message>

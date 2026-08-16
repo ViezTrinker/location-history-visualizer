@@ -4,11 +4,12 @@ Native **C++20 / Qt 6** desktop app that plots a [Google Timeline](https://timel
 
 ![Location History Visualizer with filters on the left and location points on an OpenStreetMap of Central Europe](doc/screenshots/app.png)
 
-Version **1.1.0.R**. Author [ViezTrinker](https://github.com/ViezTrinker). Release notes: [CHANGELOG.md](CHANGELOG.md).
+Version **2.0.0.R**. Author [ViezTrinker](https://github.com/ViezTrinker). Release notes: [CHANGELOG.md](CHANGELOG.md).
 
 ## Features
 
 - **Google Timeline JSON** — current export (`semanticSegments` path/visits and `rawSignals.position`), not the old `locations[]` E7 format. Large files load in the background with progress and Cancel
+- **Export** — File → Export: GPX, GeoJSON (currently filtered points), and a map screenshot (PNG, JPEG, BMP, WebP)
 - **OpenStreetMap map** — pan, mouse-wheel and double-click zoom, zoom slider beside the map, OSM attribution
 - **Filters** — date range, weekdays (checkbox with the abbreviation underneath), time of day
 - **Display modes** — Points (simple red dots of the filtered data), Cluster (click a circle to zoom into that cell), and Story

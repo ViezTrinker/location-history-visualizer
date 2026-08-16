@@ -12,6 +12,74 @@
         <translation>Открыть...</translation>
     </message>
     <message>
+        <source>&amp;Export</source>
+        <translation>&amp;Экспорт</translation>
+    </message>
+    <message>
+        <source>GPX...</source>
+        <translation>GPX...</translation>
+    </message>
+    <message>
+        <source>GeoJSON...</source>
+        <translation>GeoJSON...</translation>
+    </message>
+    <message>
+        <source>Map image...</source>
+        <translation>Изображение карты...</translation>
+    </message>
+    <message>
+        <source>Export GPX</source>
+        <translation>Экспорт GPX</translation>
+    </message>
+    <message>
+        <source>Export GeoJSON</source>
+        <translation>Экспорт GeoJSON</translation>
+    </message>
+    <message>
+        <source>Export map image</source>
+        <translation>Экспорт изображения карты</translation>
+    </message>
+    <message>
+        <source>GPX files (*.gpx);;All files (*.*)</source>
+        <translation>Файлы GPX (*.gpx);;Все файлы (*.*)</translation>
+    </message>
+    <message>
+        <source>GeoJSON files (*.geojson *.json);;All files (*.*)</source>
+        <translation>Файлы GeoJSON (*.geojson *.json);;Все файлы (*.*)</translation>
+    </message>
+    <message>
+        <source>Export failed</source>
+        <translation>Ошибка экспорта</translation>
+    </message>
+    <message>
+        <source>There are no filtered points to export.</source>
+        <translation>Нет отфильтрованных точек для экспорта.</translation>
+    </message>
+    <message>
+        <source>The file could not be written.</source>
+        <translation>Не удалось записать файл.</translation>
+    </message>
+    <message>
+        <source>The map image could not be saved.</source>
+        <translation>Не удалось сохранить изображение карты.</translation>
+    </message>
+    <message>
+        <source>PNG image (*.png)</source>
+        <translation>Изображение PNG (*.png)</translation>
+    </message>
+    <message>
+        <source>JPEG image (*.jpg *.jpeg)</source>
+        <translation>Изображение JPEG (*.jpg *.jpeg)</translation>
+    </message>
+    <message>
+        <source>Windows bitmap (*.bmp)</source>
+        <translation>Точечный рисунок Windows (*.bmp)</translation>
+    </message>
+    <message>
+        <source>WebP image (*.webp)</source>
+        <translation>Изображение WebP (*.webp)</translation>
+    </message>
+    <message>
         <source>E&amp;xit</source>
         <translation>В&amp;ыход</translation>
     </message>

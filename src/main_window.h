@@ -30,6 +30,7 @@
 #include <QWidget>
 
 #include "app_theme.h"
+#include "export_result.h"
 #include "load_result.h"
 #include "location_data.h"
 #include "location_filter.h"
@@ -59,6 +60,9 @@ namespace LocationHistory
          void OnLoadProgress(qint64 bytesRead, qint64 bytesTotal);
          void OnLoadCancelClicked(void);
          void OnLoadThreadFinished(void);
+         void OnExportGpxClicked(void);
+         void OnExportGeoJsonClicked(void);
+         void OnExportImageClicked(void);
          void OnAbout(void);
          void OnFiltersChanged(void);
          void OnDisplayModeChanged(int index);
@@ -118,6 +122,12 @@ namespace LocationHistory
           */
          QString ThemeText(AppTheme theme) const;
          QString LoadResultMessage(LoadResult result) const;
+         /*!
+          *\brief Returns a translated message for an export result
+          *
+          *\param[in] result Export result to describe
+          */
+         QString ExportResultMessage(ExportResult result) const;
          QString FormatDuration(int64_t durationMs) const;
          FilterSettings ReadFilterSettings(void) const;
          void ApplyCurrentFilter(void);
@@ -134,6 +144,28 @@ namespace LocationHistory
           *\brief Stores the current window size, position, and maximized state
           */
          void SaveWindowGeometry(void);
+         /*!
+          *\brief Enables export actions when filtered points exist and no load is running
+          */
+         void UpdateExportActions(void);
+         /*!
+          *\brief Builds the map-image save dialog filter from formats Qt can write
+          */
+         QString MapImageFileFilter(void) const;
+         /*!
+          *\brief Maps a selected file-dialog filter to a QImageWriter format name
+          *
+          *\param[in] selectedFilter Filter string chosen in the save dialog
+          */
+         QString MapImageFormatFromFilter(const QString& selectedFilter) const;
+         /*!
+          *\brief Asks for an export path and remembers it in QSettings
+          *
+          *\param[in] title Dialog title
+          *\param[in] filter File-type filter
+          *\param[in] defaultSuffix Suffix appended when the user omits one
+          */
+         QString AskExportPath(const QString& title, const QString& filter, const QString& defaultSuffix);
 
          LocationPointList _allPoints;
          LocationPointList _filteredPoints;
@@ -145,6 +177,10 @@ namespace LocationHistory
          MapWidget* _pMapWidget;
          QMenu* _pFileMenu;
          QAction* _pOpenAction;
+         QMenu* _pExportMenu;
+         QAction* _pExportGpxAction;
+         QAction* _pExportGeoJsonAction;
+         QAction* _pExportImageAction;
          QAction* _pQuitAction;
          QMenu* _pSettingsMenu;
          QMenu* _pLanguageMenu;

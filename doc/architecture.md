@@ -31,6 +31,8 @@ flowchart TB
     clusterer[clusterer]
     storyTime[story_time]
     mapFocus[map_focus]
+    gpxExporter[gpx_exporter]
+    geojsonExporter[geojson_exporter]
     dataModel[location_point / location_data]
   end
 
@@ -51,6 +53,8 @@ flowchart TB
   jsonLoadThread --> jsonLoader
   mainWindow --> filter
   mainWindow --> storyTime
+  mainWindow --> gpxExporter
+  mainWindow --> geojsonExporter
   mapWidget --> tileCache
   mapWidget --> tileDownloader
   mapWidget --> tileMath
@@ -59,6 +63,8 @@ flowchart TB
   mapWidget --> mapFocus
   jsonLoader --> dataModel
   jsonLoader --> civilTime
+  gpxExporter --> civilTime
+  geojsonExporter --> civilTime
   filter --> dataModel
   filter --> civilTime
   tests --> core

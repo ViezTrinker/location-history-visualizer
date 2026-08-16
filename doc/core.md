@@ -39,9 +39,13 @@ Ignored in v1: `activity`, `timelineMemory`, `userLocationProfile`.
 
 ## Time and filters
 
-[`src/civil_time.h`](../src/civil_time.h) converts civil date ↔ Unix ms, weekday (Monday = 0), and minute of day. Weekday and time of day use the **offset in the timestamp**, not the PC time zone.
+[`src/civil_time.h`](../src/civil_time.h) converts civil date ↔ Unix ms, weekday (Monday = 0), and minute of day. Weekday and time of day use the **offset in the timestamp**, not the PC time zone. `FormatIso8601` writes `2020-01-15T08:30:00.000+01:00` for GPX and GeoJSON.
 
 [`src/location_filter.h`](../src/location_filter.h): `FilterSettings` with from/to dates, `weekdayMask` (bit flags), and a minute window. `ApplyFilter` writes matches to `output`. Across midnight: `fromMinuteOfDay > toMinuteOfDay` is treated as wrap-around.
+
+## Export
+
+[`src/gpx_exporter.h`](../src/gpx_exporter.h) writes GPX 1.1 from a point list: visits as waypoints, each `pathId` as a track, raw positions as one time-sorted track. [`src/geojson_exporter.h`](../src/geojson_exporter.h) writes a `FeatureCollection` of Point features (`[longitude, latitude]`), with `time`, `source`, optional `endTime` and `pathId`. Both use `ExportResult` in [`src/export_result.h`](../src/export_result.h): `WriteFailed`, `NoPoints`, `Ok`.
 
 ## Clusters
 
@@ -57,4 +61,4 @@ Ignored in v1: `activity`, `timelineMemory`, `userLocationProfile`.
 
 ## Version
 
-[`src/version.h`](../src/version.h) holds About strings (`AppVersion` `1.1.0.R`, `ReleaseDate` `2026-08-15`, author and repo URL `https://github.com/ViezTrinker/location-history-visualizer`). No Qt dependency. CMake `project(... VERSION ...)` is `1.1.0` (numeric prefix of `AppVersion`; CMake does not allow the `.R` suffix).
+[`src/version.h`](../src/version.h) holds About strings (`AppVersion` `2.0.0.R`, `ReleaseDate` `2026-08-16`, author and repo URL `https://github.com/ViezTrinker/location-history-visualizer`). No Qt dependency. CMake `project(... VERSION ...)` is `2.0.0` (numeric prefix of `AppVersion`; CMake does not allow the `.R` suffix).

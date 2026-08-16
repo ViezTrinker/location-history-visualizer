@@ -15,14 +15,20 @@
 #include <QCloseEvent>
 #include <QDate>
 #include <QDir>
+#include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QFormLayout>
 #include <QHBoxLayout>
+#include <QImage>
+#include <QImageWriter>
+#include <QIODevice>
 #include <QKeySequence>
+#include <QList>
 #include <QLocale>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QPixmap>
 #include <QProgressDialog>
 #include <QSettings>
 #include <QSpinBox>
@@ -36,6 +42,9 @@
 #include "app_language.h"
 #include "app_theme.h"
 #include "civil_time.h"
+#include "export_result.h"
+#include "geojson_exporter.h"
+#include "gpx_exporter.h"
 #include "json_load_thread.h"
 #include "load_result.h"
 #include "location_filter.h"
@@ -56,6 +65,7 @@ namespace LocationHistory
       inline constexpr int32_t LoadProgressMax = 1000;
       inline constexpr int32_t DefaultWindowWidthPx = 1280;
       inline constexpr int32_t DefaultWindowHeightPx = 800;
+      inline constexpr int32_t JpegQuality = 90;
 
       QString LastJsonSettingsKey(void)
       {
@@ -65,6 +75,11 @@ namespace LocationHistory
       QString WindowGeometrySettingsKey(void)
       {
          return QStringLiteral("windowGeometry");
+      }
+
+      QString LastExportSettingsKey(void)
+      {
+         return QStringLiteral("lastExportPath");
       }
 
       QString LastJsonDialogPath(void)
@@ -91,6 +106,58 @@ namespace LocationHistory
          return QString();
       }
 
+      QString LastExportDialogPath(void)
+      {
+         QSettings settings;
+         const QString storedPath = settings.value(LastExportSettingsKey()).toString();
+         if (!storedPath.isEmpty())
+         {
+            const QFileInfo fileInfo(storedPath);
+            if (fileInfo.exists())
+            {
+               return storedPath;
+            }
+            const QString directory = fileInfo.absolutePath();
+            if (QDir(directory).exists())
+            {
+               return directory;
+            }
+         }
+
+         return LastJsonDialogPath();
+      }
+
+      bool ImageFormatSupported(const std::string_view format)
+      {
+         const QList<QByteArray> formats = QImageWriter::supportedImageFormats();
+         const QByteArray needle = QByteArray(format.data(), static_cast<int>(format.size()));
+         for (int index = 0; index < formats.size(); ++index)
+         {
+            if (formats[index].compare(needle, Qt::CaseInsensitive) == 0)
+            {
+               return true;
+            }
+         }
+         return false;
+      }
+
+      ExportResult WriteTextFile(const QString& path, const std::string& text)
+      {
+         QFile file(path);
+         if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
+         {
+            return ExportResult::WriteFailed;
+         }
+
+         const auto bytesToWrite = static_cast<qint64>(text.size());
+         const qint64 written = file.write(text.data(), bytesToWrite);
+         if (written != bytesToWrite)
+         {
+            return ExportResult::WriteFailed;
+         }
+         return ExportResult::Ok;
+      }
+
       QString FormatCount(const size_t count)
       {
          return QLocale().toString(static_cast<qulonglong>(count));
@@ -105,6 +172,10 @@ namespace LocationHistory
       , _pMapWidget(nullptr)
       , _pFileMenu(nullptr)
       , _pOpenAction(nullptr)
+      , _pExportMenu(nullptr)
+      , _pExportGpxAction(nullptr)
+      , _pExportGeoJsonAction(nullptr)
+      , _pExportImageAction(nullptr)
       , _pQuitAction(nullptr)
       , _pSettingsMenu(nullptr)
       , _pLanguageMenu(nullptr)
@@ -168,6 +239,7 @@ namespace LocationHistory
       BuildUi();
       RetranslateUi();
       OnPointCleared();
+      UpdateExportActions();
    }
 
    MainWindow::~MainWindow(void)
@@ -190,6 +262,16 @@ namespace LocationHistory
       _pOpenAction = _pFileMenu->addAction(QString());
       _pOpenAction->setShortcut(QKeySequence::Open);
       connect(_pOpenAction, &QAction::triggered, this, &MainWindow::OnOpenClicked);
+
+      _pFileMenu->addSeparator();
+      _pExportMenu = _pFileMenu->addMenu(QString());
+      _pExportGpxAction = _pExportMenu->addAction(QString());
+      connect(_pExportGpxAction, &QAction::triggered, this, &MainWindow::OnExportGpxClicked);
+      _pExportGeoJsonAction = _pExportMenu->addAction(QString());
+      connect(_pExportGeoJsonAction, &QAction::triggered, this, &MainWindow::OnExportGeoJsonClicked);
+      _pExportImageAction = _pExportMenu->addAction(QString());
+      connect(_pExportImageAction, &QAction::triggered, this, &MainWindow::OnExportImageClicked);
+      _pFileMenu->addSeparator();
 
       _pQuitAction = _pFileMenu->addAction(QString());
       _pQuitAction->setShortcut(QKeySequence::Quit);
@@ -469,6 +551,10 @@ namespace LocationHistory
    {
       _pFileMenu->setTitle(tr("&File"));
       _pOpenAction->setText(tr("Open..."));
+      _pExportMenu->setTitle(tr("&Export"));
+      _pExportGpxAction->setText(tr("GPX..."));
+      _pExportGeoJsonAction->setText(tr("GeoJSON..."));
+      _pExportImageAction->setText(tr("Map image..."));
       _pQuitAction->setText(tr("E&xit"));
       _pSettingsMenu->setTitle(tr("&Settings"));
       _pLanguageMenu->setTitle(tr("Language"));
@@ -642,6 +728,233 @@ namespace LocationHistory
       return tr("The file could not be loaded.");
    }
 
+   QString MainWindow::ExportResultMessage(const ExportResult result) const
+   {
+      if (result == ExportResult::NoPoints)
+      {
+         return tr("There are no filtered points to export.");
+      }
+      return tr("The file could not be written.");
+   }
+
+   void MainWindow::UpdateExportActions(void)
+   {
+      const bool exportEnabled = (_pLoadThread == nullptr) && (!_filteredPoints.empty());
+      if (_pExportGpxAction != nullptr)
+      {
+         _pExportGpxAction->setEnabled(exportEnabled);
+      }
+      if (_pExportGeoJsonAction != nullptr)
+      {
+         _pExportGeoJsonAction->setEnabled(exportEnabled);
+      }
+      if (_pExportImageAction != nullptr)
+      {
+         _pExportImageAction->setEnabled(exportEnabled);
+      }
+   }
+
+   QString MainWindow::MapImageFileFilter(void) const
+   {
+      QString filter;
+      if (ImageFormatSupported("png"))
+      {
+         filter += tr("PNG image (*.png)");
+      }
+      if (ImageFormatSupported("jpeg"))
+      {
+         if (!filter.isEmpty())
+         {
+            filter += QStringLiteral(";;");
+         }
+         filter += tr("JPEG image (*.jpg *.jpeg)");
+      }
+      if (ImageFormatSupported("bmp"))
+      {
+         if (!filter.isEmpty())
+         {
+            filter += QStringLiteral(";;");
+         }
+         filter += tr("Windows bitmap (*.bmp)");
+      }
+      if (ImageFormatSupported("webp"))
+      {
+         if (!filter.isEmpty())
+         {
+            filter += QStringLiteral(";;");
+         }
+         filter += tr("WebP image (*.webp)");
+      }
+      return filter;
+   }
+
+   QString MainWindow::MapImageFormatFromFilter(const QString& selectedFilter) const
+   {
+      if (selectedFilter.contains(QStringLiteral("*.webp"), Qt::CaseInsensitive))
+      {
+         return QStringLiteral("webp");
+      }
+      if (selectedFilter.contains(QStringLiteral("*.jpg"), Qt::CaseInsensitive) ||
+          selectedFilter.contains(QStringLiteral("*.jpeg"), Qt::CaseInsensitive))
+      {
+         return QStringLiteral("jpeg");
+      }
+      if (selectedFilter.contains(QStringLiteral("*.bmp"), Qt::CaseInsensitive))
+      {
+         return QStringLiteral("bmp");
+      }
+      return QStringLiteral("png");
+   }
+
+   QString MainWindow::AskExportPath(const QString& title, const QString& filter, const QString& defaultSuffix)
+   {
+      QString selectedFilter;
+      QString path = QFileDialog::getSaveFileName(
+         this,
+         title,
+         LastExportDialogPath(),
+         filter,
+         &selectedFilter);
+      if (path.isEmpty())
+      {
+         return QString();
+      }
+
+      QFileInfo fileInfo(path);
+      if (fileInfo.suffix().isEmpty() && !defaultSuffix.isEmpty())
+      {
+         path += QStringLiteral(".") + defaultSuffix;
+      }
+
+      QSettings settings;
+      settings.setValue(LastExportSettingsKey(), path);
+      return path;
+   }
+
+   void MainWindow::OnExportGpxClicked(void)
+   {
+      if (_filteredPoints.empty())
+      {
+         QMessageBox::warning(this, tr("Export failed"), ExportResultMessage(ExportResult::NoPoints));
+         return;
+      }
+
+      const QString path = AskExportPath(tr("Export GPX"), tr("GPX files (*.gpx);;All files (*.*)"), QStringLiteral("gpx"));
+      if (path.isEmpty())
+      {
+         return;
+      }
+
+      std::string gpxText;
+      const ExportResult writeResult = WriteGpx(_filteredPoints, gpxText);
+      if (IsErr(writeResult))
+      {
+         QMessageBox::warning(this, tr("Export failed"), ExportResultMessage(writeResult));
+         return;
+      }
+
+      const ExportResult fileResult = WriteTextFile(path, gpxText);
+      if (IsErr(fileResult))
+      {
+         QMessageBox::warning(this, tr("Export failed"), ExportResultMessage(fileResult));
+      }
+   }
+
+   void MainWindow::OnExportGeoJsonClicked(void)
+   {
+      if (_filteredPoints.empty())
+      {
+         QMessageBox::warning(this, tr("Export failed"), ExportResultMessage(ExportResult::NoPoints));
+         return;
+      }
+
+      const QString path = AskExportPath(
+         tr("Export GeoJSON"),
+         tr("GeoJSON files (*.geojson *.json);;All files (*.*)"),
+         QStringLiteral("geojson"));
+      if (path.isEmpty())
+      {
+         return;
+      }
+
+      std::string geoJsonText;
+      const ExportResult writeResult = WriteGeoJson(_filteredPoints, geoJsonText);
+      if (IsErr(writeResult))
+      {
+         QMessageBox::warning(this, tr("Export failed"), ExportResultMessage(writeResult));
+         return;
+      }
+
+      const ExportResult fileResult = WriteTextFile(path, geoJsonText);
+      if (IsErr(fileResult))
+      {
+         QMessageBox::warning(this, tr("Export failed"), ExportResultMessage(fileResult));
+      }
+   }
+
+   void MainWindow::OnExportImageClicked(void)
+   {
+      if (_pMapWidget == nullptr)
+      {
+         QMessageBox::warning(this, tr("Export failed"), tr("The map image could not be saved."));
+         return;
+      }
+
+      const QString filter = MapImageFileFilter();
+      if (filter.isEmpty())
+      {
+         QMessageBox::warning(this, tr("Export failed"), tr("The map image could not be saved."));
+         return;
+      }
+
+      QString selectedFilter;
+      QString path = QFileDialog::getSaveFileName(
+         this,
+         tr("Export map image"),
+         LastExportDialogPath(),
+         filter,
+         &selectedFilter);
+      if (path.isEmpty())
+      {
+         return;
+      }
+
+      const QString format = MapImageFormatFromFilter(selectedFilter);
+      QFileInfo fileInfo(path);
+      if (fileInfo.suffix().isEmpty())
+      {
+         if (format == QStringLiteral("jpeg"))
+         {
+            path += QStringLiteral(".jpg");
+         }
+         else
+         {
+            path += QStringLiteral(".") + format;
+         }
+      }
+
+      QSettings settings;
+      settings.setValue(LastExportSettingsKey(), path);
+
+      const QPixmap pixmap = _pMapWidget->grab();
+      if (pixmap.isNull())
+      {
+         QMessageBox::warning(this, tr("Export failed"), tr("The map image could not be saved."));
+         return;
+      }
+
+      QImageWriter writer(path);
+      writer.setFormat(format.toLatin1());
+      if (format == QStringLiteral("jpeg"))
+      {
+         writer.setQuality(JpegQuality);
+      }
+      if (!writer.write(pixmap.toImage()))
+      {
+         QMessageBox::warning(this, tr("Export failed"), tr("The map image could not be saved."));
+      }
+   }
+
    void MainWindow::changeEvent(QEvent* pEvent)
    {
       if (pEvent->type() == QEvent::LanguageChange)
@@ -719,6 +1032,7 @@ namespace LocationHistory
       UpdateStoryDateLimits();
       RefreshDisplayedPoints();
       UpdateStatusMessage();
+      UpdateExportActions();
    }
 
    void MainWindow::UpdateDateRangeFromPoints(void)
@@ -804,6 +1118,7 @@ namespace LocationHistory
       {
          _pOpenAction->setEnabled(false);
       }
+      UpdateExportActions();
       _pLoadThread->start();
    }
 
@@ -872,6 +1187,7 @@ namespace LocationHistory
          {
             _pOpenAction->setEnabled(true);
          }
+         UpdateExportActions();
          return;
       }
 
@@ -886,6 +1202,7 @@ namespace LocationHistory
       {
          _pOpenAction->setEnabled(true);
       }
+      UpdateExportActions();
 
       if (result == LoadResult::Cancelled)
       {

@@ -100,6 +100,13 @@ namespace LocationHistory
          output.push_back(static_cast<char>('0' + ((value / 10) % 10)));
          output.push_back(static_cast<char>('0' + (value % 10)));
       }
+
+      void AppendThreeDigits(std::string& output, const int32_t value)
+      {
+         output.push_back(static_cast<char>('0' + ((value / 100) % 10)));
+         output.push_back(static_cast<char>('0' + ((value / 10) % 10)));
+         output.push_back(static_cast<char>('0' + (value % 10)));
+      }
    } // namespace
 
    int64_t CivilToUnixMs(const CivilDateTime& dateTime, const int32_t utcOffsetMinutes)
@@ -180,6 +187,42 @@ namespace LocationHistory
       AppendTwoDigits(output, dateTime.minute);
       output.push_back(':');
       AppendTwoDigits(output, dateTime.second);
+   }
+
+   void FormatIso8601(const int64_t unixTimeMs, const int32_t utcOffsetMinutes, std::string& output)
+   {
+      CivilDateTime dateTime{};
+      UnixMsToCivil(unixTimeMs, utcOffsetMinutes, dateTime);
+
+      output.clear();
+      output.reserve(29);
+      AppendFourDigits(output, dateTime.year);
+      output.push_back('-');
+      AppendTwoDigits(output, dateTime.month);
+      output.push_back('-');
+      AppendTwoDigits(output, dateTime.day);
+      output.push_back('T');
+      AppendTwoDigits(output, dateTime.hour);
+      output.push_back(':');
+      AppendTwoDigits(output, dateTime.minute);
+      output.push_back(':');
+      AppendTwoDigits(output, dateTime.second);
+      output.push_back('.');
+      AppendThreeDigits(output, dateTime.millisecond);
+
+      int32_t offset = utcOffsetMinutes;
+      if (offset < 0)
+      {
+         output.push_back('-');
+         offset = -offset;
+      }
+      else
+      {
+         output.push_back('+');
+      }
+      AppendTwoDigits(output, offset / static_cast<int32_t>(MinutesPerHour));
+      output.push_back(':');
+      AppendTwoDigits(output, offset % static_cast<int32_t>(MinutesPerHour));
    }
 
    ParseResult ParseIso8601(const std::string_view text, int64_t& unixTimeMs, int32_t& utcOffsetMinutes)

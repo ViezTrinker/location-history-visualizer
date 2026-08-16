@@ -15,7 +15,7 @@ Menu bar: **File | Settings | Help**. Layout below: left sidebar (~280 px) + `Ma
 
 | Area | Controls |
 | --- | --- |
-| File | Menu → Open, `QFileDialog` for `*.json`. Last path in `QSettings` (`lastJsonPath`). Load runs in the background with a progress dialog and Cancel. Exit closes the window. |
+| File | Menu → Open (`*.json`, last path `lastJsonPath`). **Export** submenu: GPX, GeoJSON (filtered points), map image (PNG/JPEG/BMP/WebP). Last export path `lastExportPath`. Load runs in the background with a progress dialog and Cancel. Exit closes the window. |
 | Settings | **Language** submenu: exclusive checkable actions with native names (English, Deutsch, Español, Français, Русский, العربية, Italiano, Türkçe, Nederlands, Português, Polski, 日本語, 한국어, Bahasa Indonesia, Tiếng Việt, हिन्दी). Stored in `QSettings` (`language`). Arabic sets `Qt::RightToLeft`. **Theme** submenu: Dark (default), Light, Midnight, Nord, Sepia. Stored in `QSettings` (`theme`). Fusion palettes, independent of the Windows color mode. |
 | Help | About |
 | Date | `QDateEdit` from/to, set to min/max of the data after load |
@@ -32,7 +32,9 @@ Source UI strings are English. Translations live in [`translations/`](../transla
 
 `OnOpenClicked` starts `JsonLoadThread`. A window-modal progress dialog shows byte progress and Cancel. The SAX parse runs off the UI thread. On success the map centers on the densest cell (`CenterOnPoints`). On error a message box is shown and the previous points stay on the map. Cancel discards the in-flight parse and also keeps the previous data.
 
-Menu **Help → About** opens [`src/about_dialog.h`](../src/about_dialog.h): version `1.1.0.R`, date, ViezTrinker link, repo [location-history-visualizer](https://github.com/ViezTrinker/location-history-visualizer). Strings and URLs come from [`src/version.h`](../src/version.h). Links are `QLabel` with `setOpenExternalLinks`.
+File → Export writes the **currently filtered** points (`_filteredPoints`) as GPX or GeoJSON. Map image calls `MapWidget::grab()` so the file matches the current overlay, zoom, and Story frame, including OSM attribution. Export actions are disabled when there are no filtered points and while a JSON load is running.
+
+Menu **Help → About** opens [`src/about_dialog.h`](../src/about_dialog.h): version `2.0.0.R`, date, ViezTrinker link, repo [location-history-visualizer](https://github.com/ViezTrinker/location-history-visualizer). Strings and URLs come from [`src/version.h`](../src/version.h). Links are `QLabel` with `setOpenExternalLinks`.
 
 ## Startup
 

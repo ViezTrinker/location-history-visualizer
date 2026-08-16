@@ -12,6 +12,74 @@
         <translation>Buka...</translation>
     </message>
     <message>
+        <source>&amp;Export</source>
+        <translation>&amp;Ekspor</translation>
+    </message>
+    <message>
+        <source>GPX...</source>
+        <translation>GPX...</translation>
+    </message>
+    <message>
+        <source>GeoJSON...</source>
+        <translation>GeoJSON...</translation>
+    </message>
+    <message>
+        <source>Map image...</source>
+        <translation>Gambar peta...</translation>
+    </message>
+    <message>
+        <source>Export GPX</source>
+        <translation>Ekspor GPX</translation>
+    </message>
+    <message>
+        <source>Export GeoJSON</source>
+        <translation>Ekspor GeoJSON</translation>
+    </message>
+    <message>
+        <source>Export map image</source>
+        <translation>Ekspor gambar peta</translation>
+    </message>
+    <message>
+        <source>GPX files (*.gpx);;All files (*.*)</source>
+        <translation>Berkas GPX (*.gpx);;Semua berkas (*.*)</translation>
+    </message>
+    <message>
+        <source>GeoJSON files (*.geojson *.json);;All files (*.*)</source>
+        <translation>Berkas GeoJSON (*.geojson *.json);;Semua berkas (*.*)</translation>
+    </message>
+    <message>
+        <source>Export failed</source>
+        <translation>Ekspor gagal</translation>
+    </message>
+    <message>
+        <source>There are no filtered points to export.</source>
+        <translation>Tidak ada titik terfilter untuk diekspor.</translation>
+    </message>
+    <message>
+        <source>The file could not be written.</source>
+        <translation>Berkas tidak dapat ditulis.</translation>
+    </message>
+    <message>
+        <source>The map image could not be saved.</source>
+        <translation>Gambar peta tidak dapat disimpan.</translation>
+    </message>
+    <message>
+        <source>PNG image (*.png)</source>
+        <translation>Gambar PNG (*.png)</translation>
+    </message>
+    <message>
+        <source>JPEG image (*.jpg *.jpeg)</source>
+        <translation>Gambar JPEG (*.jpg *.jpeg)</translation>
+    </message>
+    <message>
+        <source>Windows bitmap (*.bmp)</source>
+        <translation>Bitmap Windows (*.bmp)</translation>
+    </message>
+    <message>
+        <source>WebP image (*.webp)</source>
+        <translation>Gambar WebP (*.webp)</translation>
+    </message>
+    <message>
         <source>E&amp;xit</source>
         <translation>K&amp;eluar</translation>
     </message>

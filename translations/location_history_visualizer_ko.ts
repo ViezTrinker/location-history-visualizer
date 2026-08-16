@@ -12,6 +12,74 @@
         <translation>열기...</translation>
     </message>
     <message>
+        <source>&amp;Export</source>
+        <translation>&amp;내보내기</translation>
+    </message>
+    <message>
+        <source>GPX...</source>
+        <translation>GPX...</translation>
+    </message>
+    <message>
+        <source>GeoJSON...</source>
+        <translation>GeoJSON...</translation>
+    </message>
+    <message>
+        <source>Map image...</source>
+        <translation>지도 이미지...</translation>
+    </message>
+    <message>
+        <source>Export GPX</source>
+        <translation>GPX 내보내기</translation>
+    </message>
+    <message>
+        <source>Export GeoJSON</source>
+        <translation>GeoJSON 내보내기</translation>
+    </message>
+    <message>
+        <source>Export map image</source>
+        <translation>지도 이미지 내보내기</translation>
+    </message>
+    <message>
+        <source>GPX files (*.gpx);;All files (*.*)</source>
+        <translation>GPX 파일 (*.gpx);;모든 파일 (*.*)</translation>
+    </message>
+    <message>
+        <source>GeoJSON files (*.geojson *.json);;All files (*.*)</source>
+        <translation>GeoJSON 파일 (*.geojson *.json);;모든 파일 (*.*)</translation>
+    </message>
+    <message>
+        <source>Export failed</source>
+        <translation>내보내기 실패</translation>
+    </message>
+    <message>
+        <source>There are no filtered points to export.</source>
+        <translation>내보낼 필터된 지점이 없습니다.</translation>
+    </message>
+    <message>
+        <source>The file could not be written.</source>
+        <translation>파일을 쓸 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>The map image could not be saved.</source>
+        <translation>지도 이미지를 저장할 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>PNG image (*.png)</source>
+        <translation>PNG 이미지 (*.png)</translation>
+    </message>
+    <message>
+        <source>JPEG image (*.jpg *.jpeg)</source>
+        <translation>JPEG 이미지 (*.jpg *.jpeg)</translation>
+    </message>
+    <message>
+        <source>Windows bitmap (*.bmp)</source>
+        <translation>Windows 비트맵 (*.bmp)</translation>
+    </message>
+    <message>
+        <source>WebP image (*.webp)</source>
+        <translation>WebP 이미지 (*.webp)</translation>
+    </message>
+    <message>
         <source>E&amp;xit</source>
         <translation>종료(&amp;X)</translation>
     </message>

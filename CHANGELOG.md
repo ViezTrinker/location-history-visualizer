@@ -4,15 +4,20 @@ All notable releases of Location History Visualizer are listed here.
 
 ## Unreleased
 
+## 2.0.0.R — 2026-08-16
+
+Export of filtered points and the map view. Background JSON load, cluster-click zoom, and remembered window geometry from the 1.1 line.
+
 ### Added
 
+- File → Export: GPX, GeoJSON, and a screenshot of the map (PNG, JPEG, BMP, WebP when the Qt plugin is present).
 - In Cluster mode, clicking a circle zooms onto that cell (same fit as the post-load focus). If the view is already as tight as the cell, zoom increases by one level.
 - Timeline JSON loads on a background thread with a progress dialog and Cancel. A failed or cancelled load leaves the previously shown data unchanged.
 
 ### Changed
 
 - Window size, position, and maximized state are restored on the next start instead of always opening maximized.
-- CMake `project(... VERSION ...)` is `1.1.0`, matching `AppVersion` `1.1.0.R` (CMake versions are numeric only).
+- CMake `project(... VERSION ...)` is `2.0.0`, matching `AppVersion` `2.0.0.R` (CMake versions are numeric only).
 
 ## 1.1.0.R — 2026-08-15
 

@@ -12,6 +12,74 @@
         <translation>開く...</translation>
     </message>
     <message>
+        <source>&amp;Export</source>
+        <translation>&amp;エクスポート</translation>
+    </message>
+    <message>
+        <source>GPX...</source>
+        <translation>GPX...</translation>
+    </message>
+    <message>
+        <source>GeoJSON...</source>
+        <translation>GeoJSON...</translation>
+    </message>
+    <message>
+        <source>Map image...</source>
+        <translation>地図画像...</translation>
+    </message>
+    <message>
+        <source>Export GPX</source>
+        <translation>GPXをエクスポート</translation>
+    </message>
+    <message>
+        <source>Export GeoJSON</source>
+        <translation>GeoJSONをエクスポート</translation>
+    </message>
+    <message>
+        <source>Export map image</source>
+        <translation>地図画像をエクスポート</translation>
+    </message>
+    <message>
+        <source>GPX files (*.gpx);;All files (*.*)</source>
+        <translation>GPXファイル (*.gpx);;すべてのファイル (*.*)</translation>
+    </message>
+    <message>
+        <source>GeoJSON files (*.geojson *.json);;All files (*.*)</source>
+        <translation>GeoJSONファイル (*.geojson *.json);;すべてのファイル (*.*)</translation>
+    </message>
+    <message>
+        <source>Export failed</source>
+        <translation>エクスポートに失敗しました</translation>
+    </message>
+    <message>
+        <source>There are no filtered points to export.</source>
+        <translation>エクスポートするフィルタ済みの点がありません。</translation>
+    </message>
+    <message>
+        <source>The file could not be written.</source>
+        <translation>ファイルを書き込めませんでした。</translation>
+    </message>
+    <message>
+        <source>The map image could not be saved.</source>
+        <translation>地図画像を保存できませんでした。</translation>
+    </message>
+    <message>
+        <source>PNG image (*.png)</source>
+        <translation>PNG画像 (*.png)</translation>
+    </message>
+    <message>
+        <source>JPEG image (*.jpg *.jpeg)</source>
+        <translation>JPEG画像 (*.jpg *.jpeg)</translation>
+    </message>
+    <message>
+        <source>Windows bitmap (*.bmp)</source>
+        <translation>Windowsビットマップ (*.bmp)</translation>
+    </message>
+    <message>
+        <source>WebP image (*.webp)</source>
+        <translation>WebP画像 (*.webp)</translation>
+    </message>
+    <message>
         <source>E&amp;xit</source>
         <translation>終了(&amp;X)</translation>
     </message>
