@@ -17,7 +17,7 @@
 
 [`src/location_data.h`](../src/location_data.h) defines `LocationPointList` and `DisplayMode` (`Points`, `Clustered`, `Story`).
 
-Error codes live in [`src/load_result.h`](../src/load_result.h): `LoadResult` / `ParseResult` plus `IsOk` / `IsErr` / `IsMsg`. Success and failure are not returned as `bool`.
+Error codes live in [`src/load_result.h`](../src/load_result.h): `LoadResult` / `ParseResult` plus `IsOk` / `IsErr` / `IsMsg`. Success and failure are not returned as `bool`. `Cancelled` is an informational result (`IsMsg`), not an error.
 
 ## JSON import
 
@@ -35,7 +35,7 @@ The parser is a nlohmann JSON **SAX** handler so large files are not held as a f
 
 Ignored in v1: `activity`, `timelineMemory`, `userLocationProfile`.
 
-`LoadFromFile` / `LoadFromString` return `FileNotFound`, `InvalidJson`, `NoPoints`, or `Ok`.
+`LoadFromFile` / `LoadFromString` return `FileNotFound`, `InvalidJson`, `NoPoints`, `Ok`, or `Cancelled`. An optional `LoadObserver` reports byte progress and can stop the parse. The SAX handler returns false when `IsCancelled` is true so a stop is not reported as invalid JSON.
 
 ## Time and filters
 

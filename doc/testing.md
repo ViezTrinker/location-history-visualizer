@@ -9,7 +9,7 @@ GoogleTest lives as a submodule under `third_party/googletest`. If `CMakeLists.t
 | Test file | Module | Examples |
 | --- | --- | --- |
 | `tests/tile_math_test.cpp` | `tile_math` | lat/lng round-trip, zoom clamp, tile bounds |
-| `tests/json_loader_test.cpp` | `json_loader`, `civil_time` | LatLng string, ISO-8601, fixture, path ids, visit duration, error codes |
+| `tests/json_loader_test.cpp` | `json_loader`, `civil_time` | LatLng string, ISO-8601, fixture, path ids, visit duration, error codes, progress, cancel |
 | `tests/location_filter_test.cpp` | `location_filter` | date, weekday, time-of-day window |
 | `tests/clusterer_test.cpp` | `clusterer` | identical points, separated points, empty input, cell bounding box |
 | `tests/story_time_test.cpp` | `story_time` | slider ↔ timestamp, start day plus later days, visibility at cutoff |

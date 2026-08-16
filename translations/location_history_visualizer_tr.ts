@@ -243,6 +243,22 @@
         <source>The file could not be loaded.</source>
         <translation>Dosya yüklenemedi.</translation>
     </message>
+    <message>
+        <source>Loading</source>
+        <translation>Yükleniyor</translation>
+    </message>
+    <message>
+        <source>Loading Timeline JSON…</source>
+        <translation>Timeline JSON yükleniyor…</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>İptal</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>İptal ediliyor…</translation>
+    </message>
 </context>
 <context>
     <name>LocationHistory::AboutDialog</name>

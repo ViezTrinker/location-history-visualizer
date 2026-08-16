@@ -7,6 +7,7 @@ All notable releases of Location History Visualizer are listed here.
 ### Added
 
 - In Cluster mode, clicking a circle zooms onto that cell (same fit as the post-load focus). If the view is already as tight as the cell, zoom increases by one level.
+- Timeline JSON loads on a background thread with a progress dialog and Cancel. A failed or cancelled load leaves the previously shown data unchanged.
 
 ## 1.1.0.R — 2026-08-15
 

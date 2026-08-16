@@ -243,6 +243,22 @@
         <source>The file could not be loaded.</source>
         <translation>ファイルを読み込めませんでした。</translation>
     </message>
+    <message>
+        <source>Loading</source>
+        <translation>読み込み中</translation>
+    </message>
+    <message>
+        <source>Loading Timeline JSON…</source>
+        <translation>Timeline JSONを読み込み中…</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>キャンセルしています…</translation>
+    </message>
 </context>
 <context>
     <name>LocationHistory::AboutDialog</name>

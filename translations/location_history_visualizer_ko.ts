@@ -243,6 +243,22 @@
         <source>The file could not be loaded.</source>
         <translation>파일을 불러올 수 없습니다.</translation>
     </message>
+    <message>
+        <source>Loading</source>
+        <translation>불러오는 중</translation>
+    </message>
+    <message>
+        <source>Loading Timeline JSON…</source>
+        <translation>Timeline JSON 불러오는 중…</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>취소</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>취소하는 중…</translation>
+    </message>
 </context>
 <context>
     <name>LocationHistory::AboutDialog</name>

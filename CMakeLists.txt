@@ -58,6 +58,7 @@ set(LOCATION_HISTORY_CORE_SOURCES
    src/clusterer.h
    src/json_loader.cpp
    src/json_loader.h
+   src/load_observer.h
    src/load_result.h
    src/location_data.h
    src/location_filter.cpp
@@ -89,6 +90,8 @@ set(LOCATION_HISTORY_APP_SOURCES
    src/app_language.h
    src/app_theme.cpp
    src/app_theme.h
+   src/json_load_thread.cpp
+   src/json_load_thread.h
    src/main.cpp
    src/main_window.cpp
    src/main_window.h

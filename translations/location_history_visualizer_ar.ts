@@ -243,6 +243,22 @@
         <source>The file could not be loaded.</source>
         <translation>تعذر تحميل الملف.</translation>
     </message>
+    <message>
+        <source>Loading</source>
+        <translation>جارٍ التحميل</translation>
+    </message>
+    <message>
+        <source>Loading Timeline JSON…</source>
+        <translation>جارٍ تحميل JSON للخط الزمني…</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>إلغاء</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>جارٍ الإلغاء…</translation>
+    </message>
 </context>
 <context>
     <name>LocationHistory::AboutDialog</name>

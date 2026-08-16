@@ -8,6 +8,7 @@
 
 #include <string_view>
 
+#include "load_observer.h"
 #include "load_result.h"
 #include "location_data.h"
 
@@ -27,16 +28,18 @@ namespace LocationHistory
     *
     *\param[in] path Filesystem path to the JSON file
     *\param[out] points Parsed location points
+    *\param[in] pObserver Optional progress and cancellation observer
     */
-   LoadResult LoadFromFile(std::string_view path, LocationPointList& points);
+   LoadResult LoadFromFile(std::string_view path, LocationPointList& points, LoadObserver* pObserver = nullptr);
 
    /*!
     *\brief Loads location points from a Timeline JSON string
     *
     *\param[in] jsonText JSON document text
     *\param[out] points Parsed location points
+    *\param[in] pObserver Optional progress and cancellation observer
     */
-   LoadResult LoadFromString(std::string_view jsonText, LocationPointList& points);
+   LoadResult LoadFromString(std::string_view jsonText, LocationPointList& points, LoadObserver* pObserver = nullptr);
 } // namespace LocationHistory
 
 #endif // JSON_LOADER_H

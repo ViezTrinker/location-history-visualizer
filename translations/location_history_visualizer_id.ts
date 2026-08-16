@@ -243,6 +243,22 @@
         <source>The file could not be loaded.</source>
         <translation>Berkas tidak dapat dimuat.</translation>
     </message>
+    <message>
+        <source>Loading</source>
+        <translation>Memuat</translation>
+    </message>
+    <message>
+        <source>Loading Timeline JSON…</source>
+        <translation>Memuat JSON Timeline…</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Batal</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>Membatalkan…</translation>
+    </message>
 </context>
 <context>
     <name>LocationHistory::AboutDialog</name>

@@ -11,7 +11,6 @@
 
 #include <QAction>
 #include <QActionGroup>
-#include <QApplication>
 #include <QDate>
 #include <QDir>
 #include <QFileDialog>
@@ -22,9 +21,11 @@
 #include <QLocale>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QProgressDialog>
 #include <QSettings>
 #include <QSpinBox>
 #include <QStatusBar>
+#include <QThread>
 #include <QTime>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -33,7 +34,7 @@
 #include "app_language.h"
 #include "app_theme.h"
 #include "civil_time.h"
-#include "json_loader.h"
+#include "json_load_thread.h"
 #include "load_result.h"
 #include "location_filter.h"
 #include "location_point.h"
@@ -50,6 +51,7 @@ namespace LocationHistory
       inline constexpr int32_t ZoomButtonSizePx = 32;
       inline constexpr int32_t ZoomPanelWidthPx = 48;
       inline constexpr int32_t StoryTimerIntervalMs = 40;
+      inline constexpr int32_t LoadProgressMax = 1000;
 
       QString LastJsonSettingsKey(void)
       {
@@ -148,6 +150,8 @@ namespace LocationHistory
       , _pDurationLabel(nullptr)
       , _pLatitudeLabel(nullptr)
       , _pLongitudeLabel(nullptr)
+      , _pLoadDialog(nullptr)
+      , _pLoadThread(nullptr)
    {
       setWindowTitle(QString::fromUtf8(AppName.data(), static_cast<int>(AppName.size())));
       resize(1280, 800);
@@ -155,6 +159,20 @@ namespace LocationHistory
       BuildUi();
       RetranslateUi();
       OnPointCleared();
+   }
+
+   MainWindow::~MainWindow(void)
+   {
+      if (_pLoadThread == nullptr)
+      {
+         return;
+      }
+
+      disconnect(_pLoadThread, nullptr, this, nullptr);
+      _pLoadThread->RequestCancel();
+      _pLoadThread->wait();
+      delete _pLoadThread;
+      _pLoadThread = nullptr;
    }
 
    void MainWindow::BuildMenus(void)
@@ -496,6 +514,7 @@ namespace LocationHistory
       _pZoomSlider->setToolTip(tr("Zoom"));
       ApplyStoryCutoff();
       UpdateStatusMessage();
+      UpdateLoadDialogText();
    }
 
    void MainWindow::UpdatePointCounts(void)
@@ -701,6 +720,11 @@ namespace LocationHistory
 
    void MainWindow::OnOpenClicked(void)
    {
+      if (_pLoadThread != nullptr)
+      {
+         return;
+      }
+
       const QString path = QFileDialog::getOpenFileName(
          this,
          tr("Open Timeline JSON"),
@@ -711,16 +735,127 @@ namespace LocationHistory
          return;
       }
 
-      QApplication::setOverrideCursor(Qt::WaitCursor);
-      const LoadResult result = LoadFromFile(path.toStdString(), _allPoints);
-      QApplication::restoreOverrideCursor();
+      BeginFileLoad(path);
+   }
 
+   void MainWindow::BeginFileLoad(const QString& path)
+   {
+      if (_pLoadThread != nullptr)
+      {
+         return;
+      }
+
+      _pLoadDialog = new QProgressDialog(this);
+      _pLoadDialog->setWindowModality(Qt::WindowModal);
+      _pLoadDialog->setMinimumDuration(0);
+      _pLoadDialog->setAutoClose(false);
+      _pLoadDialog->setAutoReset(false);
+      _pLoadDialog->setRange(0, LoadProgressMax);
+      _pLoadDialog->setValue(0);
+      UpdateLoadDialogText();
+      connect(_pLoadDialog, &QProgressDialog::canceled, this, &MainWindow::OnLoadCancelClicked);
+
+      _pLoadThread = new JsonLoadThread(path);
+      connect(_pLoadThread, &JsonLoadThread::Progress, this, &MainWindow::OnLoadProgress);
+      connect(_pLoadThread, &QThread::finished, this, &MainWindow::OnLoadThreadFinished);
+      if (_pOpenAction != nullptr)
+      {
+         _pOpenAction->setEnabled(false);
+      }
+      _pLoadThread->start();
+   }
+
+   void MainWindow::UpdateLoadDialogText(void)
+   {
+      if (_pLoadDialog == nullptr)
+      {
+         return;
+      }
+
+      _pLoadDialog->setWindowTitle(tr("Loading"));
+      _pLoadDialog->setLabelText(tr("Loading Timeline JSON…"));
+      _pLoadDialog->setCancelButtonText(tr("Cancel"));
+   }
+
+   void MainWindow::CloseLoadDialog(void)
+   {
+      if (_pLoadDialog == nullptr)
+      {
+         return;
+      }
+
+      _pLoadDialog->disconnect(this);
+      _pLoadDialog->close();
+      _pLoadDialog->deleteLater();
+      _pLoadDialog = nullptr;
+   }
+
+   void MainWindow::OnLoadProgress(const qint64 bytesRead, const qint64 bytesTotal)
+   {
+      if (_pLoadDialog == nullptr)
+      {
+         return;
+      }
+      if (bytesTotal <= 0)
+      {
+         _pLoadDialog->setRange(0, 0);
+         return;
+      }
+
+      _pLoadDialog->setRange(0, LoadProgressMax);
+      const auto value = static_cast<int>((bytesRead * static_cast<qint64>(LoadProgressMax)) / bytesTotal);
+      _pLoadDialog->setValue(value);
+   }
+
+   void MainWindow::OnLoadCancelClicked(void)
+   {
+      if (_pLoadThread != nullptr)
+      {
+         _pLoadThread->RequestCancel();
+      }
+      if (_pLoadDialog != nullptr)
+      {
+         _pLoadDialog->setLabelText(tr("Cancelling…"));
+      }
+   }
+
+   void MainWindow::OnLoadThreadFinished(void)
+   {
+      JsonLoadThread* pThread = _pLoadThread;
+      _pLoadThread = nullptr;
+      if (pThread == nullptr)
+      {
+         CloseLoadDialog();
+         if (_pOpenAction != nullptr)
+         {
+            _pOpenAction->setEnabled(true);
+         }
+         return;
+      }
+
+      const LoadResult result = pThread->Result();
+      const QString path = pThread->Path();
+      LocationPointList loadedPoints;
+      pThread->TakePoints(loadedPoints);
+      pThread->deleteLater();
+
+      CloseLoadDialog();
+      if (_pOpenAction != nullptr)
+      {
+         _pOpenAction->setEnabled(true);
+      }
+
+      if (result == LoadResult::Cancelled)
+      {
+         return;
+      }
       if (IsErr(result))
       {
          QMessageBox::warning(this, tr("Load failed"), LoadResultMessage(result));
          return;
       }
 
+      _allPoints.swap(loadedPoints);
       QSettings settings;
       settings.setValue(LastJsonSettingsKey(), path);
       _loadedFilePath = path;

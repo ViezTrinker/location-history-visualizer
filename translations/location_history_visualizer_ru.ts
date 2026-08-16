@@ -243,6 +243,22 @@
         <source>The file could not be loaded.</source>
         <translation>Не удалось загрузить файл.</translation>
     </message>
+    <message>
+        <source>Loading</source>
+        <translation>Загрузка</translation>
+    </message>
+    <message>
+        <source>Loading Timeline JSON…</source>
+        <translation>Загрузка JSON Timeline…</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>Отмена…</translation>
+    </message>
 </context>
 <context>
     <name>LocationHistory::AboutDialog</name>

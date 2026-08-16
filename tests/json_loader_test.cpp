@@ -10,9 +10,67 @@
 #include <gtest/gtest.h>
 
 #include "civil_time.h"
+#include "load_observer.h"
 #include "load_result.h"
 #include "location_data.h"
 #include "location_point.h"
+
+namespace
+{
+   class RecordingObserver : public LocationHistory::LoadObserver
+   {
+      public:
+         void OnProgress(const int64_t bytesRead, const int64_t bytesTotal) override
+         {
+            lastBytesRead = bytesRead;
+            lastBytesTotal = bytesTotal;
+            reportCount += 1;
+         }
+
+         bool IsCancelled(void) const override
+         {
+            return false;
+         }
+
+         int32_t reportCount = 0;
+         int64_t lastBytesRead = -1;
+         int64_t lastBytesTotal = -1;
+   };
+
+   class CancelImmediatelyObserver : public LocationHistory::LoadObserver
+   {
+      public:
+         void OnProgress(const int64_t bytesRead, const int64_t bytesTotal) override
+         {
+            (void)bytesRead;
+            (void)bytesTotal;
+         }
+
+         bool IsCancelled(void) const override
+         {
+            return true;
+         }
+   };
+
+   class CancelAfterFirstProgressObserver : public LocationHistory::LoadObserver
+   {
+      public:
+         void OnProgress(const int64_t bytesRead, const int64_t bytesTotal) override
+         {
+            (void)bytesRead;
+            (void)bytesTotal;
+            _gotProgress = true;
+         }
+
+         bool IsCancelled(void) const override
+         {
+            return _gotProgress;
+         }
+
+      private:
+         bool _gotProgress = false;
+   };
+} // namespace
 
 TEST(JsonLoader, ParseLatLngAcceptsDegreeStrings)
 {
@@ -164,4 +222,34 @@ TEST(JsonLoader, EmptyStringReturnsInvalidJson)
    LocationHistory::LocationPointList points;
    const LocationHistory::LoadResult result = LocationHistory::LoadFromString("", points);
    EXPECT_EQ(result, LocationHistory::LoadResult::InvalidJson);
+}
+
+TEST(JsonLoader, ReportsProgressForFileLoad)
+{
+   LocationHistory::LocationPointList points;
+   const std::string fixturePath = std::string(TEST_FIXTURE_DIR) + "/sample_timeline.json";
+   RecordingObserver observer;
+   const LocationHistory::LoadResult result =
+      LocationHistory::LoadFromFile(fixturePath, points, &observer);
+   EXPECT_TRUE(LocationHistory::IsOk(result));
+   EXPECT_GE(observer.reportCount, 2);
+   EXPECT_EQ(observer.lastBytesRead, observer.lastBytesTotal);
+   EXPECT_GT(observer.lastBytesTotal, 0);
+}
+
+TEST(JsonLoader, CancelBeforeParseReturnsCancelled)
+{
+   LocationHistory::LocationPointList points;
+   CancelImmediatelyObserver observer;
+   const LocationHistory::LoadResult result = LocationHistory::LoadFromString("{}", points, &observer);
+   EXPECT_EQ(result, LocationHistory::LoadResult::Cancelled);
+   EXPECT_TRUE(points.empty());
+}
+
+TEST(JsonLoader, CancelAfterFirstProgressReturnsCancelled)
+{
+   LocationHistory::LocationPointList points;
+   CancelAfterFirstProgressObserver observer;
+   const LocationHistory::LoadResult result = LocationHistory::LoadFromString("{}", points, &observer);
+   EXPECT_EQ(result, LocationHistory::LoadResult::Cancelled);
 }

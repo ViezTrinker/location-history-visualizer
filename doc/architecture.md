@@ -15,6 +15,7 @@ flowchart TB
     mainWindow[MainWindow]
     mapWidget[MapWidget]
     aboutDialog[AboutDialog]
+    jsonLoadThread[JsonLoadThread]
     appLanguage[app_language]
     appTheme[app_theme]
     mapDisplaySettings[map_display_settings]
@@ -46,7 +47,8 @@ flowchart TB
   mainWindow --> appTheme
   mainWindow --> mapDisplaySettings
   mapWidget --> mapDisplaySettings
-  mainWindow --> jsonLoader
+  mainWindow --> jsonLoadThread
+  jsonLoadThread --> jsonLoader
   mainWindow --> filter
   mainWindow --> storyTime
   mapWidget --> tileCache
@@ -75,14 +77,17 @@ flowchart TB
 sequenceDiagram
   participant User
   participant MainWindow
+  participant JsonLoadThread
   participant JsonLoader
   participant Filter
   participant MapWidget
   participant TileDownloader
 
   User->>MainWindow: Open JSON
-  MainWindow->>JsonLoader: LoadFromFile
-  JsonLoader-->>MainWindow: LocationPointList
+  MainWindow->>JsonLoadThread: start
+  JsonLoadThread->>JsonLoader: LoadFromFile
+  JsonLoader-->>JsonLoadThread: progress / result
+  JsonLoadThread-->>MainWindow: finished
   MainWindow->>Filter: ApplyFilter
   Filter-->>MainWindow: filtered points
   MainWindow->>MapWidget: SetPoints
@@ -94,7 +99,7 @@ sequenceDiagram
   MapWidget-->>MainWindow: PointClicked
 ```
 
-1. Load a file → flat point list (`LocationPoint`).
+1. Load a file on a worker thread → flat point list (`LocationPoint`). The UI shows progress and can cancel.
 2. Filters (date, weekday, time of day) produce `_filteredPoints`.
 3. `MapWidget` centers on the densest cell (`ComputeDensestFocus`) and draws OSM tiles plus the overlay for the current `DisplayMode`.
 4. A click hits the nearest point within the pixel radius and fills the point-info panel.

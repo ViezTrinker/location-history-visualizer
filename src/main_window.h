@@ -35,8 +35,11 @@
 #include "location_point.h"
 #include "map_widget.h"
 
+class QProgressDialog;
+
 namespace LocationHistory
 {
+   class JsonLoadThread;
    constexpr size_t WeekdayCount = 7;
    using WeekdayBoxList = std::array<QCheckBox*, WeekdayCount>;
    using WeekdayLabelList = std::array<QLabel*, WeekdayCount>;
@@ -48,9 +51,13 @@ namespace LocationHistory
 
       public:
          explicit MainWindow(QWidget* pParent = nullptr);
+         ~MainWindow(void) override;
 
       private slots:
          void OnOpenClicked(void);
+         void OnLoadProgress(qint64 bytesRead, qint64 bytesTotal);
+         void OnLoadCancelClicked(void);
+         void OnLoadThreadFinished(void);
          void OnAbout(void);
          void OnFiltersChanged(void);
          void OnDisplayModeChanged(int index);
@@ -114,6 +121,9 @@ namespace LocationHistory
          void ApplyCurrentFilter(void);
          void UpdateDateRangeFromPoints(void);
          void SyncZoomSlider(void);
+         void BeginFileLoad(const QString& path);
+         void CloseLoadDialog(void);
+         void UpdateLoadDialogText(void);
 
          LocationPointList _allPoints;
          LocationPointList _filteredPoints;
@@ -179,6 +189,8 @@ namespace LocationHistory
          QLabel* _pDurationLabel;
          QLabel* _pLatitudeLabel;
          QLabel* _pLongitudeLabel;
+         QProgressDialog* _pLoadDialog;
+         JsonLoadThread* _pLoadThread;
    };
 } // namespace LocationHistory
 

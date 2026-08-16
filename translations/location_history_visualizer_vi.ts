@@ -243,6 +243,22 @@
         <source>The file could not be loaded.</source>
         <translation>Không thể tải tệp.</translation>
     </message>
+    <message>
+        <source>Loading</source>
+        <translation>Đang tải</translation>
+    </message>
+    <message>
+        <source>Loading Timeline JSON…</source>
+        <translation>Đang tải JSON Timeline…</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Hủy</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>Đang hủy…</translation>
+    </message>
 </context>
 <context>
     <name>LocationHistory::AboutDialog</name>

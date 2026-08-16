@@ -243,6 +243,22 @@
         <source>The file could not be loaded.</source>
         <translation>No se pudo cargar el archivo.</translation>
     </message>
+    <message>
+        <source>Loading</source>
+        <translation>Cargando</translation>
+    </message>
+    <message>
+        <source>Loading Timeline JSON…</source>
+        <translation>Cargando JSON de Timeline…</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Cancelar</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>Cancelando…</translation>
+    </message>
 </context>
 <context>
     <name>LocationHistory::AboutDialog</name>

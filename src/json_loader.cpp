@@ -5,9 +5,13 @@
 
 #include "json_loader.h"
 
+#include <array>
 #include <charconv>
 #include <cstdint>
 #include <fstream>
+#include <istream>
+#include <sstream>
+#include <streambuf>
 #include <string>
 #include <string_view>
 #include <system_error>
@@ -16,6 +20,7 @@
 #include <nlohmann/json.hpp>
 
 #include "civil_time.h"
+#include "load_observer.h"
 #include "load_result.h"
 #include "location_data.h"
 #include "location_point.h"
@@ -24,6 +29,10 @@ namespace LocationHistory
 {
    namespace
    {
+      inline constexpr int64_t ProgressReportIntervalBytes = 256 * 1024;
+      inline constexpr size_t StreamBufferSize = 65536;
+      using StreamBuffer = std::array<char, StreamBufferSize>;
+
       enum class SaxContext : uint8_t
       {
          None = 0,
@@ -37,6 +46,12 @@ namespace LocationHistory
          RawSignals = 8,
          RawSignal = 9,
          Position = 10
+      };
+
+      enum class ForceProgressReport : uint8_t
+      {
+         No = 0,
+         Yes = 1
       };
 
       ParseResult ParseDoubleToken(const std::string_view text, double& value)
@@ -84,46 +99,125 @@ namespace LocationHistory
          return ParseResult::Ok;
       }
 
+      void ReportProgress(
+         LoadObserver* pObserver,
+         const int64_t bytesRead,
+         const int64_t bytesTotal,
+         int64_t& lastReported,
+         const ForceProgressReport force)
+      {
+         if (pObserver == nullptr)
+         {
+            return;
+         }
+         if (force == ForceProgressReport::No)
+         {
+            const int64_t delta = bytesRead - lastReported;
+            if ((delta < ProgressReportIntervalBytes) && (bytesRead < bytesTotal))
+            {
+               return;
+            }
+         }
+
+         lastReported = bytesRead;
+         pObserver->OnProgress(bytesRead, bytesTotal);
+      }
+
+      class ProgressStreambuf : public std::streambuf
+      {
+         public:
+            ProgressStreambuf(std::streambuf* pSource, LoadObserver* pObserver, const int64_t bytesTotal)
+               : _pSource(pSource)
+               , _pObserver(pObserver)
+               , _bytesTotal(bytesTotal)
+               , _bytesRead(0)
+               , _lastReported(0)
+            {
+               setg(_buffer.data(), _buffer.data(), _buffer.data());
+            }
+
+         protected:
+            int_type underflow(void) override
+            {
+               if (gptr() < egptr())
+               {
+                  return traits_type::to_int_type(*gptr());
+               }
+               if (_pSource == nullptr)
+               {
+                  return traits_type::eof();
+               }
+
+               const std::streamsize got = _pSource->sgetn(
+                  _buffer.data(),
+                  static_cast<std::streamsize>(_buffer.size()));
+               if (got <= 0)
+               {
+                  ReportProgress(_pObserver, _bytesRead, _bytesTotal, _lastReported, ForceProgressReport::Yes);
+                  return traits_type::eof();
+               }
+
+               _bytesRead += static_cast<int64_t>(got);
+               ReportProgress(_pObserver, _bytesRead, _bytesTotal, _lastReported, ForceProgressReport::No);
+               setg(_buffer.data(), _buffer.data(), _buffer.data() + static_cast<size_t>(got));
+               return traits_type::to_int_type(*gptr());
+            }
+
+         private:
+            std::streambuf* _pSource;
+            LoadObserver* _pObserver;
+            int64_t _bytesTotal;
+            int64_t _bytesRead;
+            int64_t _lastReported;
+            StreamBuffer _buffer{};
+      };
+
       class TimelineSaxHandler : public nlohmann::json_sax<nlohmann::json>
       {
          public:
-            explicit TimelineSaxHandler(LocationPointList& points)
+            TimelineSaxHandler(LocationPointList& points, LoadObserver* pObserver)
                : _points(points)
+               , _pObserver(pObserver)
             {
             }
 
             bool null(void) override
             {
-               return true;
+               return ShouldContinue();
             }
 
             bool boolean(bool) override
             {
-               return true;
+               return ShouldContinue();
             }
 
             bool number_integer(number_integer_t) override
             {
-               return true;
+               return ShouldContinue();
             }
 
             bool number_unsigned(number_unsigned_t) override
             {
-               return true;
+               return ShouldContinue();
             }
 
             bool number_float(number_float_t, const string_t&) override
             {
-               return true;
+               return ShouldContinue();
             }
 
             bool binary(binary_t&) override
             {
-               return true;
+               return ShouldContinue();
             }
 
             bool string(string_t& value) override
             {
+               if (!ShouldContinue())
+               {
+                  return false;
+               }
+
                const SaxContext current = CurrentContext();
                if ((_currentKey == "startTime") && (current == SaxContext::Segment))
                {
@@ -165,12 +259,21 @@ namespace LocationHistory
 
             bool key(string_t& value) override
             {
+               if (!ShouldContinue())
+               {
+                  return false;
+               }
                _currentKey = value;
                return true;
             }
 
             bool start_object(std::size_t) override
             {
+               if (!ShouldContinue())
+               {
+                  return false;
+               }
+
                const SaxContext parent = CurrentContext();
                if (parent == SaxContext::SemanticSegments)
                {
@@ -221,6 +324,10 @@ namespace LocationHistory
 
             bool end_object(void) override
             {
+               if (!ShouldContinue())
+               {
+                  return false;
+               }
                if (_context.empty())
                {
                   return true;
@@ -246,6 +353,10 @@ namespace LocationHistory
 
             bool start_array(std::size_t) override
             {
+               if (!ShouldContinue())
+               {
+                  return false;
+               }
                if (_currentKey == "semanticSegments")
                {
                   _context.push_back(SaxContext::SemanticSegments);
@@ -269,6 +380,10 @@ namespace LocationHistory
 
             bool end_array(void) override
             {
+               if (!ShouldContinue())
+               {
+                  return false;
+               }
                if (!_context.empty())
                {
                   _context.pop_back();
@@ -287,6 +402,11 @@ namespace LocationHistory
                return _hadError;
             }
 
+            bool WasCancelled(void) const
+            {
+               return _cancelled;
+            }
+
          private:
             SaxContext CurrentContext(void) const
             {
@@ -295,6 +415,16 @@ namespace LocationHistory
                   return SaxContext::None;
                }
                return _context.back();
+            }
+
+            bool ShouldContinue(void)
+            {
+               if ((_pObserver != nullptr) && _pObserver->IsCancelled())
+               {
+                  _cancelled = true;
+                  return false;
+               }
+               return true;
             }
 
             void TryAddPoint(
@@ -348,6 +478,7 @@ namespace LocationHistory
             }
 
             LocationPointList& _points;
+            LoadObserver* _pObserver;
             std::vector<SaxContext> _context;
             std::string _currentKey;
             std::string _segmentStartTime;
@@ -357,7 +488,77 @@ namespace LocationHistory
             std::string _pointTime;
             int32_t _currentPathId = NoPathId;
             bool _hadError = false;
+            bool _cancelled = false;
       };
+
+      bool IsCancelled(LoadObserver* pObserver, const TimelineSaxHandler& handler)
+      {
+         if (handler.WasCancelled())
+         {
+            return true;
+         }
+         if (pObserver == nullptr)
+         {
+            return false;
+         }
+         return pObserver->IsCancelled();
+      }
+
+      LoadResult ParseJsonStream(
+         std::istream& input,
+         const int64_t bytesTotal,
+         LocationPointList& points,
+         LoadObserver* pObserver)
+      {
+         if (pObserver != nullptr)
+         {
+            pObserver->OnProgress(0, bytesTotal);
+            if (pObserver->IsCancelled())
+            {
+               return LoadResult::Cancelled;
+            }
+         }
+
+         ProgressStreambuf progressBuf(input.rdbuf(), pObserver, bytesTotal);
+         std::istream progressStream(&progressBuf);
+         TimelineSaxHandler handler(points, pObserver);
+         const bool parsed = nlohmann::json::sax_parse(progressStream, &handler);
+         if (IsCancelled(pObserver, handler))
+         {
+            return LoadResult::Cancelled;
+         }
+         if (!parsed)
+         {
+            return LoadResult::InvalidJson;
+         }
+         if (handler.HadError())
+         {
+            return LoadResult::InvalidJson;
+         }
+         if (points.empty())
+         {
+            return LoadResult::NoPoints;
+         }
+         if (pObserver != nullptr)
+         {
+            pObserver->OnProgress(bytesTotal, bytesTotal);
+         }
+         return LoadResult::Ok;
+      }
+
+      int64_t StreamSize(std::istream& input)
+      {
+         input.clear();
+         input.seekg(0, std::ios::end);
+         const std::streampos endPos = input.tellg();
+         input.clear();
+         input.seekg(0, std::ios::beg);
+         if (endPos < std::streampos(0))
+         {
+            return 0;
+         }
+         return static_cast<int64_t>(endPos);
+      }
    } // namespace
 
    ParseResult ParseLatLng(const std::string_view text, double& latitude, double& longitude)
@@ -388,7 +589,7 @@ namespace LocationHistory
       return ParseResult::Ok;
    }
 
-   LoadResult LoadFromString(const std::string_view jsonText, LocationPointList& points)
+   LoadResult LoadFromString(const std::string_view jsonText, LocationPointList& points, LoadObserver* pObserver)
    {
       points.clear();
       if (jsonText.empty())
@@ -396,26 +597,12 @@ namespace LocationHistory
          return LoadResult::InvalidJson;
       }
 
-      TimelineSaxHandler handler(points);
       const std::string jsonString(jsonText);
-      const bool parsed = nlohmann::json::sax_parse(jsonString, &handler);
-      if (!parsed)
-      {
-         return LoadResult::InvalidJson;
-      }
-      if (handler.HadError())
-      {
-         return LoadResult::InvalidJson;
-      }
-      if (points.empty())
-      {
-         return LoadResult::NoPoints;
-      }
-
-      return LoadResult::Ok;
+      std::istringstream input(jsonString, std::ios::binary);
+      return ParseJsonStream(input, static_cast<int64_t>(jsonString.size()), points, pObserver);
    }
 
-   LoadResult LoadFromFile(const std::string_view path, LocationPointList& points)
+   LoadResult LoadFromFile(const std::string_view path, LocationPointList& points, LoadObserver* pObserver)
    {
       points.clear();
       if (path.empty())
@@ -430,21 +617,7 @@ namespace LocationHistory
          return LoadResult::FileNotFound;
       }
 
-      TimelineSaxHandler handler(points);
-      const bool parsed = nlohmann::json::sax_parse(input, &handler);
-      if (!parsed)
-      {
-         return LoadResult::InvalidJson;
-      }
-      if (handler.HadError())
-      {
-         return LoadResult::InvalidJson;
-      }
-      if (points.empty())
-      {
-         return LoadResult::NoPoints;
-      }
-
-      return LoadResult::Ok;
+      const int64_t bytesTotal = StreamSize(input);
+      return ParseJsonStream(input, bytesTotal, points, pObserver);
    }
 } // namespace LocationHistory

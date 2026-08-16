@@ -243,6 +243,22 @@
         <source>The file could not be loaded.</source>
         <translation>फ़ाइल लोड नहीं हो सकी।</translation>
     </message>
+    <message>
+        <source>Loading</source>
+        <translation>लोड हो रहा है</translation>
+    </message>
+    <message>
+        <source>Loading Timeline JSON…</source>
+        <translation>Timeline JSON लोड हो रहा है…</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>रद्द करें</translation>
+    </message>
+    <message>
+        <source>Cancelling…</source>
+        <translation>रद्द किया जा रहा है…</translation>
+    </message>
 </context>
 <context>
     <name>LocationHistory::AboutDialog</name>

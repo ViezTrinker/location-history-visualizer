@@ -16,7 +16,8 @@ namespace LocationHistory
       InvalidJson = -3,
       NoPoints = -2,
       Error = -1,
-      Ok = 0
+      Ok = 0,
+      Cancelled = 1
    };
 
    enum class ParseResult : int8_t
