@@ -4,7 +4,7 @@ The UI is Qt 6 Widgets. Connections use member slots, not lambdas.
 
 ## MainWindow
 
-[`src/main_window.h`](../src/main_window.h) holds two point lists:
+[`src/ui/main_window.h`](../src/ui/main_window.h) holds two point lists:
 
 - `_allPoints` — result of `LoadFromFile`
 - `_filteredPoints` — after `ApplyFilter`
@@ -34,7 +34,7 @@ Source UI strings are English. Translations live in [`translations/`](../transla
 
 File → Export writes the **currently filtered** points (`_filteredPoints`) as GPX or GeoJSON. Map image calls `MapWidget::grab()` so the file matches the current overlay, zoom, and Story frame, including OSM attribution. Export actions are disabled when there are no filtered points and while a JSON load is running.
 
-Menu **Help → About** opens [`src/about_dialog.h`](../src/about_dialog.h): version `2.0.0.R`, date, ViezTrinker link, repo [location-history-visualizer](https://github.com/ViezTrinker/location-history-visualizer). Strings and URLs come from [`src/version.h`](../src/version.h). Links are `QLabel` with `setOpenExternalLinks`.
+Menu **Help → About** opens [`src/ui/about_dialog.h`](../src/ui/about_dialog.h): version `2.0.0.R`, date, ViezTrinker link, repo [location-history-visualizer](https://github.com/ViezTrinker/location-history-visualizer). Strings and URLs come from [`src/core/version.h`](../src/core/version.h). Links are `QLabel` with `setOpenExternalLinks`.
 
 ## Startup
 

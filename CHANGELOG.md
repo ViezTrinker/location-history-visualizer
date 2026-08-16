@@ -18,6 +18,7 @@ Export of filtered points and the map view. Background JSON load, cluster-click 
 
 - Window size, position, and maximized state are restored on the next start instead of always opening maximized.
 - CMake `project(... VERSION ...)` is `2.0.0`, matching `AppVersion` `2.0.0.R` (CMake versions are numeric only).
+- Source files are grouped under `src/core`, `src/ui`, and `src/map`. Visual Studio Solution Explorer follows those folders.
 
 ## 1.1.0.R — 2026-08-15
 

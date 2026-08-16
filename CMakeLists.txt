@@ -8,6 +8,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC OFF)
 set(CMAKE_AUTOUIC OFF)
+set(CMAKE_AUTOMOC_SOURCE_GROUP "Generated")
+set(CMAKE_AUTORCC_SOURCE_GROUP "Generated")
+set(CMAKE_AUTOGEN_SOURCE_GROUP "Generated")
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER "CMake")
 
 if(MSVC)
    add_compile_options(/utf-8)
@@ -52,70 +58,73 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(nlohmann_json)
 
 set(LOCATION_HISTORY_CORE_SOURCES
-   src/civil_time.cpp
-   src/civil_time.h
-   src/clusterer.cpp
-   src/clusterer.h
-   src/export_result.h
-   src/geojson_exporter.cpp
-   src/geojson_exporter.h
-   src/gpx_exporter.cpp
-   src/gpx_exporter.h
-   src/json_loader.cpp
-   src/json_loader.h
-   src/load_observer.h
-   src/load_result.h
-   src/location_data.h
-   src/location_filter.cpp
-   src/location_filter.h
-   src/location_point.h
-   src/map_focus.cpp
-   src/map_focus.h
-   src/story_time.cpp
-   src/story_time.h
-   src/tile_math.cpp
-   src/tile_math.h
-   src/version.h
+   src/core/civil_time.cpp
+   src/core/civil_time.h
+   src/core/clusterer.cpp
+   src/core/clusterer.h
+   src/core/export_result.h
+   src/core/geojson_exporter.cpp
+   src/core/geojson_exporter.h
+   src/core/gpx_exporter.cpp
+   src/core/gpx_exporter.h
+   src/core/json_loader.cpp
+   src/core/json_loader.h
+   src/core/load_observer.h
+   src/core/load_result.h
+   src/core/location_data.h
+   src/core/location_filter.cpp
+   src/core/location_filter.h
+   src/core/location_point.h
+   src/core/map_focus.cpp
+   src/core/map_focus.h
+   src/core/story_time.cpp
+   src/core/story_time.h
+   src/core/tile_math.cpp
+   src/core/tile_math.h
+   src/core/version.h
 )
 
 add_library(location_history_core STATIC
    ${LOCATION_HISTORY_CORE_SOURCES}
 )
 target_include_directories(location_history_core PUBLIC
-   ${CMAKE_CURRENT_SOURCE_DIR}/src
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/core
 )
 target_link_libraries(location_history_core PUBLIC
    nlohmann_json::nlohmann_json
 )
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" FILES ${LOCATION_HISTORY_CORE_SOURCES})
 
 set(LOCATION_HISTORY_APP_SOURCES
-   src/about_dialog.cpp
-   src/about_dialog.h
-   src/app_language.cpp
-   src/app_language.h
-   src/app_theme.cpp
-   src/app_theme.h
-   src/json_load_thread.cpp
-   src/json_load_thread.h
    src/main.cpp
-   src/main_window.cpp
-   src/main_window.h
-   src/map_display_settings.cpp
-   src/map_display_settings.h
-   src/map_widget.cpp
-   src/map_widget.h
-   src/tile_cache.cpp
-   src/tile_cache.h
-   src/tile_downloader.cpp
-   src/tile_downloader.h
+   src/map/map_widget.cpp
+   src/map/map_widget.h
+   src/map/tile_cache.cpp
+   src/map/tile_cache.h
+   src/map/tile_downloader.cpp
+   src/map/tile_downloader.h
+   src/ui/about_dialog.cpp
+   src/ui/about_dialog.h
+   src/ui/app_language.cpp
+   src/ui/app_language.h
+   src/ui/app_theme.cpp
+   src/ui/app_theme.h
+   src/ui/json_load_thread.cpp
+   src/ui/json_load_thread.h
+   src/ui/main_window.cpp
+   src/ui/main_window.h
+   src/ui/map_display_settings.cpp
+   src/ui/map_display_settings.h
 )
 
 add_executable(location_history_visualizer WIN32
    ${LOCATION_HISTORY_APP_SOURCES}
 )
 target_include_directories(location_history_visualizer PRIVATE
-   ${CMAKE_CURRENT_SOURCE_DIR}/src
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/map
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/ui
 )
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" FILES ${LOCATION_HISTORY_APP_SOURCES})
 target_link_libraries(location_history_visualizer PRIVATE
    location_history_core
    Qt6::Widgets
@@ -176,7 +185,8 @@ add_executable(location_history_visualizer_tests
    ${LOCATION_HISTORY_TEST_SOURCES}
 )
 target_include_directories(location_history_visualizer_tests PRIVATE
-   ${CMAKE_CURRENT_SOURCE_DIR}/src
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/core
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/ui
 )
 target_link_libraries(location_history_visualizer_tests PRIVATE
    location_history_core
@@ -185,6 +195,12 @@ target_link_libraries(location_history_visualizer_tests PRIVATE
 target_compile_definitions(location_history_visualizer_tests PRIVATE
    TEST_FIXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures"
 )
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/tests" PREFIX "tests" FILES ${LOCATION_HISTORY_TEST_SOURCES})
+
+set_target_properties(location_history_core PROPERTIES FOLDER "App")
+set_target_properties(location_history_visualizer PROPERTIES FOLDER "App")
+set_target_properties(location_history_visualizer_tests PROPERTIES FOLDER "Tests")
+set_target_properties(gtest gtest_main PROPERTIES FOLDER "Third Party")
 
 include(GoogleTest)
 gtest_discover_tests(location_history_visualizer_tests DISCOVERY_MODE PRE_TEST)

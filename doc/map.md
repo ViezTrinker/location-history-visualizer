@@ -4,7 +4,7 @@ The map is not a Google Maps widget. `MapWidget` computes Web Mercator itself, f
 
 ## Projection
 
-[`src/tile_math.h`](../src/tile_math.h) converts geographic coordinates to world pixels, matching OSM:
+[`src/core/tile_math.h`](../src/core/tile_math.h) converts geographic coordinates to world pixels, matching OSM:
 
 - Tile size 256 px
 - Zoom 2..19
@@ -12,7 +12,7 @@ The map is not a Google Maps widget. `MapWidget` computes Web Mercator itself, f
 
 `MapWidget` stores the view as `_centerWorldX` / `_centerWorldY` plus `_zoom`. Mouse wheel and double-click zoom around the cursor (world coordinates scale by `2^(newZoom-oldZoom)`). The zoom bar in `MainWindow` (`+` / slider / `-`) zooms around the map center and stays in sync via `ZoomChanged`. Dragging shifts the center in pixels.
 
-After load, `CenterOnPoints` focuses on the densest cell, not the bounding box. The calculation lives in [`src/map_focus.h`](../src/map_focus.h) (`ComputeDensestFocus`, grid ~0.02°).
+After load, `CenterOnPoints` focuses on the densest cell, not the bounding box. The calculation lives in [`src/core/map_focus.h`](../src/core/map_focus.h) (`ComputeDensestFocus`, grid ~0.02°).
 
 ## Tile pipeline
 
@@ -26,15 +26,15 @@ flowchart LR
   mem --> blit[QPainter drawPixmap]
 ```
 
-[`src/tile_cache.h`](../src/tile_cache.h): up to `MaxMemoryTiles` (256) in RAM, LRU eviction. Disk under `%LOCALAPPDATA%/<AppName>/tiles/{z}/{x}/{y}.png`.
+[`src/map/tile_cache.h`](../src/map/tile_cache.h): up to `MaxMemoryTiles` (256) in RAM, LRU eviction. Disk under `%LOCALAPPDATA%/<AppName>/tiles/{z}/{x}/{y}.png`.
 
-[`src/tile_downloader.h`](../src/tile_downloader.h): `QNetworkAccessManager`, at most **2** parallel requests (OSM tile policy), fixed User-Agent. A queue plus an in-flight set prevent duplicate downloads. Finished PNGs go to `MapWidget` via the `TileDownloaded` signal, which writes the cache and calls `update()`.
+[`src/map/tile_downloader.h`](../src/map/tile_downloader.h): `QNetworkAccessManager`, at most **2** parallel requests (OSM tile policy), fixed User-Agent. A queue plus an in-flight set prevent duplicate downloads. Finished PNGs go to `MapWidget` via the `TileDownloaded` signal, which writes the cache and calls `update()`.
 
 Missing tiles appear gray until the download arrives. Bottom left: `© OpenStreetMap contributors`. File → Export → Map image captures the `MapWidget` as shown (tiles, overlay, Story frame, attribution), so missing tiles stay gray in the file and attribution remains in the image.
 
 ## Overlay modes
 
-[`src/map_widget.h`](../src/map_widget.h) draws tiles first in `paintEvent`, then the current `DisplayMode`. The time cutoff (`SetUntilTime`) applies only in `Story`.
+[`src/map/map_widget.h`](../src/map/map_widget.h) draws tiles first in `paintEvent`, then the current `DisplayMode`. The time cutoff (`SetUntilTime`) applies only in `Story`.
 
 | Mode | Behavior |
 | --- | --- |

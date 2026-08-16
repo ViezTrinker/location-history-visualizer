@@ -115,7 +115,10 @@ Details: [core.md](core.md), [map.md](map.md), [ui.md](ui.md).
 ## Directory layout
 
 ```text
-src/           core + Qt UI
+src/           entry point (main.cpp)
+src/core/      Qt-free library (parse, filter, export, overlay math)
+src/ui/        Qt window, settings, load thread
+src/map/       MapWidget and OSM tile cache/downloader
 tests/         gtest, fixture sample_timeline.json
 third_party/   googletest (Git submodule)
 doc/           this documentation
