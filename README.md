@@ -11,7 +11,7 @@ Version **1.1.0.R**. Author [ViezTrinker](https://github.com/ViezTrinker). Relea
 - **Google Timeline JSON** — current export (`semanticSegments` path/visits and `rawSignals.position`), not the old `locations[]` E7 format
 - **OpenStreetMap map** — pan, mouse-wheel and double-click zoom, zoom slider beside the map, OSM attribution
 - **Filters** — date range, weekdays (checkbox with the abbreviation underneath), time of day
-- **Display modes** — Points (simple red dots of the filtered data), Cluster, and Story
+- **Display modes** — Points (simple red dots of the filtered data), Cluster (click a circle to zoom into that cell), and Story
 - **Story view** — starts on a chosen day as red points; Play continues through all following days
 - **Point info** — click a point for local time, stay duration (visits), latitude, and longitude
 - **Smart start view** — after load, the map focuses on the densest area, not the bounding-box center

@@ -53,6 +53,36 @@ namespace LocationHistory
          return pointRadiusPx - 1;
       }
 
+      int32_t ClusterRadiusPx(const int32_t count, const int32_t maxCount)
+      {
+         int32_t safeMax = maxCount;
+         if (safeMax < 1)
+         {
+            safeMax = 1;
+         }
+         int32_t safeCount = count;
+         if (safeCount < 1)
+         {
+            safeCount = 1;
+         }
+         const double countRatio =
+            std::log(static_cast<double>(safeCount) + 1.0) /
+            std::log(static_cast<double>(safeMax) + 1.0);
+         return static_cast<int32_t>(
+            static_cast<double>(ClusterMinRadiusPx) +
+            (static_cast<double>(ClusterMaxRadiusPx - ClusterMinRadiusPx) * countRatio));
+      }
+
+      int32_t MaxClusterCount(const ClusterList& clusters)
+      {
+         int32_t maxCount = 1;
+         for (size_t index = 0; index < clusters.size(); ++index)
+         {
+            maxCount = std::max(maxCount, clusters[index].count);
+         }
+         return maxCount;
+      }
+
       QString AttributionText(void)
       {
          return QString::fromUtf8(OsmAttribution.data(), static_cast<int>(OsmAttribution.size()));
@@ -505,23 +535,11 @@ namespace LocationHistory
    void MapWidget::DrawClusters(QPainter& painter)
    {
       LocationPointList visiblePoints;
-      visiblePoints.reserve(_points.size());
-      for (size_t index = 0; index < _points.size(); ++index)
-      {
-         if (IsPointVisible(_points[index]))
-         {
-            visiblePoints.push_back(_points[index]);
-         }
-      }
+      CollectVisiblePoints(visiblePoints);
 
       ClusterList clusters;
       BuildClusters(visiblePoints, _zoom, ClusterCellSizePx, clusters);
-
-      int32_t maxCount = 1;
-      for (size_t index = 0; index < clusters.size(); ++index)
-      {
-         maxCount = std::max(maxCount, clusters[index].count);
-      }
+      const int32_t maxCount = MaxClusterCount(clusters);
 
       painter.setRenderHint(QPainter::Antialiasing, true);
       QFont font = painter.font();
@@ -542,10 +560,7 @@ namespace LocationHistory
             continue;
          }
 
-         const double countRatio = std::log(static_cast<double>(cluster.count) + 1.0) / std::log(static_cast<double>(maxCount) + 1.0);
-         const auto radius = static_cast<int32_t>(
-            static_cast<double>(ClusterMinRadiusPx) +
-            (static_cast<double>(ClusterMaxRadiusPx - ClusterMinRadiusPx) * countRatio));
+         const int32_t radius = ClusterRadiusPx(cluster.count, maxCount);
 
          painter.setPen(QPen(QColor(20, 20, 20, 180), 1));
          painter.setBrush(QColor(30, 90, 200, 170));
@@ -719,8 +734,97 @@ namespace LocationHistory
       return nearestIndex;
    }
 
+   void MapWidget::CollectVisiblePoints(LocationPointList& visiblePoints) const
+   {
+      visiblePoints.clear();
+      visiblePoints.reserve(_points.size());
+      for (size_t index = 0; index < _points.size(); ++index)
+      {
+         if (IsPointVisible(_points[index]))
+         {
+            visiblePoints.push_back(_points[index]);
+         }
+      }
+   }
+
+   int32_t MapWidget::FindNearestCluster(const ClusterList& clusters, const int32_t screenX, const int32_t screenY) const
+   {
+      const int32_t maxCount = MaxClusterCount(clusters);
+      int32_t nearestIndex = NoSelection;
+      double nearestDistance = 0.0;
+      for (size_t index = 0; index < clusters.size(); ++index)
+      {
+         const Cluster& cluster = clusters[index];
+         const int32_t clusterX = WorldToScreenX(LongitudeToWorldX(cluster.longitude, _zoom));
+         const int32_t clusterY = WorldToScreenY(LatitudeToWorldY(cluster.latitude, _zoom));
+         const double deltaX = static_cast<double>(clusterX - screenX);
+         const double deltaY = static_cast<double>(clusterY - screenY);
+         const double distance = std::sqrt(deltaX * deltaX + deltaY * deltaY);
+         const auto hitRadius = static_cast<double>(ClusterRadiusPx(cluster.count, maxCount));
+         if (distance > hitRadius)
+         {
+            continue;
+         }
+         if ((nearestIndex == NoSelection) || (distance < nearestDistance))
+         {
+            nearestDistance = distance;
+            nearestIndex = static_cast<int32_t>(index);
+         }
+      }
+      return nearestIndex;
+   }
+
+   void MapWidget::ZoomToClusterAt(const int32_t screenX, const int32_t screenY)
+   {
+      LocationPointList visiblePoints;
+      CollectVisiblePoints(visiblePoints);
+      ClusterList clusters;
+      BuildClusters(visiblePoints, _zoom, ClusterCellSizePx, clusters);
+      const int32_t clusterIndex = FindNearestCluster(clusters, screenX, screenY);
+      if (clusterIndex == NoSelection)
+      {
+         return;
+      }
+
+      const Cluster& cluster = clusters[static_cast<size_t>(clusterIndex)];
+      MapFocus focus{};
+      if (IsErr(ComputeSpanFocus(
+         cluster.latitude,
+         cluster.longitude,
+         cluster.minLatitude,
+         cluster.maxLatitude,
+         cluster.minLongitude,
+         cluster.maxLongitude,
+         width(),
+         height(),
+         focus)))
+      {
+         return;
+      }
+
+      int32_t targetZoom = ClampZoom(focus.zoom);
+      if (targetZoom <= _zoom)
+      {
+         targetZoom = ClampZoom(_zoom + 1);
+      }
+
+      _selectedIndex = NoSelection;
+      emit PointCleared();
+      _zoom = targetZoom;
+      _centerWorldX = LongitudeToWorldX(cluster.longitude, _zoom);
+      _centerWorldY = LatitudeToWorldY(cluster.latitude, _zoom);
+      emit ZoomChanged(_zoom);
+      update();
+   }
+
    void MapWidget::SelectPointAt(const int32_t screenX, const int32_t screenY)
    {
+      if (_displayMode == DisplayMode::Clustered)
+      {
+         ZoomToClusterAt(screenX, screenY);
+         return;
+      }
+
       const int32_t nearestIndex = FindNearestPoint(screenX, screenY);
       _selectedIndex = nearestIndex;
       if (nearestIndex == NoSelection)

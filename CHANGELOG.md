@@ -4,6 +4,10 @@ All notable releases of Location History Visualizer are listed here.
 
 ## Unreleased
 
+### Added
+
+- In Cluster mode, clicking a circle zooms onto that cell (same fit as the post-load focus). If the view is already as tight as the cell, zoom increases by one level.
+
 ## 1.1.0.R — 2026-08-15
 
 Display modes, sidebar layout, themes, and extra UI languages.

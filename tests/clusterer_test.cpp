@@ -37,6 +37,10 @@ TEST(Clusterer, IdenticalPointsBecomeOneCluster)
    EXPECT_EQ(clusters[0].count, 3);
    EXPECT_NEAR(clusters[0].latitude, 50.11, 1.0e-9);
    EXPECT_NEAR(clusters[0].longitude, 8.68, 1.0e-9);
+   EXPECT_NEAR(clusters[0].minLatitude, 50.11, 1.0e-9);
+   EXPECT_NEAR(clusters[0].maxLatitude, 50.11, 1.0e-9);
+   EXPECT_NEAR(clusters[0].minLongitude, 8.68, 1.0e-9);
+   EXPECT_NEAR(clusters[0].maxLongitude, 8.68, 1.0e-9);
 }
 
 TEST(Clusterer, DistantPointsStaySeparateAtHighZoom)
@@ -59,5 +63,10 @@ TEST(Clusterer, DistantPointsStaySeparateAtHighZoom)
 
    LocationHistory::ClusterList lowZoomClusters;
    LocationHistory::BuildClusters(points, LocationHistory::MinZoom, 100000, lowZoomClusters);
-   EXPECT_EQ(lowZoomClusters.size(), 1u);
+   ASSERT_EQ(lowZoomClusters.size(), 1u);
+   EXPECT_EQ(lowZoomClusters[0].count, 2);
+   EXPECT_NEAR(lowZoomClusters[0].minLatitude, 50.11, 1.0e-9);
+   EXPECT_NEAR(lowZoomClusters[0].maxLatitude, 52.52, 1.0e-9);
+   EXPECT_NEAR(lowZoomClusters[0].minLongitude, 8.68, 1.0e-9);
+   EXPECT_NEAR(lowZoomClusters[0].maxLongitude, 13.40, 1.0e-9);
 }

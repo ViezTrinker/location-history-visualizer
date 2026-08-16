@@ -18,6 +18,7 @@
 #include <QWheelEvent>
 #include <QWidget>
 
+#include "clusterer.h"
 #include "location_data.h"
 #include "tile_cache.h"
 #include "tile_downloader.h"
@@ -167,6 +168,30 @@ namespace LocationHistory
          bool IsPointVisible(const LocationPoint& point) const;
          bool IsOnScreen(int32_t screenX, int32_t screenY, int32_t marginPx) const;
          int32_t FindNearestPoint(int32_t screenX, int32_t screenY) const;
+
+         /*!
+          *\brief Collects points that pass the current display-mode visibility check
+          *
+          *\param[out] visiblePoints Visible location points
+          */
+         void CollectVisiblePoints(LocationPointList& visiblePoints) const;
+
+         /*!
+          *\brief Finds the nearest cluster circle under the click
+          *
+          *\param[in] clusters Clusters drawn at the current zoom
+          *\param[in] screenX Click x in widget pixels
+          *\param[in] screenY Click y in widget pixels
+          */
+         int32_t FindNearestCluster(const ClusterList& clusters, int32_t screenX, int32_t screenY) const;
+
+         /*!
+          *\brief Zooms the map to the cluster under the click
+          *
+          *\param[in] screenX Click x in widget pixels
+          *\param[in] screenY Click y in widget pixels
+          */
+         void ZoomToClusterAt(int32_t screenX, int32_t screenY);
          void SelectPointAt(int32_t screenX, int32_t screenY);
          void ClearSelectionIfHidden(void);
 

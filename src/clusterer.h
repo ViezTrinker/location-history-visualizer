@@ -19,6 +19,10 @@ namespace LocationHistory
    {
       double latitude;
       double longitude;
+      double minLatitude;
+      double maxLatitude;
+      double minLongitude;
+      double maxLongitude;
       int32_t count;
    };
 

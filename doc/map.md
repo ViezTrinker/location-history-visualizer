@@ -39,9 +39,12 @@ Missing tiles appear gray until the download arrives. Bottom left: `© OpenStree
 | Mode | Behavior |
 | --- | --- |
 | `Points` | simple red circles, viewport culling. Point size and drawn-point cap come from the sidebar (Map display; default 4 px and 20 000) |
-| `Clustered` | `BuildClusters` at the current zoom, circle size ~ log(count) |
+| `Clustered` | `BuildClusters` at the current zoom, circle size ~ log(count). Click a circle to zoom onto that cell |
 | `Story` | red points as in `Points` (same size and cap), but timed: first the start day, then all later days while Play is running |
 
 ## Hit testing
 
-Left-click without a meaningful drag: nearest visible point within `HitTestRadiusPx` (12); visits are slightly larger. Signal `PointClicked(lat, lng, unixTimeMs, utcOffsetMinutes, endUnixTimeMs, source)` or `PointCleared`. The selected point gets a ring.
+Left-click without a meaningful drag:
+
+- **Points / Story:** nearest visible point within `HitTestRadiusPx` (12); visits are slightly larger. Signal `PointClicked(lat, lng, unixTimeMs, utcOffsetMinutes, endUnixTimeMs, source)` or `PointCleared`. The selected point gets a ring.
+- **Clustered:** nearest cluster circle using the same radius as drawing. On a hit, `ComputeSpanFocus` recenters on the cluster and zooms to fit its bounding box (with the same padding as post-load focus). If that zoom is not deeper than the current level, zoom increases by one (clamped to `MaxZoom`). A miss leaves the view unchanged and does not change point selection. Any previous point selection is cleared (`PointCleared`).

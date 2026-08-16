@@ -59,17 +59,22 @@ namespace LocationHistory
          accumulator.count += 1;
       }
 
-      int32_t ZoomThatFits(const CellAccumulator& accumulator, const int32_t viewWidthPx, const int32_t viewHeightPx)
+      int32_t ZoomThatFitsSpan(
+         const double centerLatitude,
+         const double centerLongitude,
+         const double minLatitude,
+         const double maxLatitude,
+         const double minLongitude,
+         const double maxLongitude,
+         const int32_t viewWidthPx,
+         const int32_t viewHeightPx)
       {
          const double latitudeSpan = std::max(
-            (accumulator.maxLatitude - accumulator.minLatitude) * FocusPaddingFactor,
+            (maxLatitude - minLatitude) * FocusPaddingFactor,
             MinFocusSpanDegrees);
          const double longitudeSpan = std::max(
-            (accumulator.maxLongitude - accumulator.minLongitude) * FocusPaddingFactor,
+            (maxLongitude - minLongitude) * FocusPaddingFactor,
             MinFocusSpanDegrees);
-
-         const double centerLatitude = accumulator.latitudeSum / static_cast<double>(accumulator.count);
-         const double centerLongitude = accumulator.longitudeSum / static_cast<double>(accumulator.count);
 
          int32_t chosenZoom = MinZoom;
          for (int32_t zoom = MaxZoom; zoom >= MinZoom; --zoom)
@@ -90,6 +95,18 @@ namespace LocationHistory
 
          return chosenZoom;
       }
+
+      void NormalizeViewSize(int32_t& widthPx, int32_t& heightPx)
+      {
+         if (widthPx <= 0)
+         {
+            widthPx = DefaultFocusViewWidthPx;
+         }
+         if (heightPx <= 0)
+         {
+            heightPx = DefaultFocusViewHeightPx;
+         }
+      }
    } // namespace
 
    FocusResult ComputeDensestFocus(const LocationPointList& points, const int32_t viewWidthPx, const int32_t viewHeightPx, MapFocus& focus)
@@ -101,14 +118,7 @@ namespace LocationHistory
 
       int32_t widthPx = viewWidthPx;
       int32_t heightPx = viewHeightPx;
-      if (widthPx <= 0)
-      {
-         widthPx = DefaultFocusViewWidthPx;
-      }
-      if (heightPx <= 0)
-      {
-         heightPx = DefaultFocusViewHeightPx;
-      }
+      NormalizeViewSize(widthPx, heightPx);
 
       std::unordered_map<CellKey, CellAccumulator> cells;
       for (size_t index = 0; index < points.size(); ++index)
@@ -134,7 +144,44 @@ namespace LocationHistory
 
       focus.latitude = pBestCell->latitudeSum / static_cast<double>(pBestCell->count);
       focus.longitude = pBestCell->longitudeSum / static_cast<double>(pBestCell->count);
-      focus.zoom = ZoomThatFits(*pBestCell, widthPx, heightPx);
+      focus.zoom = ZoomThatFitsSpan(
+         focus.latitude,
+         focus.longitude,
+         pBestCell->minLatitude,
+         pBestCell->maxLatitude,
+         pBestCell->minLongitude,
+         pBestCell->maxLongitude,
+         widthPx,
+         heightPx);
+      return FocusResult::Ok;
+   }
+
+   FocusResult ComputeSpanFocus(
+      const double latitude,
+      const double longitude,
+      const double minLatitude,
+      const double maxLatitude,
+      const double minLongitude,
+      const double maxLongitude,
+      const int32_t viewWidthPx,
+      const int32_t viewHeightPx,
+      MapFocus& focus)
+   {
+      int32_t widthPx = viewWidthPx;
+      int32_t heightPx = viewHeightPx;
+      NormalizeViewSize(widthPx, heightPx);
+
+      focus.latitude = latitude;
+      focus.longitude = longitude;
+      focus.zoom = ZoomThatFitsSpan(
+         latitude,
+         longitude,
+         minLatitude,
+         maxLatitude,
+         minLongitude,
+         maxLongitude,
+         widthPx,
+         heightPx);
       return FocusResult::Ok;
    }
 } // namespace LocationHistory

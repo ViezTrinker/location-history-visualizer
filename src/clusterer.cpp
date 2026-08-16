@@ -5,6 +5,7 @@
 
 #include "clusterer.h"
 
+#include <algorithm>
 #include <cmath>
 #include <cstdint>
 #include <unordered_map>
@@ -30,6 +31,10 @@ namespace LocationHistory
       {
          double latitudeSum = 0.0;
          double longitudeSum = 0.0;
+         double minLatitude = 0.0;
+         double maxLatitude = 0.0;
+         double minLongitude = 0.0;
+         double maxLongitude = 0.0;
          int32_t count = 0;
       };
    } // namespace
@@ -59,6 +64,20 @@ namespace LocationHistory
          const CellKey key = MakeCellKey(cellX, cellY);
 
          CellAccumulator& accumulator = cells[key];
+         if (accumulator.count == 0)
+         {
+            accumulator.minLatitude = point.latitude;
+            accumulator.maxLatitude = point.latitude;
+            accumulator.minLongitude = point.longitude;
+            accumulator.maxLongitude = point.longitude;
+         }
+         else
+         {
+            accumulator.minLatitude = std::min(accumulator.minLatitude, point.latitude);
+            accumulator.maxLatitude = std::max(accumulator.maxLatitude, point.latitude);
+            accumulator.minLongitude = std::min(accumulator.minLongitude, point.longitude);
+            accumulator.maxLongitude = std::max(accumulator.maxLongitude, point.longitude);
+         }
          accumulator.latitudeSum += point.latitude;
          accumulator.longitudeSum += point.longitude;
          accumulator.count += 1;
@@ -76,6 +95,10 @@ namespace LocationHistory
          Cluster cluster{};
          cluster.latitude = accumulator.latitudeSum / static_cast<double>(accumulator.count);
          cluster.longitude = accumulator.longitudeSum / static_cast<double>(accumulator.count);
+         cluster.minLatitude = accumulator.minLatitude;
+         cluster.maxLatitude = accumulator.maxLatitude;
+         cluster.minLongitude = accumulator.minLongitude;
+         cluster.maxLongitude = accumulator.maxLongitude;
          cluster.count = accumulator.count;
          clusters.push_back(cluster);
       }

@@ -45,7 +45,7 @@ Ignored in v1: `activity`, `timelineMemory`, `userLocationProfile`.
 
 ## Clusters
 
-[`src/clusterer.h`](../src/clusterer.h) bins points in world pixels at the current zoom. Default cell size is `ClusterCellSizePx` (48). Per cell: mean coordinates and `count`.
+[`src/clusterer.h`](../src/clusterer.h) bins points in world pixels at the current zoom. Default cell size is `ClusterCellSizePx` (48). Per cell: mean coordinates, bounding box (`min`/`max` latitude and longitude), and `count`.
 
 ## Story time
 
@@ -53,7 +53,7 @@ Ignored in v1: `activity`, `timelineMemory`, `userLocationProfile`.
 
 ## Map focus
 
-[`src/map_focus.h`](../src/map_focus.h) picks the cell with the most points after load (`DensityCellDegrees` 0.02, roughly 2 km). `ComputeDensestFocus` returns a center and a zoom that fits the cell plus padding into the viewport. `FocusResult`: `NoPoints` or `Ok`.
+[`src/map_focus.h`](../src/map_focus.h) picks the cell with the most points after load (`DensityCellDegrees` 0.02, roughly 2 km). `ComputeDensestFocus` returns a center and a zoom that fits the cell plus padding into the viewport. `ComputeSpanFocus` does the same for an explicit center and bounding box (used when clicking a cluster). `FocusResult`: `NoPoints` or `Ok`.
 
 ## Version
 

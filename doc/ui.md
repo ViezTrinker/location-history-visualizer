@@ -21,7 +21,7 @@ Menu bar: **File | Settings | Help**. Layout below: left sidebar (~280 px) + `Ma
 | Date | `QDateEdit` from/to, set to min/max of the data after load |
 | Weekday | seven columns: checkbox without text, weekday abbreviation as a label underneath. Bits in `weekdayMask` |
 | Time of day | `QTimeEdit` 00:00–23:59 |
-| Display | ComboBox `DisplayMode`: Points, Cluster, or Story |
+| Display | ComboBox `DisplayMode`: Points, Cluster (click a circle to zoom into that cell), or Story |
 | Zoom | `+`, vertical `QSlider` (zoom 2..19), `-` — beside the map |
 | Story | Visible only in Story mode: start-day picker, Play/Pause, scrubber — Play continues through later days as red points |
 | Point info | When, Until, Duration, Latitude, Longitude |

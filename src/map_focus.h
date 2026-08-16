@@ -60,6 +60,30 @@ namespace LocationHistory
     *\param[out] focus Center coordinates and zoom
     */
    FocusResult ComputeDensestFocus(const LocationPointList& points, int32_t viewWidthPx, int32_t viewHeightPx, MapFocus& focus);
+
+   /*!
+    *\brief Computes a zoom that fits a geographic span into the viewport
+    *
+    *\param[in] latitude Center latitude
+    *\param[in] longitude Center longitude
+    *\param[in] minLatitude Southern bound
+    *\param[in] maxLatitude Northern bound
+    *\param[in] minLongitude Western bound
+    *\param[in] maxLongitude Eastern bound
+    *\param[in] viewWidthPx Map widget width in pixels
+    *\param[in] viewHeightPx Map widget height in pixels
+    *\param[out] focus Center coordinates and zoom
+    */
+   FocusResult ComputeSpanFocus(
+      double latitude,
+      double longitude,
+      double minLatitude,
+      double maxLatitude,
+      double minLongitude,
+      double maxLongitude,
+      int32_t viewWidthPx,
+      int32_t viewHeightPx,
+      MapFocus& focus);
 } // namespace LocationHistory
 
 #endif // MAP_FOCUS_H

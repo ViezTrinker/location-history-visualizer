@@ -11,9 +11,9 @@ GoogleTest lives as a submodule under `third_party/googletest`. If `CMakeLists.t
 | `tests/tile_math_test.cpp` | `tile_math` | lat/lng round-trip, zoom clamp, tile bounds |
 | `tests/json_loader_test.cpp` | `json_loader`, `civil_time` | LatLng string, ISO-8601, fixture, path ids, visit duration, error codes |
 | `tests/location_filter_test.cpp` | `location_filter` | date, weekday, time-of-day window |
-| `tests/clusterer_test.cpp` | `clusterer` | identical points, separated points, empty input |
+| `tests/clusterer_test.cpp` | `clusterer` | identical points, separated points, empty input, cell bounding box |
 | `tests/story_time_test.cpp` | `story_time` | slider ↔ timestamp, start day plus later days, visibility at cutoff |
-| `tests/map_focus_test.cpp` | `map_focus` | empty list, densest cell, high zoom for a tight group |
+| `tests/map_focus_test.cpp` | `map_focus` | empty list, densest cell, high zoom for a tight group, span focus |
 | `tests/app_language_test.cpp` | `app_language` (header, no Qt) | language codes including ja/ko/id/vi/hi, English fallback, round-trip, text direction |
 | `tests/app_theme_test.cpp` | `app_theme` (header, no Qt) | Dark default, light/midnight/nord/sepia codes, round-trip |
 | `tests/map_display_settings_test.cpp` | `map_display_settings` (header, no Qt) | clamp, default 20000/4 px, downsampling step |
