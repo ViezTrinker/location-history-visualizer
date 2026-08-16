@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC OFF)
+set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC OFF)
 set(CMAKE_AUTOMOC_SOURCE_GROUP "Generated")
 set(CMAKE_AUTORCC_SOURCE_GROUP "Generated")
@@ -96,6 +96,7 @@ target_link_libraries(location_history_core PUBLIC
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" FILES ${LOCATION_HISTORY_CORE_SOURCES})
 
 set(LOCATION_HISTORY_APP_SOURCES
+   resources/app.qrc
    src/main.cpp
    src/map/map_widget.cpp
    src/map/map_widget.h
@@ -116,6 +117,14 @@ set(LOCATION_HISTORY_APP_SOURCES
    src/ui/map_display_settings.cpp
    src/ui/map_display_settings.h
 )
+if(WIN32)
+   list(APPEND LOCATION_HISTORY_APP_SOURCES
+      resources/app.rc
+   )
+   set_source_files_properties(resources/app.rc PROPERTIES
+      OBJECT_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/resources/app.ico"
+   )
+endif()
 
 add_executable(location_history_visualizer WIN32
    ${LOCATION_HISTORY_APP_SOURCES}
@@ -124,7 +133,7 @@ target_include_directories(location_history_visualizer PRIVATE
    ${CMAKE_CURRENT_SOURCE_DIR}/src/map
    ${CMAKE_CURRENT_SOURCE_DIR}/src/ui
 )
-source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" FILES ${LOCATION_HISTORY_APP_SOURCES})
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${LOCATION_HISTORY_APP_SOURCES})
 target_link_libraries(location_history_visualizer PRIVATE
    location_history_core
    Qt6::Widgets

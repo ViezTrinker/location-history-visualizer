@@ -4,6 +4,10 @@ All notable releases of Location History Visualizer are listed here.
 
 ## Unreleased
 
+### Added
+
+- Application icon in Explorer, the taskbar, and the window title bar.
+
 ## 2.0.0.R — 2026-08-16
 
 Export of filtered points and the map view. Background JSON load, cluster-click zoom, and remembered window geometry from the 1.1 line.

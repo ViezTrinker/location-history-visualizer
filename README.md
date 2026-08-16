@@ -10,6 +10,7 @@ Version **2.0.0.R**. Author [ViezTrinker](https://github.com/ViezTrinker). Relea
 
 - **Google Timeline JSON** — current export (`semanticSegments` path/visits and `rawSignals.position`), not the old `locations[]` E7 format. Large files load in the background with progress and Cancel
 - **Export** — File → Export: GPX, GeoJSON (currently filtered points), and a map screenshot (PNG, JPEG, BMP, WebP)
+- **Application icon** — Explorer, taskbar, and window title bar
 - **OpenStreetMap map** — pan, mouse-wheel and double-click zoom, zoom slider beside the map, OSM attribution
 - **Filters** — date range, weekdays (checkbox with the abbreviation underneath), time of day
 - **Display modes** — Points (simple red dots of the filtered data), Cluster (click a circle to zoom into that cell), and Story

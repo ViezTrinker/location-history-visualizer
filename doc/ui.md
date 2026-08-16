@@ -38,7 +38,7 @@ Menu **Help → About** opens [`src/ui/about_dialog.h`](../src/ui/about_dialog.h
 
 ## Startup
 
-[`src/main.cpp`](../src/main.cpp) sets `applicationName` / `organizationName` from the same version strings. The tile cache path depends on that via `QStandardPaths::AppLocalDataLocation`.
+[`src/main.cpp`](../src/main.cpp) sets `applicationName` / `organizationName` from the same version strings, and the window icon from `:/app.ico`. The Windows `.exe` icon comes from [`resources/app.rc`](../resources/app.rc). The tile cache path depends on the application name via `QStandardPaths::AppLocalDataLocation`.
 
 ## Responsibilities
 

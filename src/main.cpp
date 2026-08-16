@@ -4,6 +4,7 @@
  */
 
 #include <QApplication>
+#include <QIcon>
 
 #include "app_language.h"
 #include "app_theme.h"
@@ -19,6 +20,7 @@ int main(int argc, char* argv[])
    application.setOrganizationName(QString::fromUtf8(
       LocationHistory::AuthorName.data(),
       static_cast<int>(LocationHistory::AuthorName.size())));
+   application.setWindowIcon(QIcon(QStringLiteral(":/app.ico")));
 
    LocationHistory::ApplySavedAppLanguage();
    LocationHistory::ApplySavedAppTheme();

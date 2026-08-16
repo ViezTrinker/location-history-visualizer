@@ -119,6 +119,7 @@ src/           entry point (main.cpp)
 src/core/      Qt-free library (parse, filter, export, overlay math)
 src/ui/        Qt window, settings, load thread
 src/map/       MapWidget and OSM tile cache/downloader
+resources/     application icon (ICO, Windows .rc, Qt .qrc)
 tests/         gtest, fixture sample_timeline.json
 third_party/   googletest (Git submodule)
 doc/           this documentation
